@@ -6,7 +6,7 @@
  */
 
 import {core as coreCfg, space as cfg} from './config';
-import {roll, roll0, initCanvas, drawPixel, hexToRgba, rollh} from './util';
+import {roll, roll0, initCanvas, drawPixel, hexToRgba, rollh, drawImage} from './util';
 
 const spaceProto = {
 	ctx: initCanvas(),
@@ -35,7 +35,7 @@ const spaceProto = {
 		})
 	},
 	show: function(ctx) {
-		ctx.drawImage(this.ctx.canvas, 0, 0);
+		drawImage(ctx, this.ctx, [0, 0]);
 	}
 };
 

@@ -27,6 +27,7 @@ export const ship = {
 
 export const drawing = {
 	preventSubPixelDrawing: false,
+	stickToPixelGrid: false,
 	maxFPS: 30,
 	paletteSize: 100,
 	mask: [

@@ -8,7 +8,7 @@
 
 
 import {core as coreCfg, ship as cfg} from './config';
-import {roll, initCanvas, drawPixel} from './util';
+import {roll, initCanvas, drawPixel, drawImage} from './util';
 
 const wingLength = Math.ceil(cfg.width / 2);
 
@@ -19,10 +19,9 @@ const shipyard = [],
 		show: function(ctx, x, y) { // x and y are in actual pixels
 			const floor = Math.floor(this.id / cfg.shipyardSize),
 				position = this.id % cfg.shipyardSize;
-			ctx.drawImage(shipyard[floor].canvas,
-				position * cfg.width * coreCfg.pixelSize, 0, cfg.width * coreCfg.pixelSize, cfg.height * coreCfg.pixelSize,
-				x, y, cfg.width * coreCfg.pixelSize, cfg.height * coreCfg.pixelSize
-			);
+			drawImage(ctx, shipyard[floor], [x, y],
+				[position * cfg.width * coreCfg.pixelSize, 0],
+				[cfg.width * coreCfg.pixelSize, cfg.height * coreCfg.pixelSize]);
 		}
 	};
 

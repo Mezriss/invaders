@@ -35,3 +35,10 @@ jspm_packages
 
 # Optional REPL history
 .node_repl_history
+
+# Various
+.DS_Store
+.idea/
+dist/
+ideas.md
+reference/

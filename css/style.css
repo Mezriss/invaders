@@ -13,7 +13,6 @@ html, body {
 }
 
 #gameScreen {
-
 	box-shadow: 0 0 15px purple;
-	image-rendering: pixelated;
+	/*image-rendering: pixelated;*/
 }

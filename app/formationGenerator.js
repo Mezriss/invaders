@@ -4,7 +4,7 @@
  */
 
 import * as ship from './shipGenerator';
-import {initCanvas, roll} from './util';
+import {initCanvas, roll, drawImage} from './util';
 import {core as coreCfg, formation as cfg, ship as shipCfg} from './config';
 import {formation as formationConst} from './const';
 
@@ -19,7 +19,7 @@ const formationProto = {
 	evadeSpeed: 0.10,
 	direction: 1,
 	show: function(ctx) {
-		ctx.drawImage(this.ctx.canvas, this.position.x, this.position.y)
+		drawImage(ctx, this.ctx, [this.position.x, this.position.y]);
 	},
 	behavior: function() { //this is a basic default behavior
 		if ((this.position.x <= 0) || (this.position.x + this.ctx.canvas.width >= coreCfg.screenWidth)) {
@@ -58,8 +58,8 @@ export function create(options) {
 					formation.ships.push({
 						proto: shipTypes[i],
 						armour: shipTypes[i].armour,
-						x: cfg.shipPadding / 2 + (shipCfg.width + cfg.shipPadding) * coreCfg.pixelSize * j,
-						y: cfg.linePadding / 2 + (shipCfg.height + cfg.linePadding) * coreCfg.pixelSize * i
+						x: cfg.shipPadding * coreCfg.pixelSize / 2 + (shipCfg.width + cfg.shipPadding) * coreCfg.pixelSize * j,
+						y: cfg.linePadding * coreCfg.pixelSize / 2 + (shipCfg.height + cfg.linePadding) * coreCfg.pixelSize * i
 					})
 				}
 			}

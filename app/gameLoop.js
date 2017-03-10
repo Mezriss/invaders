@@ -4,7 +4,7 @@
  */
 import {drawing as drawingCfg} from  './config';
 import * as spaceGenerator from './spaceGenerator';
-import {initCanvas} from './util';
+import {initCanvas, drawImage} from './util';
 import {core as coreCfg} from './config';
 
 
@@ -20,10 +20,10 @@ const requestAnimationFrame = window.requestAnimationFrame ||
 
 let then, loop, level, space;
 
-function draw(ts) {
+function draw() {
 	loop = requestAnimationFrame(draw);
-	then = then || ts;
-	let dt = ts - then;
+	const ts = Date.now(),
+		dt = ts - then;
 	if (dt < 1000 / drawingCfg.maxFPS) {
 		return;
 	}
@@ -48,16 +48,21 @@ function draw(ts) {
 	space.show(drawCanvas);
 	level.formations.forEach(formation => formation.show(drawCanvas));
 
-	screenCtx.drawImage(drawCanvas.canvas, 0, 0);
+	drawImage(screenCtx, drawCanvas, [0, 0]);
 }
 
 export function start(currentLevel) {
 	level = currentLevel;
 	space = spaceGenerator.create();
 
+	then = Date.now();
 	loop = requestAnimationFrame(draw);
 }
 
 export function stop() {
 	cancelAnimationFrame(loop);
+}
+
+export function pause() {
+
 }
