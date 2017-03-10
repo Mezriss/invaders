@@ -1,0 +1,29 @@
+{
+  "name": "invaders",
+  "version": "0.0.1",
+  "description": "An extandable Space Invaders game varian for web and mobile.",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack",
+    "start": "serve",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "game"
+  ],
+  "author": "Mezriss",
+  "license": "MPL-2.0",
+  "devDependencies": {
+    "css-loader": "^0.26.2",
+    "extract-text-webpack-plugin": "^2.0.0",
+    "optimize-css-assets-webpack-plugin": "^1.3.0",
+    "uglify-js": "github:mishoo/UglifyJS2#harmony",
+    "webpack": "^2.2.1"
+  },
+  "optionalDependencies": {
+    "serve": "^4.0.1"
+  },
+  "dependencies": {
+    "normalize.css": "^5.0.0"
+  }
+}
