@@ -18,12 +18,12 @@ const requestAnimationFrame = window.requestAnimationFrame ||
 	screenCtx = gameScreen.getContext('2d'),
 	drawCanvas = initCanvas();
 
-let then, loop, level, space;
+let then, loop, level, space, dt, fpsStart, fps = 0, lastFps = 0;
 
-function draw() {
+function draw(ts) {
 	loop = requestAnimationFrame(draw);
-	const ts = Date.now(),
-		dt = ts - then;
+	then = then || ts;
+	dt = ts - then;
 	if (dt < 1000 / drawingCfg.maxFPS) {
 		return;
 	}
@@ -32,30 +32,33 @@ function draw() {
 	//updating positions
 	level.formations.forEach(formation => {
 		formation.position.x += formation.evadeSpeed * coreCfg.screenWidth * dt / 1000 * formation.direction;
-		formation.position.y += formation.advanceSpeed * coreCfg.screenHeight * dt / 1000;
+		//formation.position.y += formation.advanceSpeed * coreCfg.screenHeight * dt / 1000;
 	});
 
-	//todo calculate new positions for player, enemies, projectiles
-	//todo check for collisions
-	//todo update particle effects
-	//todo get user input
-	//todo activate AI
-	//todo redraw everything
-
 	level.formations.forEach(formation => formation.behavior());
-
 
 	space.show(drawCanvas);
 	level.formations.forEach(formation => formation.show(drawCanvas));
 
 	drawImage(screenCtx, drawCanvas, [0, 0]);
+	if (drawingCfg.showFPS) {
+		if (Date.now() - fpsStart >= 1000) {
+			fpsStart += 1000;
+			lastFps = fps;
+			fps = 1;
+		} else {
+			fps += 1;
+		}
+		screenCtx.fillStyle = drawingCfg.systemInfoColor;
+		screenCtx.font = drawingCfg.systemInfoText;
+		screenCtx.fillText(lastFps, 10, 10);
+	}
 }
 
 export function start(currentLevel) {
 	level = currentLevel;
 	space = spaceGenerator.create();
-
-	then = Date.now();
+	fpsStart = Date.now();
 	loop = requestAnimationFrame(draw);
 }
 

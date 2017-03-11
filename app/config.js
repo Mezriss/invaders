@@ -28,6 +28,9 @@ export const ship = {
 export const drawing = {
 	preventSubPixelDrawing: false,
 	stickToPixelGrid: false,
+	showFPS: true,
+	systemInfoColor: 'lime',
+	systemInfoText: '10px sans-serif',
 	maxFPS: 30,
 	paletteSize: 100,
 	mask: [
