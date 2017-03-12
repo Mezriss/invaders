@@ -31,7 +31,7 @@ export const drawing = {
 	showFPS: true,
 	systemInfoColor: 'lime',
 	systemInfoText: '10px sans-serif',
-	maxFPS: 30,
+	maxFPS: 60,
 	paletteSize: 100,
 	mask: [
 		[['#000000', 0], ['#ffffff', 25], ['#ffffff', 50]],

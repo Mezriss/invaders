@@ -16,9 +16,11 @@ const requestAnimationFrame = window.requestAnimationFrame ||
 	cancelAnimationFrame = window.cancelAnimationFrame ||
 		window.mozCancelAnimationFrame,
 	screenCtx = gameScreen.getContext('2d'),
+	backgroundCtx = backgroundScreen.getContext('2d'),
+	interfaceCtx = interfaceScreen.getContext('2d'),
 	drawCanvas = initCanvas();
 
-let then, loop, level, space, dt, fpsStart, fps = 0, lastFps = 0;
+let then, loop, level, space, dt, fpsStart, fps = 0;
 
 function draw(ts) {
 	loop = requestAnimationFrame(draw);
@@ -37,27 +39,30 @@ function draw(ts) {
 
 	level.formations.forEach(formation => formation.behavior());
 
-	space.show(drawCanvas);
+	drawCanvas.clearRect(0, 0, coreCfg.screenWidth, coreCfg.screenHeight);
 	level.formations.forEach(formation => formation.show(drawCanvas));
 
+	screenCtx.clearRect(0, 0, coreCfg.screenWidth, coreCfg.screenHeight);
 	drawImage(screenCtx, drawCanvas, [0, 0]);
 	if (drawingCfg.showFPS) {
 		if (Date.now() - fpsStart >= 1000) {
 			fpsStart += 1000;
-			lastFps = fps;
+			interfaceCtx.clearRect(10, 0, 20, 20);
+			interfaceCtx.fillStyle = drawingCfg.systemInfoColor;
+			interfaceCtx.font = drawingCfg.systemInfoText;
+			interfaceCtx.fillText(fps, 10, 10);
 			fps = 1;
 		} else {
 			fps += 1;
 		}
-		screenCtx.fillStyle = drawingCfg.systemInfoColor;
-		screenCtx.font = drawingCfg.systemInfoText;
-		screenCtx.fillText(lastFps, 10, 10);
 	}
 }
 
 export function start(currentLevel) {
 	level = currentLevel;
 	space = spaceGenerator.create();
+	space.show(backgroundCtx);
+
 	fpsStart = Date.now();
 	loop = requestAnimationFrame(draw);
 }

@@ -12,7 +12,11 @@ html, body {
 	justify-content: center;
 }
 
-#gameScreen {
+#main {
 	box-shadow: 0 0 15px purple;
+}
+
+canvas {
+	position: absolute;
 	/*image-rendering: pixelated;*/
 }
