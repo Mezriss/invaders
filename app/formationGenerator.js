@@ -6,24 +6,31 @@
 import * as ship from './shipGenerator';
 import {initCanvas, roll, drawImage} from './util';
 import {core as coreCfg, formation as cfg, ship as shipCfg} from './config';
-import {formation as formationConst} from './const';
-
-//todo based on provided options create list of ships with positions in formation
-//todo initialize canvas for those ships and draw them
+import {formation as formationConst, direction} from './const';
 
 //todo functionality to remove exploding ships
-//todo functionality to draw formation
 
 const formationProto = {
-	advanceSpeed: 0.01,
-	evadeSpeed: 0.10,
-	direction: 1,
+	advanceSpeed: 0.05,
+	evadeSpeed: 0.07,
+	advanceAmount: 0.05,
+	direction: direction.right,
 	show: function(ctx) {
 		drawImage(ctx, this.ctx, [this.position.x, this.position.y]);
 	},
 	behavior: function() { //this is a basic default behavior
+		if (this.direction === direction.down) {
+			if (this.position.y - this.advanceStart >= this.advanceAmount * coreCfg.screenHeight) {
+				this.direction = this.position.x === 0 ? direction.right : direction.left;
+			}
+			return;
+		}
+
 		if ((this.position.x <= 0) || (this.position.x + this.ctx.canvas.width >= coreCfg.screenWidth)) {
-			this.direction *= -1;
+			this.advanceStart = this.position.y;
+			this.direction = direction.down;
+			//prevent running offscreen on high speeds
+			this.position.x = this.position.x <= 0 ? 0 : coreCfg.screenWidth - this.ctx.canvas.width;
 		}
 	},
 	removeShip: function() {
@@ -41,7 +48,7 @@ export function create(options) {
 		x: (coreCfg.screenWidth - formation.ctx.canvas.width) / 2,
 		y: coreCfg.screenHeight * 0.1 * options.levelNumber
 	};
-	formation.direction = roll(2) - 1 ? 1 : -1;
+	formation.direction = roll(2) - 1 ? direction.left : direction.right;
 
 	formation.ships = [];
 

@@ -4,8 +4,8 @@
  */
 
 //todo choose level traits (from a list) based on challenge rate of traits and level's "challenge budget"
-//todo based on chosen traits add formations and
 
+import {core as cfg, ship as shipCfg, formation as formationCfg} from './config';
 import * as formationGenerator from './formationGenerator';
 import {formation as formationConst} from './const';
 
@@ -17,9 +17,9 @@ export function create(levelNumber) {
 
 	level.formations.push(formationGenerator.create({
 		levelNumber: levelNumber,
-		width: 8,
-		height: 4,
-		shipTypes: 4,
+		width: Math.floor(cfg.screenWidth / ((shipCfg.width + formationCfg.shipPadding) * cfg.pixelSize) * 0.7),
+		height: 6,
+		shipTypes: 6,
 		shipArrangement: formationConst.oneTypePerLine
 	}));
 

@@ -6,6 +6,7 @@ import {drawing as drawingCfg} from  './config';
 import * as spaceGenerator from './spaceGenerator';
 import {initCanvas, drawImage} from './util';
 import {core as coreCfg} from './config';
+import {direction} from './const';
 
 
 const requestAnimationFrame = window.requestAnimationFrame ||
@@ -33,7 +34,17 @@ function draw(ts) {
 
 	//updating positions
 	level.formations.forEach(formation => {
-		formation.position.x += formation.evadeSpeed * coreCfg.screenWidth * dt / 1000 * formation.direction;
+		switch (formation.direction) {
+			case direction.left:
+				formation.position.x -= formation.evadeSpeed * coreCfg.screenWidth * dt / 1000; break;
+			case direction.right:
+				formation.position.x += formation.evadeSpeed * coreCfg.screenWidth * dt / 1000; break;
+			case direction.up:
+				formation.position.y -= formation.advanceSpeed * coreCfg.screenHeight * dt / 1000; break;
+			case direction.down:
+				formation.position.y += formation.advanceSpeed * coreCfg.screenHeight * dt / 1000; break;
+		}
+
 		//formation.position.y += formation.advanceSpeed * coreCfg.screenHeight * dt / 1000;
 	});
 
