@@ -44,3 +44,8 @@ export const formation = {
 	shipPadding: 4,
 	linePadding: 3
 };
+
+export const player = {
+	defaultColor: '#9305ff',
+	startingLives: 3
+};

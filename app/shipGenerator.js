@@ -14,6 +14,9 @@ const wingLength = Math.ceil(cfg.width / 2);
 
 const shipyard = [],
 	blueprints = {},
+	defaultOptions = {
+		color: cfg.defaultColor
+	},
 	shipProto = {
 		armour: 1,
 		show: function(ctx, x, y) { // x and y are in actual pixels
@@ -47,7 +50,7 @@ function generateShape() {
 	}
 }
 
-export function create(color = cfg.defaultColor) {
+export function create(options = defaultOptions) {
 	const ship = Object.create(shipProto);
 	ship.id = Object.keys(blueprints).length;
 	blueprints[ship.id] = ship; //might need later
@@ -63,9 +66,9 @@ export function create(color = cfg.defaultColor) {
 	for (let i = 0; i < cfg.height; i += 1) {
 		for (let j = 0; j < wingLength; j += 1) {
 			if (ship.shape[i][j]) {
-				drawPixel(shipyard[floor], j + position * cfg.width, i, color);
+				drawPixel(shipyard[floor], j + position * cfg.width, i, options.color);
 				if (j < wingLength - 1) {
-					drawPixel(shipyard[floor], cfg.width - j - 1 + position * cfg.width, i, color);
+					drawPixel(shipyard[floor], cfg.width - j - 1 + position * cfg.width, i, options.color);
 				}
 			}
 		}

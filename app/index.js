@@ -1,4 +1,5 @@
 import '../css/style.css';
+import * as player from './playerGenerator';
 import * as levelGenerator from './levelGenerator';
 import * as gameLoop from './gameLoop';
 import {core as cfg} from './config'
@@ -12,8 +13,7 @@ main.style.width = cfg.screenWidth + 'px';
 main.style.height = cfg.screenHeight + 'px';
 
 
-
-gameLoop.start(levelGenerator.create(1));
+gameLoop.start(levelGenerator.create(1), player.create());
 
 
 //todo determine device type

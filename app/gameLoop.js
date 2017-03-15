@@ -21,7 +21,7 @@ const requestAnimationFrame = window.requestAnimationFrame ||
 	interfaceCtx = interfaceScreen.getContext('2d'),
 	drawCanvas = initCanvas();
 
-let then, loop, level, space, dt, fpsStart, fps = 0;
+let then, loop, level, player, space, dt, fpsStart, fps = 0;
 
 function draw(ts) {
 	loop = requestAnimationFrame(draw);
@@ -44,13 +44,14 @@ function draw(ts) {
 			case direction.down:
 				formation.position.y += formation.advanceSpeed * coreCfg.screenHeight * dt / 1000; break;
 		}
-
-		//formation.position.y += formation.advanceSpeed * coreCfg.screenHeight * dt / 1000;
 	});
 
+	//run AI and update locations of everything
 	level.formations.forEach(formation => formation.behavior());
 
+	//draw everything
 	drawCanvas.clearRect(0, 0, coreCfg.screenWidth, coreCfg.screenHeight);
+	player.show(drawCanvas);
 	level.formations.forEach(formation => formation.show(drawCanvas));
 
 	screenCtx.clearRect(0, 0, coreCfg.screenWidth, coreCfg.screenHeight);
@@ -69,7 +70,8 @@ function draw(ts) {
 	}
 }
 
-export function start(currentLevel) {
+export function start(currentLevel, currentPlayer) {
+	player = currentPlayer;
 	level = currentLevel;
 	space = spaceGenerator.create();
 	space.show(backgroundCtx);
