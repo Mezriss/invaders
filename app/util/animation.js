@@ -14,7 +14,8 @@ const requestAnimationFrame = window.requestAnimationFrame ||
 	interfaceCtx = interfaceScreen.getContext('2d'),
 	drawCanvas = initCanvas();
 
-let animation, data, resolveHandle,
+let animation, resolveHandle,
+	responseData,
 	paused = false,
 	then, dt,
 	fpsStart, fps = 0;
@@ -34,7 +35,7 @@ function draw(ts) {
 	drawCanvas.clearRect(0, 0, coreCfg.screenWidth, coreCfg.screenHeight);
 
 	//draw next frame
-	animation(drawCanvas, dt, data);
+	responseData = animation.drawFrame(dt);
 
 	screenCtx.clearRect(0, 0, coreCfg.screenWidth, coreCfg.screenHeight);
 	drawImage(screenCtx, drawCanvas, [0, 0]);
@@ -51,11 +52,16 @@ function draw(ts) {
 			fps += 1;
 		}
 	}
+	if (responseData) {
+		pause();
+		animation.end();
+		resolveHandle(responseData);
+	}
 }
 
-export function start(animationLoop, animationData) {
-	animation = animationLoop;
-	data = animationData;
+export function start(config) {
+	animation = config.animation;
+	animation.init(config.data, drawCanvas);
 
 	fpsStart = Date.now();
 	requestAnimationFrame(draw);

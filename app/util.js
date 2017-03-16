@@ -4,6 +4,9 @@ export * from './util/color';
 import * as animation from './util/animation';
 export {animation};
 
+import * as pubSub from './util/pubSub';
+export {pubSub};
+
 export function roll(n) {
 	return Math.ceil(Math.random() * n);
 }

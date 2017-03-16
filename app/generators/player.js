@@ -11,6 +11,10 @@ const playerProto = {
 	score: 0,
 	currentShip: null,
 	extraShips: null,
+	direction: null,
+	plannedTravel: 0,
+	moving: false,
+	speed: 0.3,
 	x: Math.floor(coreCfg.screenWidth / 2 - shipCfg.width * 0.5 * coreCfg.pixelSize),
 	y: Math.floor(coreCfg.screenHeight - shipCfg.height * 1.5 * coreCfg.pixelSize),
 	show: function(ctx) {

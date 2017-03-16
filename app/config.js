@@ -47,5 +47,6 @@ export const formation = {
 
 export const player = {
 	defaultColor: '#9305ff',
-	startingLives: 3
+	startingLives: 3,
+	minTravelDistance: core.screenWidth * 0.05
 };

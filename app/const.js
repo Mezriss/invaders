@@ -8,3 +8,13 @@ export const direction = {
 	up: 'up',
 	down: 'down'
 };
+
+export const event = {
+	keyDown: 'keydown',
+	keyUp: 'keyup'
+};
+
+export const key = {
+	arrowLeft: 'ArrowLeft',
+	arrowRight: 'ArrowRight'
+};
