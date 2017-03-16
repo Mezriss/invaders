@@ -3,8 +3,8 @@
 
  */
 
-import {player as cfg, core as coreCfg, ship as shipCfg} from './config'
-import * as ship from './shipGenerator';
+import {player as cfg, core as coreCfg, ship as shipCfg} from '../config'
+import * as ship from './ship';
 
 
 const playerProto = {

@@ -3,10 +3,10 @@
 
  */
 
-import * as ship from './shipGenerator';
-import {initCanvas, roll, drawImage} from './util';
-import {core as coreCfg, formation as cfg, ship as shipCfg} from './config';
-import {formation as formationConst, direction} from './const';
+import * as ship from './ship';
+import {initCanvas, roll, drawImage} from '../util';
+import {core as coreCfg, formation as cfg, ship as shipCfg} from '../config';
+import {formation as formationConst, direction} from '../const';
 
 //todo functionality to remove exploding ships
 

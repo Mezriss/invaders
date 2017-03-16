@@ -1,9 +1,11 @@
 import '../css/style.css';
-import * as player from './playerGenerator';
-import * as levelGenerator from './levelGenerator';
-import * as gameLoop from './gameLoop';
-import {core as cfg} from './config'
 
+import {core as cfg} from './config'
+import * as spaceGenerator from './generators/space';
+import * as player from './generators/player';
+import * as levelGenerator from './generators/level';
+import {gameLoop} from './gameLoop';
+import {animation} from './util';
 
 [gameScreen, interfaceScreen, backgroundScreen].forEach(canvas => {
 	canvas.width = cfg.screenWidth;
@@ -12,8 +14,14 @@ import {core as cfg} from './config'
 main.style.width = cfg.screenWidth + 'px';
 main.style.height = cfg.screenHeight + 'px';
 
+const backgroundCtx = backgroundScreen.getContext('2d');
+let space = spaceGenerator.create();
+space.show(backgroundCtx);
 
-gameLoop.start(levelGenerator.create(1), player.create());
+animation.start(gameLoop, {
+	level: levelGenerator.create(1),
+	player: player.create()
+});
 
 
 //todo determine device type

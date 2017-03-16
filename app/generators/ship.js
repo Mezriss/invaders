@@ -7,8 +7,8 @@
 //todo generate ship as data structure with weapons and hp (and probably AI for shooting)
 
 
-import {core as coreCfg, ship as cfg} from './config';
-import {roll, initCanvas, drawPixel, drawImage} from './util';
+import {core as coreCfg, ship as cfg} from '../config';
+import {roll, initCanvas, drawPixel, drawImage} from '../util';
 
 const wingLength = Math.ceil(cfg.width / 2);
 

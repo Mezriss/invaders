@@ -5,8 +5,8 @@
 
  */
 
-import {core as coreCfg, space as cfg} from './config';
-import {roll, roll0, initCanvas, drawPixel, hexToRgba, rollh, drawImage} from './util';
+import {core as coreCfg, space as cfg} from '../config';
+import {roll, roll0, initCanvas, drawPixel, hexToRgba, rollh, drawImage} from '../util';
 
 const spaceProto = {
 	ctx: initCanvas(),
