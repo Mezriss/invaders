@@ -70,18 +70,18 @@ export function drawFrame(dt) {
 	if (player.moving || player.plannedTravel > 0) {
 		let travelDistance = player.speed * cfg.screenWidth * dt / 1000;
 		switch (player.direction) {
-			case c.direction.left: player.x -= travelDistance; break;
-			case c.direction.right: player.x += travelDistance; break;
+			case c.direction.left: player.currentShip.x -= travelDistance; break;
+			case c.direction.right: player.currentShip.x += travelDistance; break;
 		}
-		if (player.x < 0) {
-			player.x = 0;
+		if (player.currentShip.x < 0) {
+			player.currentShip.x = 0;
 		}
-		if (player.x > cfg.screenWidth - shipCfg.width * cfg.pixelSize) {
-			player.x = cfg.screenWidth - shipCfg.width * cfg.pixelSize;
+		if (player.currentShip.x > cfg.screenWidth - shipCfg.width * cfg.pixelSize) {
+			player.currentShip.x = cfg.screenWidth - shipCfg.width * cfg.pixelSize;
 		}
 		player.plannedTravel -= travelDistance;
 	} else {
-		player.x = Math.round(player.x);
+		player.currentShip.x = Math.round(player.currentShip.x);
 	}
 
 	//run AI and update locations of everything

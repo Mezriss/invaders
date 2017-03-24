@@ -20,9 +20,9 @@ const defaultOptions = {
 		armour: 1,
 		blueprint: null,
 		sprite: null,
-		show: function(ctx, x, y) {
-			drawImage(ctx, this.sprite.ctx, [x, y], this.sprite.coords, [pixelWidth, pixelHeight]);
-		}
+		x: null,
+		y: null,
+		show: ctx => drawImage(ctx, this.sprite.ctx, [this.x, this.y], this.sprite.coords, [pixelWidth, pixelHeight])
 	};
 
 export function create(options = defaultOptions) {

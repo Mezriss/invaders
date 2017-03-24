@@ -55,6 +55,9 @@ export const cache = {
 
 export const missile = {
 	defaultColor: '#ffffff',
-	glow: 0.25,
-	height: 4
+	glow: 0.3,
+	width: 3,
+	height: 5,
+	minBits: 3,
+	maxBits: 4
 };

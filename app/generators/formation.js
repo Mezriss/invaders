@@ -62,17 +62,15 @@ export function create(options) {
 		case formationConst.oneTypePerLine:
 			for (let i = 0; i < options.height; i++) {
 				for (let j = 0; j < options.width; j++) {
-					formation.ships.push({
-						proto: shipTypes[i],
-						armour: shipTypes[i].armour,
-						x: cfg.shipPadding * coreCfg.pixelSize / 2 + (shipCfg.width + cfg.shipPadding) * coreCfg.pixelSize * j,
-						y: cfg.linePadding * coreCfg.pixelSize / 2 + (shipCfg.height + cfg.linePadding) * coreCfg.pixelSize * i
-					})
+					const ship = Object.create(shipTypes[i]);
+					ship.x = cfg.shipPadding * coreCfg.pixelSize / 2 + (shipCfg.width + cfg.shipPadding) * coreCfg.pixelSize * j;
+					ship.y = cfg.linePadding * coreCfg.pixelSize / 2 + (shipCfg.height + cfg.linePadding) * coreCfg.pixelSize * i;
+					formation.ships.push(ship);
 				}
 			}
 			break;
 	}
-	formation.ships.forEach(ship => ship.proto.show(formation.ctx, ship.x, ship.y));
+	formation.ships.forEach(ship => ship.show(formation.ctx));
 
 	return formation;
 }

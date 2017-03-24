@@ -22,3 +22,10 @@ canvas {
 	image-rendering: crisp-edges;
 	image-rendering: pixelated;
 }
+
+body>canvas { /* for easy debugging */
+	position: fixed;
+	top: 10px;
+	left: 10px;
+	box-shadow: 0 0 15px green;
+}

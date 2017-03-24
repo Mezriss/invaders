@@ -15,10 +15,8 @@ const playerProto = {
 	plannedTravel: 0,
 	moving: false,
 	speed: 0.3,
-	x: Math.floor(coreCfg.screenWidth / 2 - shipCfg.width * 0.5 * coreCfg.pixelSize),
-	y: Math.floor(coreCfg.screenHeight - shipCfg.height * 1.5 * coreCfg.pixelSize),
 	show: function(ctx) {
-		this.currentShip.show(ctx, this.x, this.y);
+		this.currentShip.show(ctx);
 	}
 };
 
@@ -29,7 +27,11 @@ const playerShipCfg = {
 
 export function create() {
 	const player = Object.create(playerProto);
+
 	player.currentShip = ship.create(playerShipCfg);
+	player.currentShip.x = Math.floor(coreCfg.screenWidth / 2 - shipCfg.width * 0.5 * coreCfg.pixelSize);
+	player.currentShip.y = Math.floor(coreCfg.screenHeight - shipCfg.height * 1.5 * coreCfg.pixelSize);
+
 	player.extraShips = [];
 	for (let i = 0; i < cfg.extraShips; i += 1) {
 		player.extraShips.push(ship.create(playerShipCfg));
