@@ -18,5 +18,7 @@ html, body {
 
 canvas {
 	position: absolute;
-	/*image-rendering: pixelated;*/
+	-moz-transform: translateZ(0); /*most probably does nothing*/
+	image-rendering: crisp-edges;
+	image-rendering: pixelated;
 }

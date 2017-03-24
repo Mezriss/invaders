@@ -19,10 +19,9 @@ export const space = {
 export const ship = {
 	width: 7,
 	height: 5,
-	minDensity: 0.3,
-	maxDensity: 0.8,
-	defaultColor: '#FFC905',
-	shipyardSize: 10
+	minBits: 7,
+	maxBits: 15,
+	defaultColor: '#FFC905'
 };
 
 export const drawing = {
@@ -49,4 +48,13 @@ export const player = {
 	defaultColor: '#9305ff',
 	startingLives: 3,
 	minTravelDistance: core.screenWidth * 0.05
+};
+export const cache = {
+	itemsPerCanvas: 10
+};
+
+export const missile = {
+	defaultColor: '#ffffff',
+	glow: 0.25,
+	height: 4
 };

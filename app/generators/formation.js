@@ -48,7 +48,7 @@ export function create(options) {
 		x: (coreCfg.screenWidth - formation.ctx.canvas.width) / 2,
 		y: coreCfg.screenHeight * 0.1 * options.levelNumber
 	};
-	formation.direction = roll(2) - 1 ? direction.left : direction.right;
+	formation.direction = roll(0, 1) ? direction.left : direction.right;
 
 	formation.ships = [];
 

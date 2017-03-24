@@ -7,12 +7,11 @@ export {animation};
 import * as pubSub from './util/pubSub';
 export {pubSub};
 
-export function roll(n) {
-	return Math.ceil(Math.random() * n);
-}
+export {cacheSprite} from './util/spriteCache';
 
-export function roll0(n) {
-	return Math.floor(Math.random() * n);
+export function roll(from, to = from) {
+	from = arguments.length === 1 ? 1 : from;
+	return from + Math.floor(Math.random() * (to - from + 1));
 }
 
 export function rollh(n, amount) {
@@ -21,4 +20,15 @@ export function rollh(n, amount) {
 		rolls.push(roll(n))
 	}
 	return Math.max(...rolls);
+}
+
+export function shuffle(a) {
+	let b = a.slice(0), i, r, tmp;
+	for (i = b.length - 1; i > 0; i--) {
+		r = roll(0, i);
+		tmp = b[i];
+		b[i] = b[r];
+		b[r] = tmp;
+	}
+	return b;
 }

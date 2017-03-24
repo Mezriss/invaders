@@ -6,7 +6,7 @@
  */
 
 import {core as coreCfg, space as cfg} from '../config';
-import {roll, roll0, initCanvas, drawPixel, hexToRgba, rollh, drawImage} from '../util';
+import {roll, initCanvas, drawPixel, hexToRgba, rollh, drawImage} from '../util';
 
 const spaceProto = {
 	ctx: initCanvas(),
@@ -51,10 +51,10 @@ export function create() {
 
 	for (let i = 0; i < starCount; i += 1) {
 		const star = {
-			x: roll0(coreCfg.screenWidth / pixelSize),
-			y: roll0(coreCfg.screenHeight / pixelSize),
+			x: roll(cfg.maxBeamLength, coreCfg.screenWidth / pixelSize - cfg.maxBeamLength * 2 - 1),
+			y: roll(cfg.maxBeamLength, coreCfg.screenHeight / pixelSize - cfg.maxBeamLength * 2 - 1),
 			intensity: roll(cfg.maxIntensity),
-			hue: cfg.hue[roll0(cfg.hue.length)]
+			hue: cfg.hue[roll(0, cfg.hue.length - 1)]
 		};
 		space.stars.push(star);
 	}
