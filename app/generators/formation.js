@@ -4,11 +4,10 @@
  */
 
 import * as ship from './ship';
+import * as missile from './missile';
 import {initCanvas, roll, drawImage} from '../util';
 import {core as coreCfg, formation as cfg, ship as shipCfg} from '../config';
 import {formation as formationConst, direction} from '../const';
-
-//todo functionality to remove exploding ships
 
 const formationProto = {
 	advanceSpeed: 0.05,
@@ -33,6 +32,18 @@ const formationProto = {
 			this.position.x = this.position.x <= 0 ? 0 : coreCfg.screenWidth - this.ctx.canvas.width;
 		}
 	},
+	move: function(dt) {
+		switch (this.direction) {
+			case direction.left:
+				this.position.x -= this.evadeSpeed * coreCfg.screenWidth * dt / 1000; break;
+			case direction.right:
+				this.position.x += this.evadeSpeed * coreCfg.screenWidth * dt / 1000; break;
+			case direction.up:
+				this.position.y -= this.advanceSpeed * coreCfg.screenHeight * dt / 1000; break;
+			case direction.down:
+				this.position.y += this.advanceSpeed * coreCfg.screenHeight * dt / 1000; break;
+		}
+	},
 	removeShip: function() {
 
 	}
@@ -55,7 +66,10 @@ export function create(options) {
 	const shipTypes = [];
 
 	for (let i = 0; i < options.shipTypes; i += 1) {
-		shipTypes.push(ship.create());
+		const shipType = ship.create();
+		shipType.missile = missile.create();
+		shipType.missile.launcher = shipType;
+		shipTypes.push(shipType);
 	}
 
 	switch (options.shipArrangement) {
@@ -63,8 +77,11 @@ export function create(options) {
 			for (let i = 0; i < options.height; i++) {
 				for (let j = 0; j < options.width; j++) {
 					const ship = Object.create(shipTypes[i]);
-					ship.x = cfg.shipPadding * coreCfg.pixelSize / 2 + (shipCfg.width + cfg.shipPadding) * coreCfg.pixelSize * j;
-					ship.y = cfg.linePadding * coreCfg.pixelSize / 2 + (shipCfg.height + cfg.linePadding) * coreCfg.pixelSize * i;
+					ship.formation = formation;
+					ship.currentLevel = options.level;
+
+					ship.x = Math.floor(cfg.shipPadding * coreCfg.pixelSize / 2) + (shipCfg.width + cfg.shipPadding) * coreCfg.pixelSize * j;
+					ship.y = Math.floor(cfg.linePadding * coreCfg.pixelSize / 2) + (shipCfg.height + cfg.linePadding) * coreCfg.pixelSize * i;
 					formation.ships.push(ship);
 				}
 			}

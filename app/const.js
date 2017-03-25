@@ -16,5 +16,11 @@ export const event = {
 
 export const key = {
 	arrowLeft: 'ArrowLeft',
-	arrowRight: 'ArrowRight'
+	arrowRight: 'ArrowRight',
+	space: ' '
+};
+
+export const missile = {
+	armed: 'armed',
+	launched: 'launched'
 };

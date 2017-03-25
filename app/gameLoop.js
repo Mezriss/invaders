@@ -45,6 +45,9 @@ export function init(data, drawCanvas) {
 
 	player = data.player;
 	level = data.level;
+	player.currentShip.currentLevel = level;
+	player.currentShip.armMissile();
+
 	canvas = drawCanvas;
 }
 
@@ -53,20 +56,14 @@ export function end() {
 }
 
 export function drawFrame(dt) {
-	//updating positions
+
+	//run AI and update locations of everything
 	level.formations.forEach(formation => {
-		switch (formation.direction) {
-			case c.direction.left:
-				formation.position.x -= formation.evadeSpeed * cfg.screenWidth * dt / 1000; break;
-			case c.direction.right:
-				formation.position.x += formation.evadeSpeed * cfg.screenWidth * dt / 1000; break;
-			case c.direction.up:
-				formation.position.y -= formation.advanceSpeed * cfg.screenHeight * dt / 1000; break;
-			case c.direction.down:
-				formation.position.y += formation.advanceSpeed * cfg.screenHeight * dt / 1000; break;
-		}
+		formation.behavior();
+		formation.move(dt);
 	});
 
+	//take user input and move ship
 	if (player.moving || player.plannedTravel > 0) {
 		let travelDistance = player.speed * cfg.screenWidth * dt / 1000;
 		switch (player.direction) {
@@ -84,10 +81,13 @@ export function drawFrame(dt) {
 		player.currentShip.x = Math.round(player.currentShip.x);
 	}
 
-	//run AI and update locations of everything
-	level.formations.forEach(formation => formation.behavior());
+	level.missiles.forEach(missile => {
+		missile.behavior();
+		missile.move(dt);
+	});
 
 	//draw everything
+	level.missiles.forEach(missile => missile.show(canvas));
 	player.show(canvas);
 	level.formations.forEach(formation => formation.show(canvas));
 

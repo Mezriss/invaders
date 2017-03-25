@@ -11,7 +11,9 @@ import {formation as formationConst} from '../const';
 
 export function create(levelNumber) {
 	const level = {
+		number: levelNumber,
 		formations: [],
+		missiles: [],
 		events: []
 	};
 

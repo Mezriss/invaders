@@ -1,4 +1,5 @@
-import {core as coreCfg, missile as cfg} from '../config';
+import {core as coreCfg, missile as cfg, ship as shipCfg} from '../config';
+import {missile as missileConst} from '../const';
 import {roll, initCanvas, shuffle, drawPixel, hexToRgba, drawImage, cacheSprite} from '../util';
 
 const defaultOptions = {
@@ -6,17 +7,38 @@ const defaultOptions = {
 	},
 	pixelWidth = cfg.width * coreCfg.pixelSize,
 	pixelHeight = cfg.height * coreCfg.pixelSize,
-	sprite = initCanvas(pixelWidth + coreCfg.pixelSize * 2, pixelHeight + coreCfg.pixelSize * 2),
+	paddedPixelWidth = pixelWidth + coreCfg.pixelSize * 2,
+	paddedPixelHeight = pixelHeight + coreCfg.pixelSize * 2,
+	sprite = initCanvas(paddedPixelWidth, paddedPixelHeight),
 	partWidth = Math.ceil(cfg.width / 2),
 	partHeight = Math.ceil(cfg.height / 2),
 	missileProto = {
 		speed: 0.2,
 		damage: 1,
+		launcher: null,
 		sprite: null,
+		status: null,
 		x: null,
 		y: null,
-		show: ctx => drawImage(ctx, this.sprite.ctx, [this.x, this.y], this.sprite.coords, [pixelWidth, pixelHeight]),
-		behavior: () => {}
+		show: function(ctx) {
+			drawImage(ctx, this.sprite.ctx, [this.x, this.y], this.sprite.coords, [paddedPixelWidth, paddedPixelHeight])
+		},
+		alignWithShip() {
+			this.x = this.launcher.x + (shipCfg.width - cfg.width - 2) / 2 * coreCfg.pixelSize;
+			this.y = this.launcher.y + (shipCfg.height - cfg.height - 2) / 2 * (this.launcher.player ? 1 : -1) * coreCfg.pixelSize;
+		},
+		arm: function() {
+			this.alignWithShip();
+			this.status = missileConst.armed;
+		},
+		behavior: function() {},
+		move: function (dt) {
+			if (this.status === missileConst.armed) {
+				this.alignWithShip();
+				return;
+			}
+		}
+
 };
 
 
@@ -31,7 +53,7 @@ export function create(options = defaultOptions) {
 	}
 	missile.blueprint = shuffle(blueprint);
 
-	sprite.clearRect(0, 0, pixelWidth, pixelHeight);
+	sprite.clearRect(0, 0, paddedPixelWidth, paddedPixelHeight);
 	for (let i = 0; i < partHeight; i += 1) {
 		for (let j = 0; j < partWidth; j += 1) {
 			if (missile.blueprint[i * partWidth + j]) {
@@ -61,7 +83,7 @@ export function create(options = defaultOptions) {
 	}
 
 
-	missile.sprite = cacheSprite(sprite, pixelWidth, pixelHeight);
+	missile.sprite = cacheSprite(sprite, paddedPixelWidth, paddedPixelHeight);
 
 	return missile;
 }

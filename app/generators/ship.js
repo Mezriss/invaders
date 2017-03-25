@@ -17,12 +17,25 @@ const defaultOptions = {
 	},
 	sprite = initCanvas(pixelWidth, pixelHeight),
 	shipProto = {
+		player: false,
 		armour: 1,
 		blueprint: null,
+		missileType: null,
+		armedMissiles: null,
+		currentLevel: null,
+		formation: null,
 		sprite: null,
 		x: null,
 		y: null,
-		show: ctx => drawImage(ctx, this.sprite.ctx, [this.x, this.y], this.sprite.coords, [pixelWidth, pixelHeight])
+		show: function(ctx) {
+			drawImage(ctx, this.sprite.ctx, [this.x, this.y], this.sprite.coords, [pixelWidth, pixelHeight])
+		},
+		armMissile: function() {
+			const missile = Object.create(this.missileType);
+			missile.launcher = this;
+			missile.arm();
+			this.currentLevel.missiles.push(missile);
+		}
 	};
 
 export function create(options = defaultOptions) {

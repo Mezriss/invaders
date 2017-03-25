@@ -4,11 +4,13 @@
  */
 
 import {player as cfg, core as coreCfg, ship as shipCfg} from '../config'
-import * as ship from './ship';
+import * as shipGenerator from './ship';
+import * as missileGenerator from './missile';
 
 
 const playerProto = {
 	score: 0,
+	currentLevel: null,
 	currentShip: null,
 	extraShips: null,
 	direction: null,
@@ -24,18 +26,25 @@ const playerShipCfg = {
 	color: cfg.defaultColor
 };
 
-
 export function create() {
 	const player = Object.create(playerProto);
 
-	player.currentShip = ship.create(playerShipCfg);
-	player.currentShip.x = Math.floor(coreCfg.screenWidth / 2 - shipCfg.width * 0.5 * coreCfg.pixelSize);
-	player.currentShip.y = Math.floor(coreCfg.screenHeight - shipCfg.height * 1.5 * coreCfg.pixelSize);
-
 	player.extraShips = [];
-	for (let i = 0; i < cfg.extraShips; i += 1) {
-		player.extraShips.push(ship.create(playerShipCfg));
+
+	for (let i = 0; i < cfg.startingLives; i += 1) {
+		const ship = shipGenerator.create(playerShipCfg);
+		ship.player = true;
+
+		ship.x = Math.floor(coreCfg.screenWidth / 2 - shipCfg.width * 0.5 * coreCfg.pixelSize);
+		ship.y = Math.floor(coreCfg.screenHeight - shipCfg.height * 1.5 * coreCfg.pixelSize);
+
+		ship.missileType = missileGenerator.create();
+		ship.missileType.launcher = ship;
+
+		player.extraShips.push(ship);
 	}
+
+	player.currentShip = player.extraShips.pop();
 
 	return player;
 }
