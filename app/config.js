@@ -59,5 +59,6 @@ export const missile = {
 	width: 3,
 	height: 5,
 	minBits: 3,
-	maxBits: 4
+	maxBits: 4,
+	armSteps: 4
 };

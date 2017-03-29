@@ -37,11 +37,24 @@ function keyUpRight() {
 	player.moving = leftPressed || rightPressed;
 }
 
+function keyDownSpace() {
+	player.currentShip.barrage = true;
+	player.currentShip.fire();
+
+}
+
+function keyUpSpace() {
+	player.currentShip.barrage = false;
+}
+
 export function init(data, drawCanvas) {
 	pubSub.on(`${c.event.keyDown}#${c.key.arrowLeft}`, keyDownLeft);
 	pubSub.on(`${c.event.keyDown}#${c.key.arrowRight}`, keyDownRight);
+	pubSub.on(`${c.event.keyDown}#${c.key.space}`, keyDownSpace);
 	pubSub.on(`${c.event.keyUp}#${c.key.arrowLeft}`, keyUpLeft);
 	pubSub.on(`${c.event.keyUp}#${c.key.arrowRight}`, keyUpRight);
+	pubSub.on(`${c.event.keyUp}#${c.key.space}`, keyUpSpace);
+
 
 	player = data.player;
 	level = data.level;
@@ -52,7 +65,7 @@ export function init(data, drawCanvas) {
 }
 
 export function end() {
-	[keyDownLeft, keyDownRight, keyUpLeft, keyUpRight].forEach(handler => pubSub.off(handler));
+	[keyDownLeft, keyDownRight, keyUpLeft, keyUpRight, keyDownSpace, keyUpSpace].forEach(handler => pubSub.off(handler));
 }
 
 export function drawFrame(dt) {
@@ -60,8 +73,10 @@ export function drawFrame(dt) {
 	//run AI and update locations of everything
 	level.formations.forEach(formation => {
 		formation.behavior();
+		formation.ships.forEach(ship => ship.behavior());
 		formation.move(dt);
 	});
+	player.currentShip.behavior();
 
 	//take user input and move ship
 	if (player.moving || player.plannedTravel > 0) {

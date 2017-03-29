@@ -16,27 +16,55 @@ const defaultOptions = {
 		speed: 0.2,
 		damage: 1,
 		launcher: null,
-		sprite: null,
+		sprites: null,
+		armStart: null,
+		armProgress: 0,
+		armSpeed: 1000,
 		status: null,
 		x: null,
 		y: null,
 		show: function(ctx) {
-			drawImage(ctx, this.sprite.ctx, [this.x, this.y], this.sprite.coords, [paddedPixelWidth, paddedPixelHeight])
+			drawImage(ctx, this.sprites[this.armProgress].ctx, [this.x, this.y], this.sprites[this.armProgress].coords, [paddedPixelWidth, paddedPixelHeight])
 		},
-		alignWithShip() {
+		alignWithShipX() {
 			this.x = this.launcher.x + (shipCfg.width - cfg.width - 2) / 2 * coreCfg.pixelSize;
+		},
+		alignWithShipY() {
 			this.y = this.launcher.y + (shipCfg.height - cfg.height - 2) / 2 * (this.launcher.player ? 1 : -1) * coreCfg.pixelSize;
 		},
 		arm: function() {
-			this.alignWithShip();
-			this.status = missileConst.armed;
+			this.alignWithShipX();
+			this.alignWithShipY();
+			this.armStart = Date.now();
+			this.status = missileConst.arming;
 		},
-		behavior: function() {},
-		move: function (dt) {
+		launch() {
 			if (this.status === missileConst.armed) {
-				this.alignWithShip();
-				return;
+				this.status = missileConst.launched
 			}
+		},
+		behavior: function() {
+			if (this.status === missileConst.arming) {
+				this.armProgress = Math.floor((Date.now() - this.armStart) / (this.armSpeed / cfg.armSteps));
+				this.armProgress = this.armProgress >= cfg.armSteps ? cfg.armSteps - 1 : this.armProgress;
+				if (this.armProgress === cfg.armSteps - 1) {
+					this.status = missileConst.armed;
+					if (this.launcher.barrage) {
+						this.launch();
+					}
+				}
+			}
+		},
+		move: function (dt) {
+			if (this.status === missileConst.armed || !this.checkSafeDistance()) {
+				this.alignWithShipX();
+			}
+			if (this.status === missileConst.launched) {
+				this.y += this.speed * coreCfg.screenHeight * dt / 1000 * (this.launcher.player ? -1 : 1);
+			}
+		},
+		checkSafeDistance: function() {
+			return this.status === missileConst.launched && Math.abs(this.launcher.y - this.y) > paddedPixelHeight;
 		}
 
 };
@@ -52,8 +80,9 @@ export function create(options = defaultOptions) {
 		blueprint.push(i < bitCount);
 	}
 	missile.blueprint = shuffle(blueprint);
+	missile.sprites = [];
 
-	sprite.clearRect(0, 0, paddedPixelWidth, paddedPixelHeight);
+
 	for (let i = 0; i < partHeight; i += 1) {
 		for (let j = 0; j < partWidth; j += 1) {
 			if (missile.blueprint[i * partWidth + j]) {
@@ -75,15 +104,17 @@ export function create(options = defaultOptions) {
 			shape[i + cfg.width + 2] = shape[i + cfg.width + 2] ? shape[i + cfg.width + 2] : 100 * cfg.glow;
 		}
 	}
-
-	for (let i = 0; i < (cfg.width + 2) * (cfg.height + 2); i += 1) {
-		if (shape[i]) {
-			drawPixel(sprite, i % (cfg.width + 2), Math.floor(i / (cfg.width + 2)), hexToRgba(options.color, shape[i]))
+	//draw a sprite for each arm step
+	for (let j = cfg.armSteps - 1; j >= 0; j -= 1) {
+		sprite.clearRect(0, 0, paddedPixelWidth, paddedPixelHeight);
+		for (let i = 0; i < (cfg.width + 2) * (cfg.height + 2); i += 1) {
+			if (shape[i]) {
+				drawPixel(sprite, i % (cfg.width + 2), Math.floor(i / (cfg.width + 2)),
+					hexToRgba(options.color, shape[i] - (shape[i] / cfg.armSteps) * j))
+			}
 		}
+		missile.sprites.push(cacheSprite(sprite, paddedPixelWidth, paddedPixelHeight));
 	}
-
-
-	missile.sprite = cacheSprite(sprite, paddedPixelWidth, paddedPixelHeight);
 
 	return missile;
 }

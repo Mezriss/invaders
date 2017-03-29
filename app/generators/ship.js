@@ -21,7 +21,7 @@ const defaultOptions = {
 		armour: 1,
 		blueprint: null,
 		missileType: null,
-		armedMissiles: null,
+		missile: null,
 		currentLevel: null,
 		formation: null,
 		sprite: null,
@@ -30,11 +30,20 @@ const defaultOptions = {
 		show: function(ctx) {
 			drawImage(ctx, this.sprite.ctx, [this.x, this.y], this.sprite.coords, [pixelWidth, pixelHeight])
 		},
+		behavior: function() {
+			//reload
+			if (this.missileType && (!this.missile || this.missile.checkSafeDistance())) {
+				this.armMissile();
+			}
+		},
 		armMissile: function() {
-			const missile = Object.create(this.missileType);
-			missile.launcher = this;
-			missile.arm();
-			this.currentLevel.missiles.push(missile);
+			this.missile = Object.create(this.missileType);
+			this.missile.launcher = this;
+			this.missile.arm();
+			this.currentLevel.missiles.push(this.missile);
+		},
+		fire: function() {
+			this.missile.launch();
 		}
 	};
 
