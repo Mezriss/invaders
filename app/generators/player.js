@@ -6,6 +6,7 @@
 import {player as cfg, core as coreCfg, ship as shipCfg} from '../config'
 import * as shipGenerator from './ship';
 import * as missileGenerator from './missile';
+import {pointIntersectMS} from '../util';
 
 
 const playerProto = {
@@ -19,6 +20,12 @@ const playerProto = {
 	speed: 0.3,
 	show: function(ctx) {
 		this.currentShip.show(ctx);
+	},
+	checkCollisions(missile) {
+		if (pointIntersectMS(missile.x, missile.y, this.currentShip.x, this.currentShip.y, true)) {
+			missile.destroy();
+			console.info('Dead')
+		}
 	}
 };
 

@@ -1,8 +1,7 @@
 # Invaders
-Sace Invaders inspired game that procedurally generates almost all of its assets and content
+Space Invaders inspired game that procedurally generates almost all of its assets and content
 
 ## Roadmap
-* basic implementations of all gameplay elements (player movement, shooting, collisions, etc.)
 * interface (title screen, game over screen, settings screen (?))
 * serve from github pages
 * support for mobile devices

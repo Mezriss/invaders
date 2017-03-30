@@ -28,9 +28,14 @@ const defaultOptions = {
 		},
 		alignWithShipX() {
 			this.x = this.launcher.x + (shipCfg.width - cfg.width - 2) / 2 * coreCfg.pixelSize;
+			this.x += this.launcher.formation ? this.launcher.formation.x : 0;
 		},
 		alignWithShipY() {
-			this.y = this.launcher.y + (shipCfg.height - cfg.height - 2) / 2 * (this.launcher.player ? 1 : -1) * coreCfg.pixelSize;
+			if (this.launcher.player) {
+				this.y = this.launcher.y + (shipCfg.height - cfg.height - 2) / 2 * coreCfg.pixelSize;
+			} else {
+				this.y = this.launcher.formation.y + this.launcher.y - (shipCfg.height - cfg.height + 2) / 2 * coreCfg.pixelSize;
+			}
 		},
 		arm: function() {
 			this.alignWithShipX();
@@ -56,18 +61,33 @@ const defaultOptions = {
 			}
 		},
 		move: function (dt) {
-			if (this.status === missileConst.armed || !this.checkSafeDistance()) {
+			if (this.status !== missileConst.launched) {
+				this.alignWithShipY();
+			}
+
+			if (this.status !== missileConst.launched || !this.checkSafeDistance()) {
 				this.alignWithShipX();
 			}
 			if (this.status === missileConst.launched) {
 				this.y += this.speed * coreCfg.screenHeight * dt / 1000 * (this.launcher.player ? -1 : 1);
 			}
+			//cleanup offscreen missiles
+			if (this.y < -paddedPixelHeight || this.y > coreCfg.screenHeight) {
+				this.destroy();
+			}
 		},
 		checkSafeDistance: function() {
-			return this.status === missileConst.launched && Math.abs(this.launcher.y - this.y) > paddedPixelHeight;
+			return this.status === missileConst.launched &&
+				Math.abs(this.launcher.y + (this.launcher.formation ? this.launcher.formation.y : 0) - this.y) > paddedPixelHeight;
+		},
+		destroy: function() {
+			this.status = missileConst.destroyed;
+			this.launcher.currentLevel.missiles.splice(this.launcher.currentLevel.missiles.indexOf(this), 1);
+			if (this.launcher.missile === this) {
+				this.launcher.missile = null;
+			}
 		}
-
-};
+	};
 
 
 export function create(options = defaultOptions) {

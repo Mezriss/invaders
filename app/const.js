@@ -23,5 +23,11 @@ export const key = {
 export const missile = {
 	arming: 'arming',
 	armed: 'armed',
-	launched: 'launched'
+	launched: 'launched',
+	destroyed: 'destroyed'
+};
+
+export const conf = {
+	regular: 'regular',
+	beveled: 'beveled'
 };

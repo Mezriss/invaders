@@ -14,10 +14,12 @@ export function create(levelNumber) {
 		number: levelNumber,
 		formations: [],
 		missiles: [],
-		events: []
+		events: [],
+		effects: []
 	};
 
 	level.formations.push(formationGenerator.create({
+		level: level,
 		levelNumber: levelNumber,
 		width: Math.floor(cfg.screenWidth / ((shipCfg.width + formationCfg.shipPadding) * cfg.pixelSize) * 0.7),
 		height: 6,

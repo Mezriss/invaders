@@ -55,7 +55,6 @@ export function init(data, drawCanvas) {
 	pubSub.on(`${c.event.keyUp}#${c.key.arrowRight}`, keyUpRight);
 	pubSub.on(`${c.event.keyUp}#${c.key.space}`, keyUpSpace);
 
-
 	player = data.player;
 	level = data.level;
 	player.currentShip.currentLevel = level;
@@ -69,6 +68,14 @@ export function end() {
 }
 
 export function drawFrame(dt) {
+	//check for collisions
+	level.missiles.filter(missile => missile.status === c.missile.launched).forEach(missile => {
+		if (missile.launcher.player) {
+			level.formations.forEach(formation => formation.checkCollisions(missile))
+		} else {
+			player.checkCollisions(missile);
+		}
+	});
 
 	//run AI and update locations of everything
 	level.formations.forEach(formation => {

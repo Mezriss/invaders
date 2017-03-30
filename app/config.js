@@ -1,3 +1,5 @@
+import {conf as confConst} from './const';
+
 export const core = {
 	pixelSize: 3,
 	screenWidth: 480,
@@ -21,7 +23,8 @@ export const ship = {
 	height: 5,
 	minBits: 7,
 	maxBits: 15,
-	defaultColor: '#FFC905'
+	defaultColor: '#FFC905',
+	drawStyle: confConst.regular
 };
 
 export const drawing = {
@@ -62,3 +65,10 @@ export const missile = {
 	maxBits: 4,
 	armSteps: 4
 };
+
+export function configure(key, val) {
+	switch (key) {
+		case confConst.beveled: ship.drawStyle = confConst.beveled; break;
+		case 'pixelSize': core.pixelSize = parseInt(val, 10); break;
+	}
+}

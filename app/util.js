@@ -1,5 +1,6 @@
 export * from './util/drawing';
 export * from './util/color';
+export * from './util/collision';
 
 import * as animation from './util/animation';
 export {animation};

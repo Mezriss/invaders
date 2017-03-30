@@ -1,12 +1,14 @@
 import '../css/style.css';
 
-import {core as cfg} from './config'
+import {core as cfg, configure} from './config'
 import {event as eventConst} from './const'
 import * as spaceGenerator from './generators/space';
 import * as player from './generators/player';
 import * as levelGenerator from './generators/level';
 import * as gameLoop from './gameLoop';
 import {pubSub, animation} from './util';
+
+window.location.search.substr(1).split(/[,;&]/).forEach(keyValue => configure(...keyValue.split('=')));
 
 [gameScreen, interfaceScreen, backgroundScreen].forEach(canvas => {
 	canvas.width = cfg.screenWidth;
