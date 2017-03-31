@@ -11,7 +11,9 @@ export const direction = {
 
 export const event = {
 	keyDown: 'keydown',
-	keyUp: 'keyup'
+	keyUp: 'keyup',
+	missileDestroyed: 'missileDestroyed',
+	missileCreated: 'missileCreated'
 };
 
 export const key = {

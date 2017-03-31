@@ -1,6 +1,6 @@
 import {core as coreCfg, missile as cfg, ship as shipCfg} from '../config';
-import {missile as missileConst} from '../const';
-import {roll, initCanvas, shuffle, drawPixel, hexToRgba, drawImage, cacheSprite} from '../util';
+import {missile as missileConst, event as eventConst} from '../const';
+import {roll, initCanvas, shuffle, drawPixel, hexToRgba, drawImage, cacheSprite, pubSub} from '../util';
 
 const defaultOptions = {
 		color: cfg.defaultColor
@@ -14,7 +14,6 @@ const defaultOptions = {
 	partHeight = Math.ceil(cfg.height / 2),
 	missileProto = {
 		speed: 0.2,
-		damage: 1,
 		launcher: null,
 		sprites: null,
 		armStart: null,
@@ -82,7 +81,7 @@ const defaultOptions = {
 		},
 		destroy: function() {
 			this.status = missileConst.destroyed;
-			this.launcher.currentLevel.missiles.splice(this.launcher.currentLevel.missiles.indexOf(this), 1);
+			pubSub.pub(eventConst.missileDestroyed, this);
 			if (this.launcher.missile === this) {
 				this.launcher.missile = null;
 			}

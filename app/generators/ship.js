@@ -6,8 +6,8 @@
  */
 
 import {core as coreCfg, ship as cfg} from '../config';
-import {roll, shuffle, initCanvas, drawPixel, drawBeveledPixel, drawImage, cacheSprite} from '../util';
-import {conf as confConst} from '../const';
+import {roll, shuffle, initCanvas, drawPixel, drawBeveledPixel, drawImage, cacheSprite, pubSub} from '../util';
+import {conf as confConst, event as eventConst} from '../const';
 
 const wingLength = Math.ceil(cfg.width / 2),
 	pixelWidth = cfg.width * coreCfg.pixelSize,
@@ -19,11 +19,10 @@ const defaultOptions = {
 	sprite = initCanvas(pixelWidth, pixelHeight),
 	shipProto = {
 		player: false,
-		armour: 1,
 		blueprint: null,
+		color: null,
 		missileType: null,
 		missile: null,
-		currentLevel: null,
 		formation: null,
 		sprite: null,
 		x: null,
@@ -42,7 +41,7 @@ const defaultOptions = {
 				this.missile = Object.create(this.missileType);
 				this.missile.launcher = this;
 				this.missile.arm();
-				this.currentLevel.missiles.push(this.missile);
+				pubSub.pub(eventConst.missileCreated, this.missile);
 			}
 		},
 		fire: function() {

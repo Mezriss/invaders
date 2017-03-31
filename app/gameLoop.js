@@ -47,6 +47,14 @@ function keyUpSpace() {
 	player.currentShip.barrage = false;
 }
 
+function missileCreated(missile) {
+	level.missiles.push(missile);
+}
+
+function missileDestroyed(missile) {
+	level.missiles.splice(level.missiles.indexOf(missile), 1);
+}
+
 export function init(data, drawCanvas) {
 	pubSub.on(`${c.event.keyDown}#${c.key.arrowLeft}`, keyDownLeft);
 	pubSub.on(`${c.event.keyDown}#${c.key.arrowRight}`, keyDownRight);
@@ -55,16 +63,19 @@ export function init(data, drawCanvas) {
 	pubSub.on(`${c.event.keyUp}#${c.key.arrowRight}`, keyUpRight);
 	pubSub.on(`${c.event.keyUp}#${c.key.space}`, keyUpSpace);
 
+	pubSub.on(c.event.missileCreated, missileCreated);
+	pubSub.on(c.event.missileDestroyed, missileDestroyed);
+
 	player = data.player;
 	level = data.level;
-	player.currentShip.currentLevel = level;
 	player.currentShip.armMissile();
 
 	canvas = drawCanvas;
 }
 
 export function end() {
-	[keyDownLeft, keyDownRight, keyUpLeft, keyUpRight, keyDownSpace, keyUpSpace].forEach(handler => pubSub.off(handler));
+	[keyDownLeft, keyDownRight, keyUpLeft, keyUpRight, keyDownSpace, keyUpSpace,
+		missileCreated, missileDestroyed].forEach(handler => pubSub.off(handler));
 }
 
 export function drawFrame(dt) {

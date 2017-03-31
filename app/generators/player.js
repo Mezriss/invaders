@@ -11,7 +11,6 @@ import {pointIntersectMS} from '../util';
 
 const playerProto = {
 	score: 0,
-	currentLevel: null,
 	currentShip: null,
 	extraShips: null,
 	direction: null,

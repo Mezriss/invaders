@@ -67,18 +67,13 @@ const formationProto = {
 		if (mX < 0 || mY < 0 || mX > this.width || mY > this.height) {
 			return;
 		}
-		for (i = this.ships.length - 1; i >= 0; i -= 1) {//todo box collisions at -1
+		for (i = this.ships.length - 1; i >= 0; i -= 1) {
 			if (pointIntersectMS(mX, mY, this.ships[i].x, this.ships[i].y, false)) {
 				//todo check if ship geometry is hit
-
-				this.ships[i].armour -= missile.damage;
-				if (this.ships[i].armour <= 0) {
-					this.destroyShip(i);
-				}
+				this.destroyShip(i);
 				missile.destroy();
 				break;
 			}
-
 		}
 	},
 	destroyShip: function(id) {
@@ -119,7 +114,6 @@ export function create(options) {
 				for (let j = 0; j < options.width; j++) {
 					const ship = Object.create(shipTypes[i]);
 					ship.formation = formation;
-					ship.currentLevel = options.level;
 
 					ship.x = Math.floor(cfg.shipPadding / 2 * coreCfg.pixelSize) + (shipCfg.width + cfg.shipPadding) * coreCfg.pixelSize * j;
 					ship.y = Math.floor(cfg.linePadding / 2 * coreCfg.pixelSize) + (shipCfg.height + cfg.linePadding) * coreCfg.pixelSize * i;
