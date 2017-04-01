@@ -18,16 +18,16 @@ const spaceProto = {
 
 		this.stars.forEach(star => {
 
-			drawPixel(this.ctx, star.x, star.y, hexToRgba(star.hue, star.intensity), pixelSize);
+			drawPixel(this.ctx, star.x * pixelSize, star.y * pixelSize, hexToRgba(star.hue, star.intensity), pixelSize);
 
 			let beam = 0,
 				beamIntensity = star.intensity * cfg.initialBeamIntensity;
 
 			while (beamIntensity > cfg.minBeamIntensity && beam <= cfg.maxBeamLength) {
-				drawPixel(this.ctx, star.x - beam, star.y, hexToRgba(star.hue, beamIntensity), pixelSize);
-				drawPixel(this.ctx, star.x + beam, star.y, hexToRgba(star.hue, beamIntensity), pixelSize);
-				drawPixel(this.ctx, star.x, star.y - beam, hexToRgba(star.hue, beamIntensity), pixelSize);
-				drawPixel(this.ctx, star.x, star.y + beam, hexToRgba(star.hue, beamIntensity), pixelSize);
+				drawPixel(this.ctx, (star.x - beam) * pixelSize, star.y * pixelSize, hexToRgba(star.hue, beamIntensity), pixelSize);
+				drawPixel(this.ctx, (star.x + beam) * pixelSize, star.y * pixelSize, hexToRgba(star.hue, beamIntensity), pixelSize);
+				drawPixel(this.ctx, star.x * pixelSize, (star.y - beam) * pixelSize, hexToRgba(star.hue, beamIntensity), pixelSize);
+				drawPixel(this.ctx, star.x * pixelSize, (star.y + beam) * pixelSize, hexToRgba(star.hue, beamIntensity), pixelSize);
 
 				beam += 1;
 				beamIntensity = star.intensity * cfg.initialBeamIntensity - beam * cfg.beamFadeRate;

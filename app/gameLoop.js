@@ -55,6 +55,14 @@ function missileDestroyed(missile) {
 	level.missiles.splice(level.missiles.indexOf(missile), 1);
 }
 
+function explosionCreated(explosion) {
+	level.effects.push(explosion);
+}
+
+function explosionDestroyed(explosion) {
+	level.effects.splice(level.effects.indexOf(explosion), 1);
+}
+
 export function init(data, drawCanvas) {
 	pubSub.on(`${c.event.keyDown}#${c.key.arrowLeft}`, keyDownLeft);
 	pubSub.on(`${c.event.keyDown}#${c.key.arrowRight}`, keyDownRight);
@@ -65,6 +73,8 @@ export function init(data, drawCanvas) {
 
 	pubSub.on(c.event.missileCreated, missileCreated);
 	pubSub.on(c.event.missileDestroyed, missileDestroyed);
+	pubSub.on(c.event.explosionCreated, explosionCreated);
+	pubSub.on(c.event.explosionDestroyed, explosionDestroyed);
 
 	player = data.player;
 	level = data.level;
@@ -75,7 +85,7 @@ export function init(data, drawCanvas) {
 
 export function end() {
 	[keyDownLeft, keyDownRight, keyUpLeft, keyUpRight, keyDownSpace, keyUpSpace,
-		missileCreated, missileDestroyed].forEach(handler => pubSub.off(handler));
+		missileCreated, missileDestroyed, explosionCreated, explosionDestroyed].forEach(handler => pubSub.off(handler));
 }
 
 export function drawFrame(dt) {
@@ -119,10 +129,13 @@ export function drawFrame(dt) {
 		missile.move(dt);
 	});
 
+	level.effects.forEach(effect => effect.move(dt));
+
 	//draw everything
 	level.missiles.forEach(missile => missile.show(canvas));
 	player.show(canvas);
 	level.formations.forEach(formation => formation.show(canvas));
+	level.effects.forEach(effect => effect.show(canvas));
 
 	return null;
 }

@@ -67,6 +67,12 @@ export const missile = {
 	glowLength: 1 //more of a constant; increasing this does very little
 };
 
+export const explosion = {
+	duration: 400,
+	minOpacity: 20,
+	spread: 4,
+};
+
 export function configure(key, val) {
 	switch (key) {
 		case confConst.beveled: ship.drawStyle = confConst.beveled; break;

@@ -19,17 +19,18 @@ const defaultOptions = {
 		x: null,
 		y: null,
 		show: function(ctx) {
-			drawImage(ctx, this.sprites[this.armProgress].ctx, [this.x, this.y], this.sprites[this.armProgress].coords, [cfg.widthPaddedPx, cfg.heightPaddedPx])
+			drawImage(ctx, this.sprites[this.armProgress].ctx, [this.x - cfg.glowLengthPx, this.y - cfg.glowLengthPx],
+				this.sprites[this.armProgress].coords, [cfg.widthPaddedPx, cfg.heightPaddedPx])
 		},
 		alignWithShipX() {
-			this.x = this.launcher.x + (shipCfg.widthPx - cfg.widthPx) / 2 - cfg.glowLengthPx;
+			this.x = this.launcher.x + (shipCfg.widthPx - cfg.widthPx) / 2;
 			this.x += this.launcher.formation ? this.launcher.formation.x : 0;
 		},
 		alignWithShipY() {
 			if (this.launcher.player) {
-				this.y = this.launcher.y + (shipCfg.heightPx - cfg.heightPx) / 2 - cfg.glowLengthPx;
+				this.y = this.launcher.y + (shipCfg.heightPx - cfg.heightPx) / 2;
 			} else {
-				this.y = this.launcher.formation.y + this.launcher.y - (shipCfg.heightPx - cfg.heightPx) / 2 - cfg.glowLengthPx;
+				this.y = this.launcher.formation.y + this.launcher.y - (shipCfg.heightPx - cfg.heightPx) / 2;
 			}
 		},
 		arm: function() {
@@ -124,7 +125,7 @@ export function create(options = defaultOptions) {
 		sprite.clearRect(0, 0, cfg.widthPaddedPx, cfg.heightPaddedPx);
 		for (let i = 0; i < (cfg.width + 2) * (cfg.height + 2); i += 1) {
 			if (shape[i]) {
-				drawPixel(sprite, i % (cfg.width + 2), Math.floor(i / (cfg.width + 2)),
+				drawPixel(sprite, i % (cfg.width + 2) * coreCfg.pixelSize, Math.floor(i / (cfg.width + 2)) * coreCfg.pixelSize,
 					hexToRgba(options.color, shape[i] - (shape[i] / cfg.armSteps) * j))
 			}
 		}

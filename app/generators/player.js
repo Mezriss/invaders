@@ -21,7 +21,7 @@ const playerProto = {
 		this.currentShip.show(ctx);
 	},
 	checkCollisions(missile) {
-		if (rectIntersect(missile.x + missileCfg.glowLengthPx, missile.y + missileCfg.glowLengthPx, this.currentShip.x, this.currentShip.y)) {
+		if (rectIntersect(missile.x, missile.y, this.currentShip.x, this.currentShip.y)) {
 			missile.destroy();
 			console.info('Dead')
 		}

@@ -5,7 +5,7 @@
 
  */
 
-import {ship as cfg} from '../config';
+import {ship as cfg, core as coreCfg} from '../config';
 import {roll, shuffle, initCanvas, drawPixel, drawBeveledPixel, drawImage, cacheSprite, pubSub} from '../util';
 import {conf as confConst, event as eventConst} from '../const';
 
@@ -58,7 +58,7 @@ export function create(options = defaultOptions) {
 	for (let i = 0; i < wingLength * cfg.height; i += 1) {
 		shape.push(i < bitCount);
 	}
-	
+	ship.color = options.color;
 	shape = shuffle(shape);
 	ship.blueprint = [];
 
@@ -74,7 +74,7 @@ export function create(options = defaultOptions) {
 	for (let i = 0; i < cfg.height; i += 1) {
 		for (let j = 0; j < cfg.width; j += 1) {
 			if (ship.blueprint[i * cfg.width + j]) {
-				draw(sprite, j, i, options.color);
+				draw(sprite, j * coreCfg.pixelSize, i * coreCfg.pixelSize, ship.color);
 			}
 		}
 	}

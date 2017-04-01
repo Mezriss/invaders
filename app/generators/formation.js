@@ -5,9 +5,10 @@
 
 import * as ship from './ship';
 import * as missile from './missile';
-import {initCanvas, roll, drawImage, rectIntersect} from '../util';
-import {core as coreCfg, formation as cfg, ship as shipCfg, missile as missileCfg} from '../config';
-import {formation as formationConst, missile as missileConst, direction} from '../const';
+import * as explosion from './explosion';
+import {initCanvas, roll, drawImage, rectIntersect, pubSub} from '../util';
+import {core as coreCfg, formation as cfg, ship as shipCfg} from '../config';
+import {formation as formationConst, missile as missileConst, event as eventConst, direction} from '../const';
 
 let mX, mY, i; //missile coords for collision calculations
 
@@ -62,14 +63,16 @@ const formationProto = {
 		}
 	},
 	checkCollisions: function(missile) {
-		mX = missile.x + missileCfg.glowLengthPx  - this.x;
-		mY = missile.y + missileCfg.glowLengthPx - this.y;
+		mX = missile.x - this.x;
+		mY = missile.y - this.y;
 		if (mX < 0 || mY < 0 || mX > this.width || mY > this.height) {
 			return;
 		}
 		for (i = this.ships.length - 1; i >= 0; i -= 1) {
 			if (rectIntersect(mX, mY, this.ships[i].x, this.ships[i].y)) {
 				//todo check if ship geometry is hit
+
+				pubSub.pub(eventConst.explosionCreated, explosion.create(this.ships[i], missile));
 				this.destroyShip(i);
 				missile.destroy();
 				break;
@@ -82,7 +85,6 @@ const formationProto = {
 		}
 		this.ctx.clearRect(this.ships[id].x, this.ships[id].y, shipCfg.widthPx, shipCfg.heightPx);
 		this.ships.splice(id, 1);
-		//todo add effect
 	}
 };
 

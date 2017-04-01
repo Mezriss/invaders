@@ -10,7 +10,7 @@ export function initCanvas(width = cfg.screenWidth, height = cfg.screenHeight) {
 
 export function drawPixel(ctx, x, y, color, pixelSize = cfg.pixelSize) {
 	ctx.fillStyle = color;
-	ctx.fillRect(x * pixelSize, y * pixelSize, pixelSize, pixelSize)
+	ctx.fillRect(x, y, pixelSize, pixelSize)
 }
 
 export function drawImage(ctx, target, coords, sourceCoords, dimensions) {
