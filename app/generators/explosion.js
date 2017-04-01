@@ -1,4 +1,4 @@
-import {missile as missileConst, event as eventConst} from '../const';
+import {missile as missileConst, event as eventConst, conf as confConst} from '../const';
 import {explosion as cfg, ship as shipCfg, missile as missileCfg, core as coreCfg} from '../config'
 import {drawPixel, drawBeveledPixel, pubSub, hexToRgba} from '../util';
 
@@ -20,7 +20,7 @@ const explosionProto = {
 	},
 	show: function(ctx) {
 		this.particles.forEach(particle => {
-			drawPixel(ctx,
+			(shipCfg.drawStyle === confConst.beveled ? drawBeveledPixel : drawPixel)(ctx,
 				particle.x * this.spread - coreCfg.pixelSize / 2 + this.x,
 				particle.y * this.spread - coreCfg.pixelSize / 2 + this.y,
 				hexToRgba(this.color, this.alpha));

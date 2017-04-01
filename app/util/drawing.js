@@ -46,6 +46,5 @@ export function drawBeveledPixel(ctx, x, y, color) {
 		palette.fillRect(paletteLength * cfg.pixelSize, 0, cfg.pixelSize, cfg.pixelSize);
 		drawImage(palette, palette, [cfg.pixelSize * paletteLength, 0], [0, 0], [cfg.pixelSize, cfg.pixelSize]);
 	}
-	ctx.drawImage(palette.canvas, paletteIndex[color] * cfg.pixelSize, 0, cfg.pixelSize, cfg.pixelSize,
-		x * cfg.pixelSize, y * cfg.pixelSize, cfg.pixelSize, cfg.pixelSize)
+	drawImage(ctx, palette, [x, y], [paletteIndex[color] * cfg.pixelSize, 0], [cfg.pixelSize, cfg.pixelSize]);
 }

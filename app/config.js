@@ -24,7 +24,7 @@ export const ship = {
 	minBits: 7,
 	maxBits: 15,
 	defaultColor: '#FFC905',
-	drawStyle: confConst.regular //todo widthPx
+	drawStyle: confConst.regular
 };
 
 export const drawing = {
