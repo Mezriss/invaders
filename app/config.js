@@ -24,7 +24,7 @@ export const ship = {
 	minBits: 7,
 	maxBits: 15,
 	defaultColor: '#FFC905',
-	drawStyle: confConst.regular
+	drawStyle: confConst.regular //todo widthPx
 };
 
 export const drawing = {
@@ -63,7 +63,8 @@ export const missile = {
 	height: 5,
 	minBits: 3,
 	maxBits: 4,
-	armSteps: 4
+	armSteps: 4,
+	glowLength: 1 //more of a constant; increasing this does very little
 };
 
 export function configure(key, val) {
@@ -71,4 +72,18 @@ export function configure(key, val) {
 		case confConst.beveled: ship.drawStyle = confConst.beveled; break;
 		case 'pixelSize': core.pixelSize = parseInt(val, 10); break;
 	}
+	setCalculatedValues();
 }
+
+function setCalculatedValues() {
+	ship.widthPx = ship.width * core.pixelSize;
+	ship.heightPx = ship.height * core.pixelSize;
+	missile.widthPx = missile.width * core.pixelSize;
+	missile.heightPx = missile.height * core.pixelSize;
+	missile.glowLengthPx = missile.glowLength * core.pixelSize;
+	missile.widthPaddedPx = missile.widthPx + missile.glowLengthPx * 2;
+	missile.heightPaddedPx = missile.heightPx + missile.glowLengthPx * 2;
+	formation.shipPaddingPx = formation.shipPadding * core.pixelSize;
+	formation.linePaddingPx = formation.linePadding * core.pixelSize;
+}
+setCalculatedValues();

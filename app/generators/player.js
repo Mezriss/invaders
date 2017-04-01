@@ -3,10 +3,10 @@
 
  */
 
-import {player as cfg, core as coreCfg, ship as shipCfg} from '../config'
+import {player as cfg, core as coreCfg, ship as shipCfg, missile as missileCfg} from '../config'
 import * as shipGenerator from './ship';
 import * as missileGenerator from './missile';
-import {pointIntersectMS} from '../util';
+import {rectIntersect} from '../util';
 
 
 const playerProto = {
@@ -21,7 +21,7 @@ const playerProto = {
 		this.currentShip.show(ctx);
 	},
 	checkCollisions(missile) {
-		if (pointIntersectMS(missile.x, missile.y, this.currentShip.x, this.currentShip.y, true)) {
+		if (rectIntersect(missile.x + missileCfg.glowLengthPx, missile.y + missileCfg.glowLengthPx, this.currentShip.x, this.currentShip.y)) {
 			missile.destroy();
 			console.info('Dead')
 		}
@@ -41,8 +41,8 @@ export function create() {
 		const ship = shipGenerator.create(playerShipCfg);
 		ship.player = true;
 
-		ship.x = Math.floor(coreCfg.screenWidth / 2 - shipCfg.width * 0.5 * coreCfg.pixelSize);
-		ship.y = Math.floor(coreCfg.screenHeight - shipCfg.height * 1.5 * coreCfg.pixelSize);
+		ship.x = Math.floor(coreCfg.screenWidth / 2 - shipCfg.widthPx / 2);
+		ship.y = Math.floor(coreCfg.screenHeight - shipCfg.heightPx * 1.5);
 
 		ship.missileType = missileGenerator.create();
 		ship.missileType.launcher = ship;

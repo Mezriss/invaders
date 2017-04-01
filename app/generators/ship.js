@@ -5,18 +5,16 @@
 
  */
 
-import {core as coreCfg, ship as cfg} from '../config';
+import {ship as cfg} from '../config';
 import {roll, shuffle, initCanvas, drawPixel, drawBeveledPixel, drawImage, cacheSprite, pubSub} from '../util';
 import {conf as confConst, event as eventConst} from '../const';
 
-const wingLength = Math.ceil(cfg.width / 2),
-	pixelWidth = cfg.width * coreCfg.pixelSize,
-	pixelHeight = cfg.height * coreCfg.pixelSize;
+const wingLength = Math.ceil(cfg.width / 2);
 
 const defaultOptions = {
 		color: cfg.defaultColor
 	},
-	sprite = initCanvas(pixelWidth, pixelHeight),
+	sprite = initCanvas(cfg.widthPx, cfg.heightPx),
 	shipProto = {
 		player: false,
 		blueprint: null,
@@ -28,7 +26,7 @@ const defaultOptions = {
 		x: null,
 		y: null,
 		show: function(ctx) {
-			drawImage(ctx, this.sprite.ctx, [this.x, this.y], this.sprite.coords, [pixelWidth, pixelHeight])
+			drawImage(ctx, this.sprite.ctx, [this.x, this.y], this.sprite.coords, [cfg.widthPx, cfg.heightPx])
 		},
 		behavior: function() {
 			//reload
@@ -54,27 +52,33 @@ const defaultOptions = {
 export function create(options = defaultOptions) {
 	const ship = Object.create(shipProto),
 		bitCount = roll(cfg.minBits, cfg.maxBits),
-		shape = [],
 		draw = cfg.drawStyle === confConst.beveled ? drawBeveledPixel : drawPixel;
+	let shape = [];
 	
 	for (let i = 0; i < wingLength * cfg.height; i += 1) {
 		shape.push(i < bitCount);
 	}
 	
-	ship.blueprint = shuffle(shape);
-	
-	sprite.clearRect(0, 0, pixelWidth, pixelHeight);
+	shape = shuffle(shape);
+	ship.blueprint = [];
+
 	for (let i = 0; i < cfg.height; i += 1) {
 		for (let j = 0; j < wingLength; j += 1) {
-			if (ship.blueprint[i * wingLength + j]) {
+			ship.blueprint[i * cfg.width + j] = shape[i * wingLength + j];
+			ship.blueprint[i * cfg.width + cfg.width - j - 1] = shape[i * wingLength + j];
+		}
+	}
+
+	
+	sprite.clearRect(0, 0, cfg.widthPx, cfg.heightPx);
+	for (let i = 0; i < cfg.height; i += 1) {
+		for (let j = 0; j < cfg.width; j += 1) {
+			if (ship.blueprint[i * cfg.width + j]) {
 				draw(sprite, j, i, options.color);
-				if (j < wingLength - 1) {
-					draw(sprite, cfg.width - j - 1, i, options.color);
-				}
 			}
 		}
 	}
-	ship.sprite = cacheSprite(sprite, pixelWidth, pixelHeight);
+	ship.sprite = cacheSprite(sprite, cfg.widthPx, cfg.heightPx);
 
 	return ship;
 }

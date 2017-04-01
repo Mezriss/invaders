@@ -20,7 +20,7 @@ export function create(levelNumber) {
 
 	level.formations.push(formationGenerator.create({
 		levelNumber: levelNumber,
-		width: Math.floor(cfg.screenWidth / ((shipCfg.width + formationCfg.shipPadding) * cfg.pixelSize) * 0.7),
+		width: Math.floor(cfg.screenWidth / (shipCfg.widthPx + formationCfg.shipPaddingPx) * 0.7),
 		height: 6,
 		shipTypes: 6,
 		shipArrangement: formationConst.oneTypePerLine

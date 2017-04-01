@@ -5,8 +5,8 @@
 
 import * as ship from './ship';
 import * as missile from './missile';
-import {initCanvas, roll, drawImage, rectIntersectMS, pointIntersectMS} from '../util';
-import {core as coreCfg, formation as cfg, ship as shipCfg} from '../config';
+import {initCanvas, roll, drawImage, rectIntersect} from '../util';
+import {core as coreCfg, formation as cfg, ship as shipCfg, missile as missileCfg} from '../config';
 import {formation as formationConst, missile as missileConst, direction} from '../const';
 
 let mX, mY, i; //missile coords for collision calculations
@@ -62,13 +62,13 @@ const formationProto = {
 		}
 	},
 	checkCollisions: function(missile) {
-		mX = missile.x - this.x;;
-		mY = missile.y - this.y;
+		mX = missile.x + missileCfg.glowLengthPx  - this.x;
+		mY = missile.y + missileCfg.glowLengthPx - this.y;
 		if (mX < 0 || mY < 0 || mX > this.width || mY > this.height) {
 			return;
 		}
 		for (i = this.ships.length - 1; i >= 0; i -= 1) {
-			if (pointIntersectMS(mX, mY, this.ships[i].x, this.ships[i].y, false)) {
+			if (rectIntersect(mX, mY, this.ships[i].x, this.ships[i].y)) {
 				//todo check if ship geometry is hit
 				this.destroyShip(i);
 				missile.destroy();
@@ -80,7 +80,7 @@ const formationProto = {
 		if (this.ships[i].missile && this.ships[i].missile.status !== missileConst.launched) {
 			this.ships[i].missile.destroy();
 		}
-		this.ctx.clearRect(this.ships[id].x, this.ships[id].y, shipCfg.width * coreCfg.pixelSize, shipCfg.height * coreCfg.pixelSize);
+		this.ctx.clearRect(this.ships[id].x, this.ships[id].y, shipCfg.widthPx, shipCfg.heightPx);
 		this.ships.splice(id, 1);
 		//todo add effect
 	}
@@ -90,8 +90,8 @@ const formationProto = {
 export function create(options) {
 	const formation = Object.create(formationProto);
 
-	formation.width = (shipCfg.width + cfg.shipPadding) * options.width * coreCfg.pixelSize;
-	formation.height = (shipCfg.height + cfg.linePadding) * options.height * coreCfg.pixelSize;
+	formation.width = (shipCfg.widthPx + cfg.shipPaddingPx) * options.width;
+	formation.height = (shipCfg.heightPx + cfg.linePaddingPx) * options.height;
 	formation.ctx = initCanvas(formation.width, formation.height);
 	formation.x = (coreCfg.screenWidth - formation.width) / 2;
 	formation.y = coreCfg.screenHeight * 0.1 * options.levelNumber;
@@ -115,8 +115,8 @@ export function create(options) {
 					const ship = Object.create(shipTypes[i]);
 					ship.formation = formation;
 
-					ship.x = Math.floor(cfg.shipPadding / 2 * coreCfg.pixelSize) + (shipCfg.width + cfg.shipPadding) * coreCfg.pixelSize * j;
-					ship.y = Math.floor(cfg.linePadding / 2 * coreCfg.pixelSize) + (shipCfg.height + cfg.linePadding) * coreCfg.pixelSize * i;
+					ship.x = Math.floor(cfg.shipPaddingPx / 2) + (shipCfg.widthPx + cfg.shipPaddingPx) * j;
+					ship.y = Math.floor(cfg.linePaddingPx / 2) + (shipCfg.heightPx + cfg.linePaddingPx) * i;
 					formation.ships.push(ship);
 				}
 			}

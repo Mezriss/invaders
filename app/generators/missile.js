@@ -5,11 +5,7 @@ import {roll, initCanvas, shuffle, drawPixel, hexToRgba, drawImage, cacheSprite,
 const defaultOptions = {
 		color: cfg.defaultColor
 	},
-	pixelWidth = cfg.width * coreCfg.pixelSize,
-	pixelHeight = cfg.height * coreCfg.pixelSize,
-	paddedPixelWidth = pixelWidth + coreCfg.pixelSize * 2,
-	paddedPixelHeight = pixelHeight + coreCfg.pixelSize * 2,
-	sprite = initCanvas(paddedPixelWidth, paddedPixelHeight),
+	sprite = initCanvas(cfg.widthPaddedPx, cfg.heightPaddedPx),
 	partWidth = Math.ceil(cfg.width / 2),
 	partHeight = Math.ceil(cfg.height / 2),
 	missileProto = {
@@ -23,17 +19,17 @@ const defaultOptions = {
 		x: null,
 		y: null,
 		show: function(ctx) {
-			drawImage(ctx, this.sprites[this.armProgress].ctx, [this.x, this.y], this.sprites[this.armProgress].coords, [paddedPixelWidth, paddedPixelHeight])
+			drawImage(ctx, this.sprites[this.armProgress].ctx, [this.x, this.y], this.sprites[this.armProgress].coords, [cfg.widthPaddedPx, cfg.heightPaddedPx])
 		},
 		alignWithShipX() {
-			this.x = this.launcher.x + (shipCfg.width - cfg.width - 2) / 2 * coreCfg.pixelSize;
+			this.x = this.launcher.x + (shipCfg.widthPx - cfg.widthPx) / 2 - cfg.glowLengthPx;
 			this.x += this.launcher.formation ? this.launcher.formation.x : 0;
 		},
 		alignWithShipY() {
 			if (this.launcher.player) {
-				this.y = this.launcher.y + (shipCfg.height - cfg.height - 2) / 2 * coreCfg.pixelSize;
+				this.y = this.launcher.y + (shipCfg.heightPx - cfg.heightPx) / 2 - cfg.glowLengthPx;
 			} else {
-				this.y = this.launcher.formation.y + this.launcher.y - (shipCfg.height - cfg.height + 2) / 2 * coreCfg.pixelSize;
+				this.y = this.launcher.formation.y + this.launcher.y - (shipCfg.heightPx - cfg.heightPx) / 2 - cfg.glowLengthPx;
 			}
 		},
 		arm: function() {
@@ -71,13 +67,13 @@ const defaultOptions = {
 				this.y += this.speed * coreCfg.screenHeight * dt / 1000 * (this.launcher.player ? -1 : 1);
 			}
 			//cleanup offscreen missiles
-			if (this.y < -paddedPixelHeight || this.y > coreCfg.screenHeight) {
+			if (this.y < -cfg.heightPaddedPx || this.y > coreCfg.screenHeight) {
 				this.destroy();
 			}
 		},
 		checkSafeDistance: function() {
 			return this.status === missileConst.launched &&
-				Math.abs(this.launcher.y + (this.launcher.formation ? this.launcher.formation.y : 0) - this.y) > paddedPixelHeight;
+				Math.abs(this.launcher.y + (this.launcher.formation ? this.launcher.formation.y : 0) - this.y) > cfg.heightPaddedPx;
 		},
 		destroy: function() {
 			this.status = missileConst.destroyed;
@@ -125,14 +121,14 @@ export function create(options = defaultOptions) {
 	}
 	//draw a sprite for each arm step
 	for (let j = cfg.armSteps - 1; j >= 0; j -= 1) {
-		sprite.clearRect(0, 0, paddedPixelWidth, paddedPixelHeight);
+		sprite.clearRect(0, 0, cfg.widthPaddedPx, cfg.heightPaddedPx);
 		for (let i = 0; i < (cfg.width + 2) * (cfg.height + 2); i += 1) {
 			if (shape[i]) {
 				drawPixel(sprite, i % (cfg.width + 2), Math.floor(i / (cfg.width + 2)),
 					hexToRgba(options.color, shape[i] - (shape[i] / cfg.armSteps) * j))
 			}
 		}
-		missile.sprites.push(cacheSprite(sprite, paddedPixelWidth, paddedPixelHeight));
+		missile.sprites.push(cacheSprite(sprite, cfg.widthPaddedPx, cfg.heightPaddedPx));
 	}
 
 	return missile;

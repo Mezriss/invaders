@@ -106,8 +106,8 @@ export function drawFrame(dt) {
 		if (player.currentShip.x < 0) {
 			player.currentShip.x = 0;
 		}
-		if (player.currentShip.x > cfg.screenWidth - shipCfg.width * cfg.pixelSize) {
-			player.currentShip.x = cfg.screenWidth - shipCfg.width * cfg.pixelSize;
+		if (player.currentShip.x > cfg.screenWidth - shipCfg.widthPx) {
+			player.currentShip.x = cfg.screenWidth - shipCfg.widthPx;
 		}
 		player.plannedTravel -= travelDistance;
 	} else {
