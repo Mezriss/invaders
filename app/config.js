@@ -50,7 +50,8 @@ export const formation = {
 export const player = {
 	defaultColor: '#9305ff',
 	startingLives: 3,
-	minTravelDistance: core.screenWidth * 0.05
+	minTravelDistance: core.screenWidth * 0.05,
+	respawnDelay: 1000
 };
 export const cache = {
 	itemsPerCanvas: 10
@@ -69,7 +70,7 @@ export const missile = {
 };
 
 export const explosion = {
-	duration: 400,
+	duration: 300,
 	minOpacity: 20,
 	spread: 4,
 };

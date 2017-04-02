@@ -70,9 +70,12 @@ const formationProto = {
 		}
 		for (i = this.ships.length - 1; i >= 0; i -= 1) {
 			if (rectIntersect(mX, mY, this.ships[i].x, this.ships[i].y)) {
-				//todo check if ship geometry is hit
-
-				pubSub.pub(eventConst.levelEntityCreated, eventConst.effect, explosion.create(this.ships[i], missile));
+				if(this.ships[i].missile && this.ships[i].missile.status !== missileConst.launched) {
+					pubSub.pub(eventConst.levelEntityCreated, eventConst.effect, explosion.create(this.ships[i]));
+					pubSub.pub(eventConst.levelEntityCreated, eventConst.effect, explosion.create(this.ships[i].missile));
+				} else {
+					pubSub.pub(eventConst.levelEntityCreated, eventConst.effect, explosion.create(this.ships[i], missile));
+				}
 				this.destroyShip(i);
 				missile.destroy();
 				break;

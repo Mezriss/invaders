@@ -79,6 +79,9 @@ const sprite = initCanvas(cfg.widthPaddedPx, cfg.heightPaddedPx),
 			if (this.launcher.missile === this) {
 				this.launcher.missile = null;
 			}
+		},
+		getCenter: function() {
+			return [this.x + cfg.widthPx / 2, this.y + cfg.heightPx / 2];
 		}
 	};
 

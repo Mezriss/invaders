@@ -28,30 +28,24 @@ const explosionProto = {
 	}
 };
 
-export function create(ship, missile) {
+export function create(target, source) {
 	const explosion = Object.create(explosionProto);
-	explosion.color = ship.color;
+	explosion.color = target.color;
 
-	if (ship.missile && ship.missile.status !== missileConst.launched) {
-		explosion.x = ship.x + shipCfg.widthPx / 2;
-		explosion.y = ship.y + shipCfg.heightPx / 2;
-		if (ship.formation) {
-			explosion.x += ship.formation.x;
-			explosion.y += ship.formation.y;
-		}
+	if (source) {
+		[explosion.x, explosion.y] = source.getCenter();
 	} else {
-		explosion.x = missile.x + missileCfg.widthPx / 2;
-		explosion.y = missile.y + missileCfg.heightPx / 2 + (ship.player ? missileCfg.heightPx : 0);
+		[explosion.x, explosion.y] = target.getCenter();
 	}
 
 	explosion.particles = [];
 
 	for (let i = 0; i < shipCfg.height; i += 1) {
 		for (let j = 0; j < shipCfg.width; j += 1) {
-			if (ship.blueprint[i * shipCfg.width + j]) {
+			if (target.blueprint[i * shipCfg.width + j]) {
 				explosion.particles.push({
-					x: ship.x + (ship.formation ? ship.formation.x : 0) + (j + 0.5) *  coreCfg.pixelSize - explosion.x,
-					y: ship.y + (ship.formation ? ship.formation.y : 0) + (i + 0.5) *  coreCfg.pixelSize - explosion.y
+					x: target.x + (target.formation ? target.formation.x : 0) + (j + 0.5) *  coreCfg.pixelSize - explosion.x,
+					y: target.y + (target.formation ? target.formation.y : 0) + (i + 0.5) *  coreCfg.pixelSize - explosion.y
 				});
 			}
 		}

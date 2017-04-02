@@ -3,10 +3,12 @@
 
  */
 
-import {player as cfg, core as coreCfg, ship as shipCfg, missile as missileCfg} from '../config'
+import {player as cfg, core as coreCfg, ship as shipCfg} from '../config'
+import {event as eventConst, missile as missileConst} from  '../const'
 import * as shipGenerator from './ship';
 import * as missileGenerator from './missile';
-import {rectIntersect} from '../util';
+import * as explosion from './explosion';
+import {rectIntersect, pubSub} from '../util';
 
 
 const playerProto = {
@@ -23,7 +25,17 @@ const playerProto = {
 	checkCollisions(missile) {
 		if (rectIntersect(missile.x, missile.y, this.currentShip.x, this.currentShip.y)) {
 			missile.destroy();
-			console.info('Dead')
+			if(this.currentShip.missile && this.currentShip.missile.status !== missileConst.launched) {
+				pubSub.pub(eventConst.levelEntityCreated, eventConst.effect, explosion.create(this.currentShip));
+				pubSub.pub(eventConst.levelEntityCreated, eventConst.effect, explosion.create(this.currentShip.missile));
+				this.currentShip.missile.destroy();
+			} else {
+				pubSub.pub(eventConst.levelEntityCreated, eventConst.effect, explosion.create(this.currentShip, missile));
+			}
+			this.currentShip = null;
+			if (this.extraShips.length) {
+				setTimeout(() => this.currentShip = this.extraShips.pop(), cfg.respawnDelay);
+			}
 		}
 	}
 };

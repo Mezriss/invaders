@@ -43,6 +43,10 @@ const sprite = initCanvas(cfg.widthPx, cfg.heightPx),
 			if (this.missile) {
 				this.missile.launch();
 			}
+		},
+		getCenter() {
+			return [this.x + (this.formation ? this.formation.x : 0) + cfg.widthPx / 2,
+				this.y + (this.formation ? this.formation.y : 0) + cfg.heightPx / 2];
 		}
 	};
 

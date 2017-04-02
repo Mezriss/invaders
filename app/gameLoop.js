@@ -28,8 +28,10 @@ function keyDown(key) {
 			player.direction = c.direction.right;
 			break;
 		case c.key.space:
-			player.currentShip.barrage = true;
-			player.currentShip.fire();
+			if (player.currentShip) {
+				player.currentShip.barrage = true;
+				player.currentShip.fire();
+			}
 			break;
 	}
 }
@@ -47,7 +49,9 @@ function keyUp(key) {
 			player.moving = leftPressed || rightPressed;
 			break;
 		case c.key.space:
-			player.currentShip.barrage = false;
+			if (player.currentShip) {
+				player.currentShip.barrage = false;
+			}
 			break;
 	}
 }
@@ -84,7 +88,9 @@ export function drawFrame(dt) {
 		if (missile.launcher.player) {
 			level.formations.forEach(formation => formation.checkCollisions(missile))
 		} else {
-			player.checkCollisions(missile);
+			if (player.currentShip) {
+				player.checkCollisions(missile);
+			}
 		}
 	});
 
@@ -94,24 +100,25 @@ export function drawFrame(dt) {
 		formation.ships.forEach(ship => ship.behavior());
 		formation.move(dt);
 	});
-	player.currentShip.behavior();
-
-	//take user input and move ship
-	if (player.moving || player.plannedTravel > 0) {
-		let travelDistance = player.speed * cfg.screenWidth * dt / 1000;
-		switch (player.direction) {
-			case c.direction.left: player.currentShip.x -= travelDistance; break;
-			case c.direction.right: player.currentShip.x += travelDistance; break;
+	if (player.currentShip) {
+		player.currentShip.behavior();
+		//take user input and move ship
+		if (player.moving || player.plannedTravel > 0) {
+			let travelDistance = player.speed * cfg.screenWidth * dt / 1000;
+			switch (player.direction) {
+				case c.direction.left: player.currentShip.x -= travelDistance; break;
+				case c.direction.right: player.currentShip.x += travelDistance; break;
+			}
+			if (player.currentShip.x < 0) {
+				player.currentShip.x = 0;
+			}
+			if (player.currentShip.x > cfg.screenWidth - shipCfg.widthPx) {
+				player.currentShip.x = cfg.screenWidth - shipCfg.widthPx;
+			}
+			player.plannedTravel -= travelDistance;
+		} else {
+			player.currentShip.x = Math.round(player.currentShip.x);
 		}
-		if (player.currentShip.x < 0) {
-			player.currentShip.x = 0;
-		}
-		if (player.currentShip.x > cfg.screenWidth - shipCfg.widthPx) {
-			player.currentShip.x = cfg.screenWidth - shipCfg.widthPx;
-		}
-		player.plannedTravel -= travelDistance;
-	} else {
-		player.currentShip.x = Math.round(player.currentShip.x);
 	}
 
 	level.missiles.forEach(missile => {
@@ -123,7 +130,9 @@ export function drawFrame(dt) {
 
 	//draw everything
 	level.missiles.forEach(missile => missile.show(canvas));
-	player.show(canvas);
+	if (player.currentShip) {
+		player.show(canvas);
+	}
 	level.formations.forEach(formation => formation.show(canvas));
 	level.effects.forEach(effect => effect.show(canvas));
 
