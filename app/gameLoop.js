@@ -2,7 +2,7 @@
 	Game Loop
 
  */
-import {core as cfg, player as playerCfg, ship as shipCfg} from './config';
+import {player as playerCfg} from './config';
 import * as c from './const';
 import {pubSub} from './util';
 
@@ -28,10 +28,8 @@ function keyDown(key) {
 			player.direction = c.direction.right;
 			break;
 		case c.key.space:
-			if (player.currentShip) {
-				player.currentShip.barrage = true;
-				player.currentShip.fire();
-			}
+			player.setBarrage(true);
+			player.fire();
 			break;
 	}
 }
@@ -49,9 +47,7 @@ function keyUp(key) {
 			player.moving = leftPressed || rightPressed;
 			break;
 		case c.key.space:
-			if (player.currentShip) {
-				player.currentShip.barrage = false;
-			}
+			player.setBarrage(false);
 			break;
 	}
 }
@@ -88,9 +84,7 @@ export function drawFrame(dt) {
 		if (missile.launcher.player) {
 			level.formations.forEach(formation => formation.checkCollisions(missile))
 		} else {
-			if (player.currentShip) {
-				player.checkCollisions(missile);
-			}
+			player.checkCollisions(missile);
 		}
 	});
 
@@ -100,26 +94,9 @@ export function drawFrame(dt) {
 		formation.ships.forEach(ship => ship.behavior());
 		formation.move(dt);
 	});
-	if (player.currentShip) {
-		player.currentShip.behavior();
-		//take user input and move ship
-		if (player.moving || player.plannedTravel > 0) {
-			let travelDistance = player.speed * cfg.screenWidth * dt / 1000;
-			switch (player.direction) {
-				case c.direction.left: player.currentShip.x -= travelDistance; break;
-				case c.direction.right: player.currentShip.x += travelDistance; break;
-			}
-			if (player.currentShip.x < 0) {
-				player.currentShip.x = 0;
-			}
-			if (player.currentShip.x > cfg.screenWidth - shipCfg.widthPx) {
-				player.currentShip.x = cfg.screenWidth - shipCfg.widthPx;
-			}
-			player.plannedTravel -= travelDistance;
-		} else {
-			player.currentShip.x = Math.round(player.currentShip.x);
-		}
-	}
+
+	player.behavior();
+	player.move(dt);
 
 	level.missiles.forEach(missile => {
 		missile.behavior();
@@ -130,9 +107,7 @@ export function drawFrame(dt) {
 
 	//draw everything
 	level.missiles.forEach(missile => missile.show(canvas));
-	if (player.currentShip) {
-		player.show(canvas);
-	}
+	player.show(canvas);
 	level.formations.forEach(formation => formation.show(canvas));
 	level.effects.forEach(effect => effect.show(canvas));
 

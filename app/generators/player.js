@@ -4,7 +4,7 @@
  */
 
 import {player as cfg, core as coreCfg, ship as shipCfg} from '../config'
-import {event as eventConst, missile as missileConst} from  '../const'
+import {event as eventConst, missile as missileConst, direction as directionConst} from  '../const'
 import * as shipGenerator from './ship';
 import * as missileGenerator from './missile';
 import * as explosion from './explosion';
@@ -20,10 +20,51 @@ const playerProto = {
 	moving: false,
 	speed: 0.3,
 	show: function(ctx) {
-		this.currentShip.show(ctx);
+		if (this.currentShip) {
+			this.currentShip.show(ctx);
+		}
+	},
+	behavior: function() {
+		if (this.currentShip) {
+			this.currentShip.behavior();
+		}
+	},
+	move: function(dt) {
+		if (this.currentShip) {
+			if (this.moving || this.plannedTravel > 0) {
+				let travelDistance = this.speed * coreCfg.screenWidth * dt / 1000;
+				switch (this.direction) {
+					case directionConst.left:
+						this.currentShip.x -= travelDistance;
+						break;
+					case directionConst.right:
+						this.currentShip.x += travelDistance;
+						break;
+				}
+				if (this.currentShip.x < 0) {
+					this.currentShip.x = 0;
+				}
+				if (this.currentShip.x > coreCfg.screenWidth - shipCfg.widthPx) {
+					this.currentShip.x = coreCfg.screenWidth - shipCfg.widthPx;
+				}
+				this.plannedTravel -= travelDistance;
+			} else {
+				this.currentShip.x = Math.round(this.currentShip.x);
+			}
+		}
+	},
+	fire() {
+		if (this.currentShip) {
+			this.currentShip.fire();
+		}
+	},
+	setBarrage(val) {
+		if (this.currentShip) {
+			this.currentShip.barrage = val;
+		}
 	},
 	checkCollisions(missile) {
-		if (rectIntersect(missile.x, missile.y, this.currentShip.x, this.currentShip.y)) {
+		if (this.currentShip && rectIntersect(missile.x, missile.y, this.currentShip.x, this.currentShip.y)) {
 			missile.destroy();
 			if(this.currentShip.missile && this.currentShip.missile.status !== missileConst.launched) {
 				pubSub.pub(eventConst.levelEntityCreated, eventConst.effect, explosion.create(this.currentShip));
