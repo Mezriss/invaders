@@ -2,14 +2,12 @@ import {core as coreCfg, missile as cfg, ship as shipCfg} from '../config';
 import {missile as missileConst, event as eventConst} from '../const';
 import {roll, initCanvas, shuffle, drawPixel, hexToRgba, drawImage, cacheSprite, pubSub} from '../util';
 
-const defaultOptions = {
-		color: cfg.defaultColor
-	},
-	sprite = initCanvas(cfg.widthPaddedPx, cfg.heightPaddedPx),
+const sprite = initCanvas(cfg.widthPaddedPx, cfg.heightPaddedPx),
 	partWidth = Math.ceil(cfg.width / 2),
 	partHeight = Math.ceil(cfg.height / 2),
 	missileProto = {
 		speed: 0.2,
+		color: cfg.defaultColor,
 		launcher: null,
 		sprites: null,
 		armStart: null,
@@ -46,8 +44,7 @@ const defaultOptions = {
 		},
 		behavior: function() {
 			if (this.status === missileConst.arming) {
-				this.armProgress = Math.floor((Date.now() - this.armStart) / (this.armSpeed / cfg.armSteps));
-				this.armProgress = this.armProgress >= cfg.armSteps ? cfg.armSteps - 1 : this.armProgress;
+				this.armProgress = Math.min(Math.floor((Date.now() - this.armStart) / (this.armSpeed / cfg.armSteps)), cfg.armSteps - 1);
 				if (this.armProgress === cfg.armSteps - 1) {
 					this.status = missileConst.armed;
 					if (this.launcher.barrage) {
@@ -85,48 +82,55 @@ const defaultOptions = {
 		}
 	};
 
+function padded2dTo1d(x, y) {
+	return (y + cfg.glowLength) * cfg.widthPadded + x + cfg.glowLength;
+}
 
-export function create(options = defaultOptions) {
+export function create(options = {}) {
 	const missile = Object.create(missileProto),
-		bitCount = roll(cfg.minBits, cfg.maxBits),
-		blueprint = [],
-		shape = [];
+		bitCount = roll(cfg.minBits, cfg.maxBits);
+
+	missile.color = options.color || missile.color;
+
+	let shape = [];
 
 	for (let i = 0; i < partWidth * partHeight; i += 1) {
-		blueprint.push(i < bitCount);
+		shape.push(i < bitCount);
 	}
-	missile.blueprint = shuffle(blueprint);
-	missile.sprites = [];
+	shape = shuffle(shape);
 
+	missile.blueprint = [];
+	missile.sprites = [];
 
 	for (let i = 0; i < partHeight; i += 1) {
 		for (let j = 0; j < partWidth; j += 1) {
-			if (missile.blueprint[i * partWidth + j]) {
-				shape[(i + 1) * (cfg.width + 2) + j + 1] = 100;
-				shape[(cfg.height - i) * (cfg.width + 2) + j + 1] = 100;
-				if (j < partWidth - 1) {
-					shape[(i + 1) * (cfg.width + 2) + cfg.width - j] = 100;
-					shape[(cfg.height - i) * (cfg.width + 2) + cfg.width - j] = 100;
-				}
+			if (shape[i * partWidth + j]) {
+				missile.blueprint[padded2dTo1d(j, i)] = 100;
+				missile.blueprint[padded2dTo1d(cfg.width - 1 - j, i)] = 100;
+				missile.blueprint[padded2dTo1d(j, cfg.height - 1 - i)] = 100;
+				missile.blueprint[padded2dTo1d(cfg.width - 1 - j, cfg.height - 1 - i)] = 100;
 			}
 		}
 	}
 	//let's add some glow
-	for (let i = 0; i < (cfg.width + 2) * (cfg.height + 2); i += 1) {
-		if (shape[i] === 100) {
-			shape[i - 1] = shape[i - 1] ? shape[i - 1] : 100 * cfg.glow;
-			shape[i + 1] = shape[i + 1] ? shape[i + 1] : 100 * cfg.glow;
-			shape[i - cfg.width - 2] = shape[i - cfg.width - 2] ? shape[i - cfg.width - 2] : 100 * cfg.glow;
-			shape[i + cfg.width + 2] = shape[i + cfg.width + 2] ? shape[i + cfg.width + 2] : 100 * cfg.glow;
+	for (let i = 0; i < cfg.widthPadded * cfg.heightPadded; i += 1) {
+		if (missile.blueprint[i] === 100) {
+			for (let j = 1; j <= cfg.glowLength; j+= 1) {
+				let glow =  100 * (cfg.glow - cfg.glow * cfg.glowDegradation * (j - 1));
+				missile.blueprint[i - j] = missile.blueprint[i - j] || glow;
+				missile.blueprint[i + j] = missile.blueprint[i + j] || glow;
+				missile.blueprint[i - cfg.widthPadded * j] = missile.blueprint[i - cfg.widthPadded * j] || glow;
+				missile.blueprint[i + cfg.widthPadded * j] = missile.blueprint[i + cfg.widthPadded * j] || glow;
+			}
 		}
 	}
 	//draw a sprite for each arm step
-	for (let j = cfg.armSteps - 1; j >= 0; j -= 1) {
+	for (let j = 0; j < cfg.armSteps; j += 1) {
 		sprite.clearRect(0, 0, cfg.widthPaddedPx, cfg.heightPaddedPx);
-		for (let i = 0; i < (cfg.width + 2) * (cfg.height + 2); i += 1) {
-			if (shape[i]) {
-				drawPixel(sprite, i % (cfg.width + 2) * coreCfg.pixelSize, Math.floor(i / (cfg.width + 2)) * coreCfg.pixelSize,
-					hexToRgba(options.color, shape[i] - (shape[i] / cfg.armSteps) * j))
+		for (let i = 0; i < cfg.widthPadded * cfg.heightPadded; i += 1) {
+			if (missile.blueprint[i]) {
+				drawPixel(sprite, i % cfg.widthPadded * coreCfg.pixelSize, Math.floor(i / cfg.widthPadded) * coreCfg.pixelSize,
+					hexToRgba(missile.color, missile.blueprint[i] * (j + 1) / cfg.armSteps))
 			}
 		}
 		missile.sprites.push(cacheSprite(sprite, cfg.widthPaddedPx, cfg.heightPaddedPx));

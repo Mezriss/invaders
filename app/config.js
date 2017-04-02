@@ -59,12 +59,13 @@ export const cache = {
 export const missile = {
 	defaultColor: '#ffffff',
 	glow: 0.2,
+	glowDegradation: 0,
 	width: 3,
 	height: 5,
 	minBits: 3,
 	maxBits: 4,
 	armSteps: 4,
-	glowLength: 1 //more of a constant; increasing this does very little
+	glowLength: 1
 };
 
 export const explosion = {
@@ -73,13 +74,9 @@ export const explosion = {
 	spread: 4,
 };
 
-export function configure(key, val) {
-	switch (key) {
-		case confConst.beveled: ship.drawStyle = confConst.beveled; break;
-		case 'pixelSize': core.pixelSize = parseInt(val, 10); break;
-	}
-	setCalculatedValues();
-}
+export const interfacePanelTop = {
+	height: 10
+};
 
 function setCalculatedValues() {
 	ship.widthPx = ship.width * core.pixelSize;
@@ -87,9 +84,26 @@ function setCalculatedValues() {
 	missile.widthPx = missile.width * core.pixelSize;
 	missile.heightPx = missile.height * core.pixelSize;
 	missile.glowLengthPx = missile.glowLength * core.pixelSize;
+	missile.widthPadded = missile.width + missile.glowLength * 2;
+	missile.heightPadded = missile.height + missile.glowLength * 2;
 	missile.widthPaddedPx = missile.widthPx + missile.glowLengthPx * 2;
 	missile.heightPaddedPx = missile.heightPx + missile.glowLengthPx * 2;
 	formation.shipPaddingPx = formation.shipPadding * core.pixelSize;
 	formation.linePaddingPx = formation.linePadding * core.pixelSize;
+	interfacePanelTop.heightPx = interfacePanelTop.height * core.pixelSize;
 }
+
+function recalculateValues() {
+	player.minTravelDistance = core.screenWidth * 0.05;
+}
+
+export function configure(key, val) {
+	switch (key) {
+		case confConst.beveled: ship.drawStyle = confConst.beveled; break;
+		case 'pixelSize': core.pixelSize = parseInt(val, 10); break;
+	}
+	setCalculatedValues();
+	recalculateValues();
+}
+
 setCalculatedValues();

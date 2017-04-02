@@ -11,14 +11,11 @@ import {conf as confConst, event as eventConst} from '../const';
 
 const wingLength = Math.ceil(cfg.width / 2);
 
-const defaultOptions = {
-		color: cfg.defaultColor
-	},
-	sprite = initCanvas(cfg.widthPx, cfg.heightPx),
+const sprite = initCanvas(cfg.widthPx, cfg.heightPx),
 	shipProto = {
 		player: false,
 		blueprint: null,
-		color: null,
+		color: cfg.defaultColor,
 		missileType: null,
 		missile: null,
 		formation: null,
@@ -49,7 +46,7 @@ const defaultOptions = {
 		}
 	};
 
-export function create(options = defaultOptions) {
+export function create(options = {}) {
 	const ship = Object.create(shipProto),
 		bitCount = roll(cfg.minBits, cfg.maxBits),
 		draw = cfg.drawStyle === confConst.beveled ? drawBeveledPixel : drawPixel;
@@ -58,7 +55,7 @@ export function create(options = defaultOptions) {
 	for (let i = 0; i < wingLength * cfg.height; i += 1) {
 		shape.push(i < bitCount);
 	}
-	ship.color = options.color;
+	ship.color = options.color || ship.color;
 	shape = shuffle(shape);
 	ship.blueprint = [];
 
