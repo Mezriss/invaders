@@ -9,72 +9,63 @@ import {pubSub} from './util';
 let canvas, player, level,
 	leftPressed = false, rightPressed = false;
 
-function keyDownLeft() {
-	if (!player.moving) {
-		player.plannedTravel = playerCfg.minTravelDistance;
+function keyDown(key) {
+	switch (key) {
+		case c.key.arrowLeft:
+			if (!player.moving) {
+				player.plannedTravel = playerCfg.minTravelDistance;
+			}
+			player.moving = true;
+			leftPressed = true;
+			player.direction = c.direction.left;
+			break;
+		case c.key.arrowRight:
+			if (!player.moving) {
+				player.plannedTravel = playerCfg.minTravelDistance;
+			}
+			player.moving = true;
+			rightPressed = true;
+			player.direction = c.direction.right;
+			break;
+		case c.key.space:
+			player.currentShip.barrage = true;
+			player.currentShip.fire();
+			break;
 	}
-	player.moving = true;
-	leftPressed = true;
-	player.direction = c.direction.left;
 }
-function keyDownRight() {
-	if (!player.moving) {
-		player.plannedTravel = playerCfg.minTravelDistance;
+
+function keyUp(key) {
+	switch (key) {
+		case c.key.arrowLeft:
+			leftPressed = false;
+			if (player.direction === c.direction.left) {
+				player.moving = false;
+			}
+			break;
+		case c.key.arrowRight:
+			rightPressed = false;
+			player.moving = leftPressed || rightPressed;
+			break;
+		case c.key.space:
+			player.currentShip.barrage = false;
+			break;
 	}
-	player.moving = true;
-	rightPressed = true;
-	player.direction = c.direction.right;
-}
-function keyUpLeft() {
-	leftPressed = false;
-	if (player.direction === c.direction.left) {
-		player.moving = false;
-	}
 }
 
-function keyUpRight() {
-	rightPressed = false;
-	player.moving = leftPressed || rightPressed;
+function levelEntityCreated(type, entity) {
+	level[type].push(entity);
 }
 
-function keyDownSpace() {
-	player.currentShip.barrage = true;
-	player.currentShip.fire();
-
-}
-
-function keyUpSpace() {
-	player.currentShip.barrage = false;
-}
-
-function missileCreated(missile) {
-	level.missiles.push(missile);
-}
-
-function missileDestroyed(missile) {
-	level.missiles.splice(level.missiles.indexOf(missile), 1);
-}
-
-function explosionCreated(explosion) {
-	level.effects.push(explosion);
-}
-
-function explosionDestroyed(explosion) {
-	level.effects.splice(level.effects.indexOf(explosion), 1);
+function levelEntityDestroyed(type, entity) {
+	level[type].splice(level[type].indexOf(entity), 1);
 }
 
 export function init(data, drawCanvas) {
-	pubSub.on(`${c.event.keyDown}#${c.key.arrowLeft}`, keyDownLeft);
-	pubSub.on(`${c.event.keyDown}#${c.key.arrowRight}`, keyDownRight);
-	pubSub.on(`${c.event.keyDown}#${c.key.space}`, keyDownSpace);
-	pubSub.on(`${c.event.keyUp}#${c.key.arrowLeft}`, keyUpLeft);
-	pubSub.on(`${c.event.keyUp}#${c.key.arrowRight}`, keyUpRight);
-	pubSub.on(`${c.event.keyUp}#${c.key.space}`, keyUpSpace);
+	pubSub.on(c.event.keyDown, keyDown);
+	pubSub.on(c.event.keyUp, keyUp);
 
-	pubSub.on(c.event.missileCreated, missileCreated);
-	pubSub.on(c.event.missileDestroyed, missileDestroyed);
-	pubSub.on(c.event.explosionCreated, explosionCreated);
-	pubSub.on(c.event.explosionDestroyed, explosionDestroyed);
+	pubSub.on(c.event.levelEntityCreated, levelEntityCreated);
+	pubSub.on(c.event.levelEntityDestroyed, levelEntityDestroyed);
 
 	player = data.player;
 	level = data.level;
@@ -84,8 +75,7 @@ export function init(data, drawCanvas) {
 }
 
 export function end() {
-	[keyDownLeft, keyDownRight, keyUpLeft, keyUpRight, keyDownSpace, keyUpSpace,
-		missileCreated, missileDestroyed, explosionCreated, explosionDestroyed].forEach(handler => pubSub.off(handler));
+	[keyDown, keyUp, levelEntityCreated, levelEntityDestroyed].forEach(handler => pubSub.off(handler));
 }
 
 export function drawFrame(dt) {

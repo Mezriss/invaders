@@ -18,10 +18,10 @@ main.style.width = cfg.screenWidth + 'px';
 main.style.height = cfg.screenHeight + 'px';
 
 document.addEventListener(eventConst.keyDown, event => {
-	pubSub.pub(`${eventConst.keyDown}#${event.key}`, event)
+	pubSub.pub(eventConst.keyDown, event.key, event)
 });
 document.addEventListener(eventConst.keyUp, event => {
-	pubSub.pub(`${eventConst.keyUp}#${event.key}`, event)
+	pubSub.pub(eventConst.keyUp, event.key, event)
 });
 
 const backgroundCtx = backgroundScreen.getContext('2d');

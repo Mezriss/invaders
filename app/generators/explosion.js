@@ -15,7 +15,7 @@ const explosionProto = {
 		this.spread = 1 + (cfg.spread - 1) * this.elapsedTime / cfg.duration;
 		this.alpha = 100 - (100 - cfg.minOpacity) * this.elapsedTime / cfg.duration;
 		if (this.elapsedTime > cfg.duration) {
-			pubSub.pub(eventConst.explosionDestroyed, this);
+			pubSub.pub(eventConst.levelEntityDestroyed, eventConst.effect, this);
 		}
 	},
 	show: function(ctx) {

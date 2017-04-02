@@ -36,7 +36,7 @@ const sprite = initCanvas(cfg.widthPx, cfg.heightPx),
 				this.missile = Object.create(this.missileType);
 				this.missile.launcher = this;
 				this.missile.arm();
-				pubSub.pub(eventConst.missileCreated, this.missile);
+				pubSub.pub(eventConst.levelEntityCreated, eventConst.missile, this.missile);
 			}
 		},
 		fire: function() {

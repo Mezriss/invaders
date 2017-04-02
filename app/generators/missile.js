@@ -75,7 +75,7 @@ const sprite = initCanvas(cfg.widthPaddedPx, cfg.heightPaddedPx),
 		},
 		destroy: function() {
 			this.status = missileConst.destroyed;
-			pubSub.pub(eventConst.missileDestroyed, this);
+			pubSub.pub(eventConst.levelEntityDestroyed, eventConst.missile, this);
 			if (this.launcher.missile === this) {
 				this.launcher.missile = null;
 			}

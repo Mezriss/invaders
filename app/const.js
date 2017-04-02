@@ -12,10 +12,11 @@ export const direction = {
 export const event = {
 	keyDown: 'keydown',
 	keyUp: 'keyup',
-	missileCreated: 'missileCreated',
-	missileDestroyed: 'missileDestroyed',
-	explosionCreated: 'explosionCreated',
-	explosionDestroyed: 'explosionDestroyed'
+	levelEntityCreated: 'levelEntityCreated',
+	levelEntityDestroyed: 'levelEntityDestroyed',
+	missile: 'missiles',
+	effect: 'effects'
+
 };
 
 export const key = {

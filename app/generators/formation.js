@@ -72,7 +72,7 @@ const formationProto = {
 			if (rectIntersect(mX, mY, this.ships[i].x, this.ships[i].y)) {
 				//todo check if ship geometry is hit
 
-				pubSub.pub(eventConst.explosionCreated, explosion.create(this.ships[i], missile));
+				pubSub.pub(eventConst.levelEntityCreated, eventConst.effect, explosion.create(this.ships[i], missile));
 				this.destroyShip(i);
 				missile.destroy();
 				break;
