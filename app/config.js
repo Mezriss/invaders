@@ -75,6 +75,11 @@ export const explosion = {
 	spread: 4,
 };
 
+export const font = {
+	defaultColor: '#ffffff',
+	alignment: 'left'
+};
+
 export const interfacePanelTop = {
 	height: 10
 };

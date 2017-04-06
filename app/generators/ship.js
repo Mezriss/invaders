@@ -79,7 +79,7 @@ export function create(options = {}) {
 			}
 		}
 	}
-	ship.sprite = cacheSprite(sprite, cfg.widthPx, cfg.heightPx);
+	ship.sprite = cacheSprite(sprite);
 
 	return ship;
 }

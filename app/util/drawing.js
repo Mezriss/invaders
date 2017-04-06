@@ -13,7 +13,7 @@ export function drawPixel(ctx, x, y, color, pixelSize = cfg.pixelSize) {
 	ctx.fillRect(x, y, pixelSize, pixelSize)
 }
 
-export function drawImage(ctx, target, coords, sourceCoords, dimensions) {
+export function drawImage(ctx, source, coords, sourceCoords, dimensions) {
 	if (drawingCfg.preventSubPixelDrawing) {
 		coords = coords.map(c => Math.floor(c));
 	}
@@ -21,9 +21,9 @@ export function drawImage(ctx, target, coords, sourceCoords, dimensions) {
 		coords = coords.map(c => c - c % cfg.pixelSize);
 	}
 	if (sourceCoords && dimensions) {
-		ctx.drawImage(target.canvas, ...sourceCoords, ...dimensions, ...coords, ...dimensions);
+		ctx.drawImage(source.canvas, ...sourceCoords, ...dimensions, ...coords, ...dimensions);
 	} else {
-		ctx.drawImage(target.canvas, ...coords);
+		ctx.drawImage(source.canvas, ...coords);
 	}
 
 }

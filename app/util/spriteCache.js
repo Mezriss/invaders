@@ -4,8 +4,11 @@ import {initCanvas, drawImage} from '../util';
 const canvases = {},
 	canvasUsage = {};
 
-export function cacheSprite(ctx, width, height) {
-	const name = `${width}x${height}`;
+export function cacheSprite(ctx) {
+	const width = ctx.canvas.width,
+		height = ctx.canvas.height,
+		name = `${width}x${height}`;
+
 	if (!canvases[name] || canvasUsage[name] === cfg.itemsPerCanvas) {
 		canvases[name] = canvases[name] || [];
 		canvases[name].push(initCanvas(width * cfg.itemsPerCanvas, height));

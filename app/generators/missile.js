@@ -136,7 +136,7 @@ export function create(options = {}) {
 					hexToRgba(missile.color, missile.blueprint[i] * (j + 1) / cfg.armSteps))
 			}
 		}
-		missile.sprites.push(cacheSprite(sprite, cfg.widthPaddedPx, cfg.heightPaddedPx));
+		missile.sprites.push(cacheSprite(sprite));
 	}
 
 	return missile;

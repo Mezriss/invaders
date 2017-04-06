@@ -36,3 +36,12 @@ export const conf = {
 	regular: 'regular',
 	beveled: 'beveled'
 };
+
+export const alignment = {
+	left: 'left',
+	right: 'right',
+	center: 'center'
+};
+
+import {font as c64} from './fonts/c64';
+export const fonts = {c64};

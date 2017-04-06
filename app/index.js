@@ -7,6 +7,7 @@ import * as player from './generators/player';
 import * as levelGenerator from './generators/level';
 import * as gameLoop from './gameLoop';
 import {pubSub, animation} from './util';
+import * as font from './generators/font';
 
 window.location.search.substr(1).split(/[,;&]/).forEach(keyValue => configure(...keyValue.split('=')));
 
@@ -35,6 +36,9 @@ animation.start({
 		player: player.create()
 	}
 });
+
+const c64 = font.create('c64');
+c64.write(interfaceScreen.getContext('2d'), [480 / 2,10], 'Invaders', {size: 2, alignment: 'center'});
 
 
 //todo determine device type
