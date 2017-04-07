@@ -38,20 +38,22 @@ const sprite = initCanvas(coreCfg.pixelSize, coreCfg.pixelSize),
 			this.drawLetter(this.glyphs[letter], color, size);
 		}
 		drawImage(ctx, this.glyphs[letter].sprites[style].ctx,
-			[x + this.glyphs[letter].x * size, y + this.glyphs[letter].y * size],
+			[x + this.glyphs[letter].x * size, y - (this.glyphs[letter].y + this.glyphs[letter].height) * size],
 			this.glyphs[letter].sprites[style].coords, [this.meta.boundingBox.width * size, this.meta.boundingBox.height * size]);
 	},
 	drawLetter(glyph, color, size) {
-		if (sprite.canvas.width !== glyph.width * size) {
-			sprite.canvas.width = glyph.width * size;
+		if (sprite.canvas.width !== this.meta.boundingBox.width * size) {
+			sprite.canvas.width = this.meta.boundingBox.width * size;
 		}
-		if (sprite.canvas.height !== glyph.height * size) {
-			sprite.canvas.height = glyph.height * size;
+		if (sprite.canvas.height !== this.meta.boundingBox.height * size) {
+			sprite.canvas.height = this.meta.boundingBox.height * size;
 		}
-		sprite.clearRect(0, 0, glyph.width * size, glyph.height * size);
-		for (let i = 0; i < glyph.bitmap.length; i += 1) {
-			if (glyph.bitmap[i]) {
-				drawPixel(sprite, i % glyph.width * size, Math.floor(i / glyph.width) * size, color, size)
+		sprite.clearRect(0, 0, this.meta.boundingBox.width * size, this.meta.boundingBox.height * size);
+		for (let i = 0; i < glyph.height; i += 1) {
+			for (let j = 0; j < glyph.height; j += 1) {
+				if (glyph.bitmap[i] && glyph.bitmap[i][j]) {
+					drawPixel(sprite, j * size, i * size, color, size);
+				}
 			}
 		}
 		glyph.sprites[color + '-' + size] = cacheSprite(sprite);
@@ -66,16 +68,20 @@ export function create(name) {
 	Object.keys(font.glyphs).forEach(key => {
 		let width = font.glyphs[key].width || font.meta.boundingBox.width;
 		font.glyphs[key].sprites = {};
-		font.glyphs[key].bitmap = font.glyphs[key].bytes
-			.map(val => val.toString(2))
-			.map(val => '0'.repeat(width - val.length) + val)
-			.join('').split('').map(val => parseInt(val, 10));
+		font.glyphs[key].bitmap = [];
 
-		font.glyphs[key].width = font.glyphs[key].width || font.meta.boundingBox.width;
-		font.glyphs[key].height = font.glyphs[key].height || font.meta.boundingBox.height;
-		font.glyphs[key].x = font.glyphs[key].x || font.meta.boundingBox.x;
-		font.glyphs[key].y = font.glyphs[key].y || font.meta.boundingBox.y;
-		font.glyphs[key].dWidth = font.glyphs[key].dWidth || font.meta.boundingBox.width;
+		for (let i = 0; i < font.glyphs[key].bytes.length; i+= 1) {
+			font.glyphs[key].bitmap[i] = [];
+			for (let bit = 0; bit < 8; bit += 1) {
+				font.glyphs[key].bitmap[i][7 - bit] = (font.glyphs[key].bytes[i] >> bit) % 2;
+			}
+		}
+
+		font.glyphs[key].width = 'width' in font.glyphs[key] ? font.glyphs[key].width : font.meta.boundingBox.width;
+		font.glyphs[key].height = 'height' in font.glyphs[key] ? font.glyphs[key].height : font.meta.boundingBox.height;
+		font.glyphs[key].x = 'x' in font.glyphs[key] ? font.glyphs[key].x : font.meta.boundingBox.x;
+		font.glyphs[key].y = 'y' in font.glyphs[key] ? font.glyphs[key].y : font.meta.boundingBox.y;
+		font.glyphs[key].dWidth = 'dWidth' in font.glyphs[key] ? font.glyphs[key].dWidth : font.meta.boundingBox.width;
 	});
 
 	return font;
