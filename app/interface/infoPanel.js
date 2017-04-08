@@ -4,10 +4,7 @@ import {pubSub} from '../util';
 import * as fontGenerator from '../generators/font';
 import str from '../str';
 
-let score, ships,
-	font,
-	scorePositionX, textPositionY,
-	shipListPositionX;
+let font, scorePositionX, textPositionY, shipListPositionX;
 
 const interfaceCtx = interfaceScreen.getContext('2d');
 
@@ -22,17 +19,17 @@ function updateScore(score) {
 }
 
 function updateShips(ships) {
-	interfaceCtx.clearRect(shipListPositionX, cfg.paddingY,
+	interfaceCtx.clearRect(shipListPositionX, textPositionY - shipCfg.heightPx,
 		playerCfg.maxLives * (shipCfg.width + 1) * coreCfg.pixelSize, shipCfg.heightPx);
 
 	for (let i = 0; i < ships.length; i += 1) {
-		ships[i].show(interfaceCtx, shipListPositionX + i * (shipCfg.width + 1) * coreCfg.pixelSize, cfg.paddingY);
+		ships[i].show(interfaceCtx, shipListPositionX + i * (shipCfg.width + 1) * coreCfg.pixelSize, textPositionY - shipCfg.heightPx);
 	}
 }
 
 export function init(data) {
 	font = fontGenerator.create(cfg.font);
-	textPositionY = cfg.paddingY + font.meta.boundingBox.height * cfg.fontSize;
+	textPositionY = cfg.paddingY + (font.meta.boundingBox.height + font.meta.boundingBox.y) * cfg.fontSize;
 	scorePositionX = font.write(interfaceCtx, [cfg.paddingX, textPositionY], str.Score, {size: cfg.fontSize}).width;
 	updateScore(data.score);
 
