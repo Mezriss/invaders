@@ -11,3 +11,5 @@ Space Invaders inspired game that procedurally generates almost all of its asset
 * sound effects
 * content for level generator
 * optimize for N3DS browser
+* add an ability to record gameplay as gifs/video
+* add social media buttons for easier highscore boasting

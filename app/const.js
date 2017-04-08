@@ -43,5 +43,8 @@ export const alignment = {
 	center: 'center'
 };
 
-import {font as c64} from './fonts/c64';
-export const fonts = {c64};
+//import {font as c64} from './fonts/c64';
+import {font as pressStart} from './fonts/press-start-2b';
+//import {font as gohufont} from './fonts/gohufont-11.bdf';
+//import {font as powerline} from './fonts/ter-powerline-x12b.bdf';
+export const fonts = {pressStart};

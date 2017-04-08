@@ -50,13 +50,14 @@ const sprite = initCanvas(coreCfg.pixelSize, coreCfg.pixelSize),
 		}
 		sprite.clearRect(0, 0, this.meta.boundingBox.width * size, this.meta.boundingBox.height * size);
 		for (let i = 0; i < glyph.height; i += 1) {
-			for (let j = 0; j < glyph.height; j += 1) {
+			for (let j = 0; j < glyph.width; j += 1) {
 				if (glyph.bitmap[i] && glyph.bitmap[i][j]) {
 					drawPixel(sprite, j * size, i * size, color, size);
 				}
 			}
 		}
 		glyph.sprites[color + '-' + size] = cacheSprite(sprite);
+		document.body.appendChild(sprite.canvas);
 	}
 };
 
