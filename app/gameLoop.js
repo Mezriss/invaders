@@ -2,9 +2,10 @@
 	Game Loop
 
  */
-import {player as playerCfg} from './config';
+import {player as playerCfg} from './conf';
 import * as c from './const';
 import {pubSub} from './util';
+import * as infoPanel from './interface/infoPanel';
 
 let canvas, player, level,
 	leftPressed = false, rightPressed = false;
@@ -60,6 +61,11 @@ function levelEntityDestroyed(type, entity) {
 	level[type].splice(level[type].indexOf(entity), 1);
 }
 
+function enemyDestroyed(enemy) {
+	player.score += enemy.scoreValue;
+	pubSub.pub(c.event.scoreUpdate, player.score);
+}
+
 export function init(data, drawCanvas) {
 	pubSub.on(c.event.keyDown, keyDown);
 	pubSub.on(c.event.keyUp, keyUp);
@@ -67,15 +73,19 @@ export function init(data, drawCanvas) {
 	pubSub.on(c.event.levelEntityCreated, levelEntityCreated);
 	pubSub.on(c.event.levelEntityDestroyed, levelEntityDestroyed);
 
+	pubSub.on(c.event.enemyDestroyed, enemyDestroyed);
+
 	player = data.player;
 	level = data.level;
 	player.currentShip.armMissile();
 
 	canvas = drawCanvas;
+	infoPanel.init(player);
 }
 
 export function end() {
-	[keyDown, keyUp, levelEntityCreated, levelEntityDestroyed].forEach(handler => pubSub.off(handler));
+	[keyDown, keyUp, levelEntityCreated, levelEntityDestroyed, enemyDestroyed].forEach(handler => pubSub.off(handler));
+	infoPanel.destroy();
 }
 
 export function drawFrame(dt) {

@@ -7,7 +7,7 @@ import * as ship from './ship';
 import * as missile from './missile';
 import * as explosion from './explosion';
 import {initCanvas, roll, drawImage, rectIntersect, pubSub} from '../util';
-import {core as coreCfg, formation as cfg, ship as shipCfg} from '../config';
+import {core as coreCfg, formation as cfg, ship as shipCfg} from '../conf';
 import {formation as formationConst, missile as missileConst, event as eventConst, direction} from '../const';
 
 let mX, mY, i; //missile coords for collision calculations
@@ -83,7 +83,9 @@ const formationProto = {
 		}
 	},
 	destroyShip: function(id) {
+		pubSub.pub(eventConst.enemyDestroyed, this.ships[i]);
 		if (this.ships[i].missile && this.ships[i].missile.status !== missileConst.launched) {
+			pubSub.pub(eventConst.enemyDestroyed, this.ships[i].missile);
 			this.ships[i].missile.destroy();
 		}
 		this.ctx.clearRect(this.ships[id].x, this.ships[id].y, shipCfg.widthPx, shipCfg.heightPx);

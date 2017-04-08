@@ -1,7 +1,7 @@
 /*
 	Somewhat abstract animation method
  */
-import {drawing as drawingCfg, core as coreCfg} from  '../config';
+import {drawing as drawingCfg, core as coreCfg} from  '../conf';
 import {initCanvas, drawImage} from './drawing';
 
 
@@ -43,10 +43,10 @@ function draw(ts) {
 	if (drawingCfg.showFPS) {
 		if (Date.now() - fpsStart >= 1000) {
 			fpsStart += 1000;
-			interfaceCtx.clearRect(10, 0, 20, 20);
+			interfaceCtx.clearRect(0, 0, 20, 12);
 			interfaceCtx.fillStyle = drawingCfg.systemInfoColor;
 			interfaceCtx.font = drawingCfg.systemInfoText;
-			interfaceCtx.fillText(fps, 10, 10);
+			interfaceCtx.fillText(fps, 0, 10);
 			fps = 1;
 		} else {
 			fps += 1;

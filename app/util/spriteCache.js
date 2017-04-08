@@ -1,4 +1,4 @@
-import {cache as cfg} from '../config';
+import {cache as cfg} from '../conf';
 import {initCanvas, drawImage} from '../util';
 
 const canvases = {},

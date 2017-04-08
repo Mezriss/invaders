@@ -5,7 +5,7 @@
 
  */
 
-import {ship as cfg, core as coreCfg} from '../config';
+import {ship as cfg, core as coreCfg} from '../conf';
 import {roll, shuffle, initCanvas, drawPixel, drawBeveledPixel, drawImage, cacheSprite, pubSub} from '../util';
 import {conf as confConst, event as eventConst} from '../const';
 
@@ -20,10 +20,11 @@ const sprite = initCanvas(cfg.widthPx, cfg.heightPx),
 		missile: null,
 		formation: null,
 		sprite: null,
+		scoreValue: 1,
 		x: null,
 		y: null,
-		show: function(ctx) {
-			drawImage(ctx, this.sprite.ctx, [this.x, this.y], this.sprite.coords, [cfg.widthPx, cfg.heightPx])
+		show: function(ctx, x = this.x, y = this.y) {
+			drawImage(ctx, this.sprite.ctx, [x, y], this.sprite.coords, [cfg.widthPx, cfg.heightPx])
 		},
 		behavior: function() {
 			//reload
@@ -70,7 +71,6 @@ export function create(options = {}) {
 		}
 	}
 
-	
 	sprite.clearRect(0, 0, cfg.widthPx, cfg.heightPx);
 	for (let i = 0; i < cfg.height; i += 1) {
 		for (let j = 0; j < cfg.width; j += 1) {

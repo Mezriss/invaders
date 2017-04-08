@@ -50,7 +50,8 @@ export const formation = {
 export const player = {
 	defaultColor: '#9305ff',
 	startingLives: 3,
-	minTravelDistance: core.screenWidth * 0.05,
+	maxLives: 5,
+	get minTravelDistance() { return core.screenWidth * 0.05},
 	respawnDelay: 1000
 };
 export const cache = {
@@ -77,11 +78,15 @@ export const explosion = {
 
 export const font = {
 	defaultColor: '#ffffff',
-	alignment: 'left'
+	alignment: 'left',
 };
 
-export const interfacePanelTop = {
-	height: 10
+export const interfaceInfoPanel = {
+	font: 'pressStart',
+	fontSize: 2,
+	get paddingX() { return Math.round(core.screenWidth * 0.02) },
+	get paddingY() { return Math.round(core.screenHeight * 0.02) },
+	scoreDigits: 4
 };
 
 function setCalculatedValues() {
@@ -96,20 +101,15 @@ function setCalculatedValues() {
 	missile.heightPaddedPx = missile.heightPx + missile.glowLengthPx * 2;
 	formation.shipPaddingPx = formation.shipPadding * core.pixelSize;
 	formation.linePaddingPx = formation.linePadding * core.pixelSize;
-	interfacePanelTop.heightPx = interfacePanelTop.height * core.pixelSize;
-}
-
-function recalculateValues() {
-	player.minTravelDistance = core.screenWidth * 0.05;
 }
 
 export function configure(key, val) {
 	switch (key) {
 		case confConst.beveled: ship.drawStyle = confConst.beveled; break;
 		case 'pixelSize': core.pixelSize = parseInt(val, 10); break;
+		case 'font': interfaceInfoPanel.font = val; break;
 	}
 	setCalculatedValues();
-	recalculateValues();
 }
 
 setCalculatedValues();

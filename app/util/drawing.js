@@ -1,4 +1,4 @@
-import {core as cfg, drawing as drawingCfg} from '../config';
+import {core as cfg, drawing as drawingCfg} from '../conf';
 import {hexToRgba} from './color';
 
 export function initCanvas(width = cfg.screenWidth, height = cfg.screenHeight) {

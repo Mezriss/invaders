@@ -1,7 +1,8 @@
-import {font as cfg, core as coreCfg} from '../config';
+import {font as cfg, core as coreCfg} from '../conf';
 import {fonts, alignment as alignmentConst} from '../const'
 import {drawImage, cacheSprite, initCanvas, drawPixel} from '../util'
 
+const fontCache = [];
 
 const sprite = initCanvas(coreCfg.pixelSize, coreCfg.pixelSize),
 	fontProto = {
@@ -31,6 +32,10 @@ const sprite = initCanvas(coreCfg.pixelSize, coreCfg.pixelSize),
 			this.writeLetter(ctx, text[i], x, y, color, size);
 			x += this.glyphs[text[i]].dWidth * size;
 		}
+
+		return {
+			width: x
+		}
 	},
 	writeLetter(ctx, letter, x, y, color, size) {
 		const style = color + '-' + size;
@@ -57,33 +62,38 @@ const sprite = initCanvas(coreCfg.pixelSize, coreCfg.pixelSize),
 			}
 		}
 		glyph.sprites[color + '-' + size] = cacheSprite(sprite);
-		document.body.appendChild(sprite.canvas);
 	}
 };
 
 export function create(name) {
-	const font = Object.create(fontProto);
+	if (fontCache[name]) {
+		return fontCache[name];
+	} else {
+		const font = Object.create(fontProto);
 
-	font.meta = fonts[name].meta;
-	font.glyphs = Object.assign({}, fonts[name].glyphs);
-	Object.keys(font.glyphs).forEach(key => {
-		let width = font.glyphs[key].width || font.meta.boundingBox.width;
-		font.glyphs[key].sprites = {};
-		font.glyphs[key].bitmap = [];
+		font.meta = fonts[name].meta;
+		font.glyphs = Object.assign({}, fonts[name].glyphs);
+		Object.keys(font.glyphs).forEach(key => {
+			let width = font.glyphs[key].width || font.meta.boundingBox.width;
+			font.glyphs[key].sprites = {};
+			font.glyphs[key].bitmap = [];
 
-		for (let i = 0; i < font.glyphs[key].bytes.length; i+= 1) {
-			font.glyphs[key].bitmap[i] = [];
-			for (let bit = 0; bit < 8; bit += 1) {
-				font.glyphs[key].bitmap[i][7 - bit] = (font.glyphs[key].bytes[i] >> bit) % 2;
+			for (let i = 0; i < font.glyphs[key].bytes.length; i+= 1) {
+				font.glyphs[key].bitmap[i] = [];
+				for (let bit = 0; bit < 8; bit += 1) {
+					font.glyphs[key].bitmap[i][7 - bit] = (font.glyphs[key].bytes[i] >> bit) % 2;
+				}
 			}
-		}
 
-		font.glyphs[key].width = 'width' in font.glyphs[key] ? font.glyphs[key].width : font.meta.boundingBox.width;
-		font.glyphs[key].height = 'height' in font.glyphs[key] ? font.glyphs[key].height : font.meta.boundingBox.height;
-		font.glyphs[key].x = 'x' in font.glyphs[key] ? font.glyphs[key].x : font.meta.boundingBox.x;
-		font.glyphs[key].y = 'y' in font.glyphs[key] ? font.glyphs[key].y : font.meta.boundingBox.y;
-		font.glyphs[key].dWidth = 'dWidth' in font.glyphs[key] ? font.glyphs[key].dWidth : font.meta.boundingBox.width;
-	});
+			font.glyphs[key].width = 'width' in font.glyphs[key] ? font.glyphs[key].width : font.meta.boundingBox.width;
+			font.glyphs[key].height = 'height' in font.glyphs[key] ? font.glyphs[key].height : font.meta.boundingBox.height;
+			font.glyphs[key].x = 'x' in font.glyphs[key] ? font.glyphs[key].x : font.meta.boundingBox.x;
+			font.glyphs[key].y = 'y' in font.glyphs[key] ? font.glyphs[key].y : font.meta.boundingBox.y;
+			font.glyphs[key].dWidth = 'dWidth' in font.glyphs[key] ? font.glyphs[key].dWidth : font.meta.boundingBox.width;
+		});
 
-	return font;
+		fontCache[name] = font;
+
+		return font;
+	}
 }

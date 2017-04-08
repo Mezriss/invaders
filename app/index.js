@@ -1,13 +1,12 @@
 import '../css/style.css';
 
-import {core as cfg, configure} from './config'
+import {core as cfg, configure} from './conf'
 import {event as eventConst} from './const'
 import * as spaceGenerator from './generators/space';
 import * as player from './generators/player';
 import * as levelGenerator from './generators/level';
 import * as gameLoop from './gameLoop';
 import {pubSub, animation} from './util';
-import * as font from './generators/font';
 
 window.location.search.substr(1).split(/[,;&]/).forEach(keyValue => configure(...keyValue.split('=')));
 
@@ -36,15 +35,3 @@ animation.start({
 		player: player.create()
 	}
 });
-
-const c64 = font.create('c64');
-c64.write(interfaceScreen.getContext('2d'), [480 / 2,10], 'Invaders', {size: 2, alignment: 'center'});
-
-
-//todo determine device type
-//todo subscribe to screen orientation changes (maybe)
-//todo interface and events for interface
-//todo prepare localstorage to save score and game
-//todo initialize sound stuff
-//todo on game start determine screen orientation and choose game style
-//todo show title screen (that can go to instructions screen or game start)

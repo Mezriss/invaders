@@ -1,4 +1,4 @@
-import {missile as missileCfg, ship as shipCfg} from '../config';
+import {missile as missileCfg, ship as shipCfg} from '../conf';
 
 export function rectIntersect(mX, mY, sX, sY) {
 	return !(

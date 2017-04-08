@@ -3,7 +3,7 @@
 
  */
 
-import {player as cfg, core as coreCfg, ship as shipCfg} from '../config'
+import {player as cfg, core as coreCfg, ship as shipCfg} from '../conf'
 import {event as eventConst, missile as missileConst, direction as directionConst} from  '../const'
 import * as shipGenerator from './ship';
 import * as missileGenerator from './missile';
@@ -75,7 +75,11 @@ const playerProto = {
 			}
 			this.currentShip = null;
 			if (this.extraShips.length) {
-				setTimeout(() => this.currentShip = this.extraShips.pop(), cfg.respawnDelay);
+				setTimeout(() => {
+					this.currentShip = this.extraShips.pop();
+					pubSub.pub(eventConst.shipListUpdate, this.extraShips);
+				}, cfg.respawnDelay);
+				pubSub.pub(eventConst.shipListUpdate, this.extraShips);
 			}
 		}
 	}
