@@ -18,12 +18,16 @@ export const event = {
 	effect: 'effects',
 	enemyDestroyed: 'enemyDestroyed',
 	shipListUpdate: 'shipListUpdate',
-	scoreUpdate: 'scoreUpdate'
+	scoreUpdate: 'scoreUpdate',
+	gameOver: 'gameOver'
 };
 
 export const key = {
 	arrowLeft: 'ArrowLeft',
 	arrowRight: 'ArrowRight',
+	arrowUp: 'ArrowUp',
+	arrowDown: 'ArrowDown',
+	enter: 'Enter',
 	space: ' '
 };
 
@@ -36,7 +40,9 @@ export const missile = {
 
 export const conf = {
 	regular: 'regular',
-	beveled: 'beveled'
+	beveled: 'beveled',
+	sound: 'sound',
+	fps: 'fps'
 };
 
 export const alignment = {

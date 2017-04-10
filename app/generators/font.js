@@ -12,7 +12,8 @@ const sprite = initCanvas(coreCfg.pixelSize, coreCfg.pixelSize),
 		let color = options.color || cfg.defaultColor,
 			size = options.size || coreCfg.pixelSize,
 			alignment = options.alignment || cfg.alignment,
-			[x, y] = coords;
+			[x, y] = coords.map(val => Math.round(val)),
+			lineStart = x;
 
 		switch (alignment) {
 			case alignmentConst.center:
@@ -21,11 +22,13 @@ const sprite = initCanvas(coreCfg.pixelSize, coreCfg.pixelSize),
 					lineWidth += this.glyphs[text[i]].dWidth * size
 				}
 				x -= Math.floor(lineWidth / 2);
+				lineStart = x;
 				break;
 			case alignmentConst.right:
 				for (let i = 0; i < text.length; i += 1) {
 					x -= this.glyphs[text[i]].dWidth * size
 				}
+				lineStart = x;
 				break;
 		}
 		for (let i = 0; i < text.length; i += 1) {
@@ -34,7 +37,8 @@ const sprite = initCanvas(coreCfg.pixelSize, coreCfg.pixelSize),
 		}
 
 		return {
-			width: x
+			lineStart,
+			lineEnd: x
 		}
 	},
 	writeLetter(ctx, letter, x, y, color, size) {

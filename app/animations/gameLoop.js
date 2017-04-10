@@ -2,10 +2,10 @@
 	Game Loop
 
  */
-import {player as playerCfg} from './conf';
-import * as c from './const';
-import {pubSub} from './util';
-import * as infoPanel from './interface/infoPanel';
+import {player as playerCfg} from '../conf';
+import * as c from '../const';
+import {pubSub} from '../util';
+import * as infoPanel from '../interface/infoPanel';
 
 let canvas, player, level,
 	leftPressed = false, rightPressed = false;

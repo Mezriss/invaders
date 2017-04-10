@@ -30,11 +30,11 @@ function updateShips(ships) {
 export function init(data) {
 	font = fontGenerator.create(cfg.font);
 	textPositionY = cfg.paddingY + (font.meta.boundingBox.height + font.meta.boundingBox.y) * cfg.fontSize;
-	scorePositionX = font.write(interfaceCtx, [cfg.paddingX, textPositionY], str.Score, {size: cfg.fontSize}).width;
+	scorePositionX = font.write(interfaceCtx, [cfg.paddingX, textPositionY], str.score, {size: cfg.fontSize}).lineEnd;
 	updateScore(data.score);
 
 	shipListPositionX = coreCfg.screenWidth - cfg.paddingX - playerCfg.maxLives * (shipCfg.width + 1) * coreCfg.pixelSize;
-	font.write(interfaceCtx, [shipListPositionX, textPositionY], str.Ships, {size: cfg.fontSize, alignment: alignmentConst.right});
+	font.write(interfaceCtx, [shipListPositionX, textPositionY], str.ships, {size: cfg.fontSize, alignment: alignmentConst.right});
 	updateShips(data.extraShips);
 
 	pubSub.on(eventConst.scoreUpdate, updateScore);

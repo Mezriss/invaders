@@ -19,9 +19,9 @@ const playerProto = {
 	plannedTravel: 0,
 	moving: false,
 	speed: 0.3,
-	show: function(ctx) {
+	show: function(ctx, x, y) {
 		if (this.currentShip) {
-			this.currentShip.show(ctx);
+			this.currentShip.show(ctx, x, y);
 		}
 	},
 	behavior: function() {
@@ -76,8 +76,13 @@ const playerProto = {
 			this.currentShip = null;
 			if (this.extraShips.length) {
 				setTimeout(() => {
-					this.currentShip = this.extraShips.pop();
-					pubSub.pub(eventConst.shipListUpdate, this.extraShips);
+					if (this.extraShips.length) {
+						this.currentShip = this.extraShips.pop();
+						pubSub.pub(eventConst.shipListUpdate, this.extraShips);
+					} else {
+						pubSub.pub(eventConst.gameOver, this);
+					}
+
 				}, cfg.respawnDelay);
 				pubSub.pub(eventConst.shipListUpdate, this.extraShips);
 			}

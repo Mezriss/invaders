@@ -30,12 +30,12 @@ export const ship = {
 export const drawing = {
 	preventSubPixelDrawing: false,
 	stickToPixelGrid: false,
-	showFPS: true,
+	showFPS: false,
 	systemInfoColor: 'lime',
 	systemInfoText: '10px sans-serif',
 	maxFPS: 60,
 	paletteSize: 100,
-	mask: [
+	mask: [//todo generate this
 		[['#000000', 0], ['#ffffff', 25], ['#ffffff', 50]],
 		[['#000000', 25], ['#000000', 0], ['#ffffff', 25]],
 		[['#000000', 50], ['#000000', 25], ['#000000', 0]]
@@ -50,7 +50,7 @@ export const formation = {
 export const player = {
 	defaultColor: '#9305ff',
 	startingLives: 3,
-	maxLives: 5,
+	maxLives: 4,
 	get minTravelDistance() { return core.screenWidth * 0.05},
 	respawnDelay: 1000
 };
@@ -89,6 +89,20 @@ export const interfaceInfoPanel = {
 	scoreDigits: 4
 };
 
+export const titleScreen = {
+	font: 'pressStart',
+	titleSize: 3,
+	menuItemSize: 2,
+	lineHeight: 2,
+	get cursorPadding() { return core.pixelSize * 2},
+	get cursorSpeed() { return core.screenHeight * 0.3 },
+	color: '#ffffff'
+};
+
+export const sound = {
+	on: false
+};
+
 function setCalculatedValues() {
 	ship.widthPx = ship.width * core.pixelSize;
 	ship.heightPx = ship.height * core.pixelSize;
@@ -106,10 +120,20 @@ function setCalculatedValues() {
 export function configure(key, val) {
 	switch (key) {
 		case confConst.beveled: ship.drawStyle = confConst.beveled; break;
-		case 'pixelSize': core.pixelSize = parseInt(val, 10); break;
-		case 'font': interfaceInfoPanel.font = val; break;
+		case 'pixelSize':
+			core.pixelSize = parseInt(val, 10);
+			setCalculatedValues();
+		break;
+		case 'font':
+			interfaceInfoPanel.font = val;
+			titleScreen.font = val;
+			break;
+		case confConst.fps:
+			drawing.showFPS = val || (val === undefined);
+			break;
+		case confConst.sound:
+			sound.on = val || (val === undefined)
 	}
-	setCalculatedValues();
 }
 
 setCalculatedValues();

@@ -5,7 +5,8 @@ import {event as eventConst} from './const'
 import * as spaceGenerator from './generators/space';
 import * as player from './generators/player';
 import * as levelGenerator from './generators/level';
-import * as gameLoop from './gameLoop';
+import * as gameLoop from './animations/gameLoop';
+import * as titleScreen from './animations/titleScreen';
 import {pubSub, animation} from './util';
 
 window.location.search.substr(1).split(/[,;&]/).forEach(keyValue => configure(...keyValue.split('=')));
@@ -29,9 +30,8 @@ let space = spaceGenerator.create();
 space.show(backgroundCtx);
 
 animation.start({
-	animation: gameLoop,
+	animation: titleScreen,
 	data: {
-		level: levelGenerator.create(1),
 		player: player.create()
 	}
 });
