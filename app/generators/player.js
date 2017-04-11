@@ -18,7 +18,9 @@ const playerProto = {
 	direction: null,
 	plannedTravel: 0,
 	moving: false,
-	speed: 0.3,
+	speed: cfg.speed,
+	get x() {return this.currentShip && this.currentShip.x},
+	get y() {return this.currentShip && this.currentShip.y},
 	show: function(ctx, x, y) {
 		if (this.currentShip) {
 			this.currentShip.show(ctx, x, y);
@@ -32,7 +34,7 @@ const playerProto = {
 	move: function(dt) {
 		if (this.currentShip) {
 			if (this.moving || this.plannedTravel > 0) {
-				let travelDistance = this.speed * coreCfg.screenWidth * dt / 1000;
+				let travelDistance = this.speed * dt / 1000;
 				switch (this.direction) {
 					case directionConst.left:
 						this.currentShip.x -= travelDistance;

@@ -10,6 +10,8 @@ const requestAnimationFrame = window.requestAnimationFrame ||
 		window.webkitRequestAnimationFrame ||
 		window.msRequestAnimationFrame ||
 		window.oRequestAnimationFrame,
+	cancelAnimationFrame = window.cancelAnimationFrame ||
+		window.mozCancelAnimationFrame,
 	screenCtx = gameScreen.getContext('2d'),
 	interfaceCtx = interfaceScreen.getContext('2d'),
 	drawCanvas = initCanvas();
@@ -53,7 +55,7 @@ function draw(ts) {
 		}
 	}
 	if (responseData) {
-		pause();
+		stop();
 		animation.end();
 		resolveHandle(responseData);
 	}
@@ -71,12 +73,9 @@ export function start(config) {
 	});
 }
 
-export function pause() {
-	paused = true;
+export function stop() {
+	cancelAnimationFrame(draw);
 	then = null;
-}
-
-export function resume() {
-	paused = false;
-	requestAnimationFrame(draw);
+	animation.end();
+	resolveHandle(responseData);
 }

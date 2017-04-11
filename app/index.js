@@ -4,7 +4,7 @@ import {core as cfg, configure} from './conf'
 import {event as eventConst} from './const'
 import * as spaceGenerator from './generators/space';
 import * as player from './generators/player';
-import * as levelGenerator from './generators/level';
+import * as level from './generators/level';
 import * as gameLoop from './animations/gameLoop';
 import * as titleScreen from './animations/titleScreen';
 import {pubSub, animation} from './util';
@@ -34,4 +34,12 @@ animation.start({
 	data: {
 		player: player.create()
 	}
-});
+}).then(data => playLevels(data));
+
+function playLevels(data) {
+	data.level = level.create(data.level ? data.level.number + 1 : 1);
+	animation.start({
+		animation: gameLoop,
+		data: data
+	}).then(data => playLevels(data));
+}

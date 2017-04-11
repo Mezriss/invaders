@@ -51,6 +51,7 @@ export const player = {
 	defaultColor: '#9305ff',
 	startingLives: 3,
 	maxLives: 4,
+	get speed() { return 0.3 * core.screenWidth},
 	get minTravelDistance() { return core.screenWidth * 0.05},
 	respawnDelay: 1000
 };
@@ -96,7 +97,9 @@ export const titleScreen = {
 	lineHeight: 2,
 	get cursorPadding() { return core.pixelSize * 2},
 	get cursorSpeed() { return core.screenHeight * 0.3 },
-	color: '#ffffff'
+	color: '#ffffff',
+	fadeSteps: 4,
+	transitionDuration: 3000
 };
 
 export const sound = {
