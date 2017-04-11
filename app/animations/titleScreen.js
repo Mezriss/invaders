@@ -1,8 +1,7 @@
 import {pubSub, hexToRgba} from  '../util';
 import * as fontGenerator from '../generators/font';
-import {event as eventConst, key as keyConst, alignment as alignmentConst, conf as confConst} from '../const';
-import {titleScreen as cfg, core as coreCfg, ship as shipCfg, sound as soundConf, drawing as drawingConf, player as playerCfg,
-	configure} from '../conf';
+import {eventConst, keyConst, alignmentConst, confConst} from '../const';
+import {titleScreenCfg as cfg, coreCfg, shipCfg, soundCfg, drawingCfg, playerCfg, configure} from '../conf';
 import str from '../str';
 
 let drawCtx, player, font, color, newColor,
@@ -37,14 +36,14 @@ const interfaceCtx = interfaceScreen.getContext('2d'),
 		}
 	}],
 	settingsMenu = [{
-		get label() {return str.sound + (soundConf.on ? str.on : str.off)},
+		get label() {return str.sound + (soundCfg.on ? str.on : str.off)},
 		action: function() {
-			configure(confConst.sound, !soundConf.on);
+			configure(confConst.sound, !soundCfg.on);
 		}
 	}, {
-		get label() {return str.showFPS + (drawingConf.showFPS ? str.on : str.off)},
+		get label() {return str.showFPS + (drawingCfg.showFPS ? str.on : str.off)},
 		action: function() {
-			configure(confConst.fps, !drawingConf.showFPS);
+			configure(confConst.fps, !drawingCfg.showFPS);
 		}
 	}, {
 		label: str.back,

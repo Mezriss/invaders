@@ -1,4 +1,4 @@
-import {core as cfg, drawing as drawingCfg} from '../conf';
+import {coreCfg as cfg, drawingCfg} from '../conf';
 import {hexToRgba} from './color';
 
 export function initCanvas(width = cfg.screenWidth, height = cfg.screenHeight) {
@@ -28,7 +28,7 @@ export function drawImage(ctx, source, coords, sourceCoords, dimensions) {
 
 }
 
-//drawing pixels with a mask over them; for shitty "3d" pixel effect
+//drawingCfg pixels with a mask over them; for shitty "3d" pixel effect
 const palette = initCanvas(cfg.pixelSize * drawingCfg.paletteSize, cfg.pixelSize),
 	paletteIndex = {transparent: 0};
 let paletteLength = 0;

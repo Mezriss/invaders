@@ -1,5 +1,5 @@
-import {interfaceInfoPanel as cfg, core as coreCfg, player as playerCfg, ship as shipCfg} from '../conf';
-import {event as eventConst, alignment as alignmentConst} from '../const';
+import {interfaceInfoPanelCfg as cfg, coreCfg, playerCfg, shipCfg} from '../conf';
+import {eventConst, alignmentConst} from '../const';
 import {pubSub} from '../util';
 import * as fontGenerator from '../generators/font';
 import str from '../str';

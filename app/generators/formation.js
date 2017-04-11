@@ -7,8 +7,8 @@ import * as ship from './ship';
 import * as missile from './missile';
 import * as explosion from './explosion';
 import {initCanvas, roll, drawImage, rectIntersect, pubSub} from '../util';
-import {core as coreCfg, formation as cfg, ship as shipCfg} from '../conf';
-import {formation as formationConst, missile as missileConst, event as eventConst, direction} from '../const';
+import {coreCfg, formationCfg as cfg, shipCfg} from '../conf';
+import {formationConst, missileConst, eventConst, directionConst} from '../const';
 
 let mX, mY, i; //missile coords for collision calculations
 
@@ -27,16 +27,16 @@ const formationProto = {
 		drawImage(ctx, this.ctx, [this.x, this.y]);
 	},
 	behavior: function() { //this is a basic default behavior
-		if (this.direction === direction.down) {
+		if (this.direction === directionConst.down) {
 			if (this.y - this.advanceStart >= this.advanceAmount * coreCfg.screenHeight) {
-				this.direction = this.x === 0 ? direction.right : direction.left;
+				this.direction = this.x === 0 ? directionConst.right : directionConst.left;
 			}
 			return;
 		}
 
 		if ((this.x <= 0) || (this.x + this.ctx.canvas.width >= coreCfg.screenWidth)) {
 			this.advanceStart = this.y;
-			this.direction = direction.down;
+			this.direction = directionConst.down;
 			//prevent running offscreen on high speeds
 			this.x = this.x <= 0 ? 0 : coreCfg.screenWidth - this.ctx.canvas.width;
 		}
@@ -52,13 +52,13 @@ const formationProto = {
 	},
 	move: function(dt) {
 		switch (this.direction) {
-			case direction.left:
+			case directionConst.left:
 				this.x -= this.evadeSpeed * coreCfg.screenWidth * dt / 1000; break;
-			case direction.right:
+			case directionConst.right:
 				this.x += this.evadeSpeed * coreCfg.screenWidth * dt / 1000; break;
-			case direction.up:
+			case directionConst.up:
 				this.y -= this.advanceSpeed * coreCfg.screenHeight * dt / 1000; break;
-			case direction.down:
+			case directionConst.down:
 				this.y += this.advanceSpeed * coreCfg.screenHeight * dt / 1000; break;
 		}
 	},
@@ -103,7 +103,7 @@ export function create(options) {
 	formation.x = (coreCfg.screenWidth - formation.width) / 2;
 	formation.y = coreCfg.screenHeight * 0.1 * options.levelNumber;
 
-	formation.direction = roll(0, 1) ? direction.left : direction.right;
+	formation.direction = roll(0, 1) ? directionConst.left : directionConst.right;
 
 	formation.ships = [];
 

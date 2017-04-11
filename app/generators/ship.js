@@ -5,9 +5,9 @@
 
  */
 
-import {ship as cfg, core as coreCfg} from '../conf';
+import {shipCfg as cfg, coreCfg} from '../conf';
 import {roll, shuffle, initCanvas, drawPixel, drawBeveledPixel, drawImage, cacheSprite, pubSub} from '../util';
-import {conf as confConst, event as eventConst} from '../const';
+import {confConst, eventConst} from '../const';
 
 const wingLength = Math.ceil(cfg.width / 2);
 

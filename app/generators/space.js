@@ -5,7 +5,7 @@
 
  */
 
-import {core as coreCfg, space as cfg} from '../conf';
+import {coreCfg, spaceCfg as cfg} from '../conf';
 import {roll, initCanvas, drawPixel, hexToRgba, rollh, drawImage} from '../util';
 
 const spaceProto = {

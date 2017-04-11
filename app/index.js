@@ -1,7 +1,7 @@
 import '../css/style.css';
 
-import {core as cfg, configure} from './conf'
-import {event as eventConst} from './const'
+import {coreCfg as cfg, configure} from './conf'
+import {eventConst} from './const'
 import * as spaceGenerator from './generators/space';
 import * as player from './generators/player';
 import * as level from './generators/level';

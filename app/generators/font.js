@@ -1,5 +1,5 @@
-import {font as cfg, core as coreCfg} from '../conf';
-import {fonts, alignment as alignmentConst} from '../const'
+import {fontCfg as cfg, coreCfg} from '../conf';
+import {fonts, alignmentConst} from '../const'
 import {drawImage, cacheSprite, initCanvas, drawPixel} from '../util'
 
 const fontCache = [];

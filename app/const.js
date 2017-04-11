@@ -1,15 +1,15 @@
-export const formation = {
+export const formationConst = {
 	oneTypePerLine: 'one-type-per-line'
 };
 
-export const direction = {
+export const directionConst = {
 	left: 'left',
 	right: 'right',
 	up: 'up',
 	down: 'down'
 };
 
-export const event = {
+export const eventConst = {
 	keyDown: 'keydown',
 	keyUp: 'keyup',
 	levelEntityCreated: 'levelEntityCreated',
@@ -22,7 +22,7 @@ export const event = {
 	gameOver: 'gameOver'
 };
 
-export const key = {
+export const keyConst = {
 	arrowLeft: 'ArrowLeft',
 	arrowRight: 'ArrowRight',
 	arrowUp: 'ArrowUp',
@@ -31,21 +31,21 @@ export const key = {
 	space: ' '
 };
 
-export const missile = {
+export const missileConst = {
 	arming: 'arming',
 	armed: 'armed',
 	launched: 'launched',
 	destroyed: 'destroyed'
 };
 
-export const conf = {
+export const confConst = {
 	regular: 'regular',
 	beveled: 'beveled',
 	sound: 'sound',
 	fps: 'fps'
 };
 
-export const alignment = {
+export const alignmentConst = {
 	left: 'left',
 	right: 'right',
 	center: 'center'

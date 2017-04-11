@@ -1,7 +1,7 @@
 /*
 	Somewhat abstract animation method
  */
-import {drawing as drawingCfg, core as coreCfg} from  '../conf';
+import {drawingCfg, coreCfg} from  '../conf';
 import {initCanvas, drawImage} from './drawing';
 
 

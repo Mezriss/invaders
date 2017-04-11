@@ -1,12 +1,12 @@
-import {conf as confConst} from './const';
+import {confConst} from './const';
 
-export const core = {
+export const coreCfg = {
 	pixelSize: 3,
 	screenWidth: 480,
 	screenHeight: 600
 };
 
-export const space = {
+export const spaceCfg = {
 	pixelSize: 2,
 	background: '#000011',
 	maxStars: 80,
@@ -18,7 +18,7 @@ export const space = {
 	maxBeamLength: 5
 };
 
-export const ship = {
+export const shipCfg = {
 	width: 7,
 	height: 5,
 	minBits: 7,
@@ -27,7 +27,7 @@ export const ship = {
 	drawStyle: confConst.regular
 };
 
-export const drawing = {
+export const drawingCfg = {
 	preventSubPixelDrawing: false,
 	stickToPixelGrid: false,
 	showFPS: false,
@@ -42,24 +42,24 @@ export const drawing = {
 	]
 };
 
-export const formation = {
+export const formationCfg = {
 	shipPadding: 4,
 	linePadding: 3
 };
 
-export const player = {
+export const playerCfg = {
 	defaultColor: '#9305ff',
 	startingLives: 3,
 	maxLives: 4,
-	get speed() { return 0.3 * core.screenWidth},
-	get minTravelDistance() { return core.screenWidth * 0.05},
+	get speed() { return 0.3 * coreCfg.screenWidth},
+	get minTravelDistance() { return coreCfg.screenWidth * 0.05},
 	respawnDelay: 1000
 };
-export const cache = {
+export const cacheCfg = {
 	itemsPerCanvas: 10
 };
 
-export const missile = {
+export const missileCfg = {
 	defaultColor: '#ffffff',
 	glow: 0.2,
 	glowDegradation: 0,
@@ -71,71 +71,71 @@ export const missile = {
 	glowLength: 1
 };
 
-export const explosion = {
+export const explosionCfg = {
 	duration: 300,
 	minOpacity: 20,
 	spread: 4,
 };
 
-export const font = {
+export const fontCfg = {
 	defaultColor: '#ffffff',
 	alignment: 'left',
 };
 
-export const interfaceInfoPanel = {
+export const interfaceInfoPanelCfg = {
 	font: 'pressStart',
 	fontSize: 2,
-	get paddingX() { return Math.round(core.screenWidth * 0.02) },
-	get paddingY() { return Math.round(core.screenHeight * 0.02) },
+	get paddingX() { return Math.round(coreCfg.screenWidth * 0.02) },
+	get paddingY() { return Math.round(coreCfg.screenHeight * 0.02) },
 	scoreDigits: 4
 };
 
-export const titleScreen = {
+export const titleScreenCfg = {
 	font: 'pressStart',
 	titleSize: 3,
 	menuItemSize: 2,
 	lineHeight: 2,
-	get cursorPadding() { return core.pixelSize * 2},
-	get cursorSpeed() { return core.screenHeight * 0.3 },
+	get cursorPadding() { return coreCfg.pixelSize * 2},
+	get cursorSpeed() { return coreCfg.screenHeight * 0.3 },
 	color: '#ffffff',
 	fadeSteps: 4,
 	transitionDuration: 3000
 };
 
-export const sound = {
+export const soundCfg = {
 	on: false
 };
 
 function setCalculatedValues() {
-	ship.widthPx = ship.width * core.pixelSize;
-	ship.heightPx = ship.height * core.pixelSize;
-	missile.widthPx = missile.width * core.pixelSize;
-	missile.heightPx = missile.height * core.pixelSize;
-	missile.glowLengthPx = missile.glowLength * core.pixelSize;
-	missile.widthPadded = missile.width + missile.glowLength * 2;
-	missile.heightPadded = missile.height + missile.glowLength * 2;
-	missile.widthPaddedPx = missile.widthPx + missile.glowLengthPx * 2;
-	missile.heightPaddedPx = missile.heightPx + missile.glowLengthPx * 2;
-	formation.shipPaddingPx = formation.shipPadding * core.pixelSize;
-	formation.linePaddingPx = formation.linePadding * core.pixelSize;
+	shipCfg.widthPx = shipCfg.width * coreCfg.pixelSize;
+	shipCfg.heightPx = shipCfg.height * coreCfg.pixelSize;
+	missileCfg.widthPx = missileCfg.width * coreCfg.pixelSize;
+	missileCfg.heightPx = missileCfg.height * coreCfg.pixelSize;
+	missileCfg.glowLengthPx = missileCfg.glowLength * coreCfg.pixelSize;
+	missileCfg.widthPadded = missileCfg.width + missileCfg.glowLength * 2;
+	missileCfg.heightPadded = missileCfg.height + missileCfg.glowLength * 2;
+	missileCfg.widthPaddedPx = missileCfg.widthPx + missileCfg.glowLengthPx * 2;
+	missileCfg.heightPaddedPx = missileCfg.heightPx + missileCfg.glowLengthPx * 2;
+	formationCfg.shipPaddingPx = formationCfg.shipPadding * coreCfg.pixelSize;
+	formationCfg.linePaddingPx = formationCfg.linePadding * coreCfg.pixelSize;
 }
 
 export function configure(key, val) {
 	switch (key) {
-		case confConst.beveled: ship.drawStyle = confConst.beveled; break;
+		case confConst.beveled: shipCfg.drawStyle = confConst.beveled; break;
 		case 'pixelSize':
-			core.pixelSize = parseInt(val, 10);
+			coreCfg.pixelSize = parseInt(val, 10);
 			setCalculatedValues();
 		break;
 		case 'font':
-			interfaceInfoPanel.font = val;
-			titleScreen.font = val;
+			interfaceInfoPanelCfg.font = val;
+			titleScreenCfg.font = val;
 			break;
 		case confConst.fps:
-			drawing.showFPS = val || (val === undefined);
+			drawingCfg.showFPS = val || (val === undefined);
 			break;
 		case confConst.sound:
-			sound.on = val || (val === undefined)
+			soundCfg.on = val || (val === undefined)
 	}
 }
 

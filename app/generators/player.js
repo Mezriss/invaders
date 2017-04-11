@@ -3,8 +3,8 @@
 
  */
 
-import {player as cfg, core as coreCfg, ship as shipCfg} from '../conf'
-import {event as eventConst, missile as missileConst, direction as directionConst} from  '../const'
+import {playerCfg as cfg, coreCfg, shipCfg} from '../conf'
+import {eventConst, missileConst, directionConst} from  '../const'
 import * as shipGenerator from './ship';
 import * as missileGenerator from './missile';
 import * as explosion from './explosion';

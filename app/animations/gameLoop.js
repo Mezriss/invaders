@@ -2,7 +2,7 @@
 	Game Loop
 
  */
-import {player as playerCfg} from '../conf';
+import {playerCfg} from '../conf';
 import * as c from '../const';
 import {pubSub} from '../util';
 import * as infoPanel from '../interface/infoPanel';
@@ -12,23 +12,23 @@ let canvas, player, level,
 
 function keyDown(key) {
 	switch (key) {
-		case c.key.arrowLeft:
+		case c.keyConst.arrowLeft:
 			if (!player.moving) {
 				player.plannedTravel = playerCfg.minTravelDistance;
 			}
 			player.moving = true;
 			leftPressed = true;
-			player.direction = c.direction.left;
+			player.direction = c.directionConst.left;
 			break;
-		case c.key.arrowRight:
+		case c.keyConst.arrowRight:
 			if (!player.moving) {
 				player.plannedTravel = playerCfg.minTravelDistance;
 			}
 			player.moving = true;
 			rightPressed = true;
-			player.direction = c.direction.right;
+			player.direction = c.directionConst.right;
 			break;
-		case c.key.space:
+		case c.keyConst.space:
 			player.setBarrage(true);
 			player.fire();
 			break;
@@ -37,17 +37,17 @@ function keyDown(key) {
 
 function keyUp(key) {
 	switch (key) {
-		case c.key.arrowLeft:
+		case c.keyConst.arrowLeft:
 			leftPressed = false;
-			if (player.direction === c.direction.left) {
+			if (player.direction === c.directionConst.left) {
 				player.moving = false;
 			}
 			break;
-		case c.key.arrowRight:
+		case c.keyConst.arrowRight:
 			rightPressed = false;
 			player.moving = leftPressed || rightPressed;
 			break;
-		case c.key.space:
+		case c.keyConst.space:
 			player.setBarrage(false);
 			break;
 	}
@@ -63,17 +63,17 @@ function levelEntityDestroyed(type, entity) {
 
 function enemyDestroyed(enemy) {
 	player.score += enemy.scoreValue;
-	pubSub.pub(c.event.scoreUpdate, player.score);
+	pubSub.pub(c.eventConst.scoreUpdate, player.score);
 }
 
 export function init(data, drawCanvas) {
-	pubSub.on(c.event.keyDown, keyDown);
-	pubSub.on(c.event.keyUp, keyUp);
+	pubSub.on(c.eventConst.keyDown, keyDown);
+	pubSub.on(c.eventConst.keyUp, keyUp);
 
-	pubSub.on(c.event.levelEntityCreated, levelEntityCreated);
-	pubSub.on(c.event.levelEntityDestroyed, levelEntityDestroyed);
+	pubSub.on(c.eventConst.levelEntityCreated, levelEntityCreated);
+	pubSub.on(c.eventConst.levelEntityDestroyed, levelEntityDestroyed);
 
-	pubSub.on(c.event.enemyDestroyed, enemyDestroyed);
+	pubSub.on(c.eventConst.enemyDestroyed, enemyDestroyed);
 
 	player = data.player;
 	level = data.level;
@@ -90,7 +90,7 @@ export function end() {
 
 export function drawFrame(dt) {
 	//check for collisions
-	level.missiles.filter(missile => missile.status === c.missile.launched).forEach(missile => {
+	level.missiles.filter(missile => missile.status === c.missileConst.launched).forEach(missile => {
 		if (missile.launcher.player) {
 			level.formations.forEach(formation => formation.checkCollisions(missile))
 		} else {

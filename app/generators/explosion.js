@@ -1,5 +1,5 @@
-import {missile as missileConst, event as eventConst, conf as confConst} from '../const';
-import {explosion as cfg, ship as shipCfg, missile as missileCfg, core as coreCfg} from '../conf'
+import {eventConst, confConst} from '../const';
+import {explosionCfg as cfg, shipCfg, coreCfg} from '../conf'
 import {drawPixel, drawBeveledPixel, pubSub, hexToRgba} from '../util';
 
 const explosionProto = {

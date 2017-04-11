@@ -1,5 +1,5 @@
-import {core as coreCfg, missile as cfg, ship as shipCfg} from '../conf';
-import {missile as missileConst, event as eventConst} from '../const';
+import {coreCfg, missileCfg as cfg, shipCfg} from '../conf';
+import {missileConst, eventConst} from '../const';
 import {roll, initCanvas, shuffle, drawPixel, hexToRgba, drawImage, cacheSprite, pubSub} from '../util';
 
 const sprite = initCanvas(cfg.widthPaddedPx, cfg.heightPaddedPx),

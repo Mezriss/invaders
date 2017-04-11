@@ -5,9 +5,9 @@
 
 //todo choose level traits (from a list) based on challenge rate of traits and level's "challenge budget"
 
-import {core as cfg, ship as shipCfg, formation as formationCfg} from '../conf';
+import {coreCfg as cfg, shipCfg, formationCfg} from '../conf';
 import * as formationGenerator from './formation';
-import {formation as formationConst} from '../const';
+import {formationConst} from '../const';
 
 export function create(levelNumber) {
 	const level = {
