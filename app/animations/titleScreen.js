@@ -1,7 +1,7 @@
 import {pubSub, hexToRgba} from  '../util';
 import * as fontGenerator from '../generators/font';
 import {eventConst, keyConst, alignmentConst, confConst} from '../const';
-import {titleScreenCfg as cfg, coreCfg, shipCfg, soundCfg, drawingCfg, playerCfg, highScoresCfg, configure} from '../conf';
+import {titleScreenCfg as cfg, coreCfg, shipCfg, soundCfg, drawingCfg, playerCfg, missileCfg, configure} from '../conf';
 import str from '../str';
 import * as highScores from '../highScores';
 import * as ship from '../generators/ship';
@@ -12,7 +12,7 @@ let drawCtx, player, font, color, newColor,
 	currentMenu,
 	title = {}, menuItems = {}, cursor,
 	transitionElapsed,
-	scores;
+	scores, scoreIndicator;
 
 const interfaceCtx = interfaceScreen.getContext('2d');
 
@@ -104,12 +104,19 @@ export function init(data, drawCanvas) {
 
 	if (data.oldPlayer) {
 		currentMenu = highScoresMenu;
+		scoreIndicator = {
+			position: data.position,
+			missile: Object.create(data.oldPlayer.lastShip.missileType)
+		};
+		scoreIndicator.missile.armProgress = missileCfg.armSteps - 1;
+
 		if (data.position === - 1) {
 			scores.push(data.record);
+			scoreIndicator.position = scores.length - 1;
 		}
-
 	} else {
 		currentMenu = mainMenu;
+		scoreIndicator = null;
 	}
 
 	for (let i = 0; i < scores.length; i += 1) {
@@ -153,6 +160,12 @@ function drawMenu() {
 	}
 	if (currentMenu === highScoresMenu) {
 		for (let i = 0; i < scores.length; i += 1) {
+			if (scoreIndicator && scoreIndicator.position === i) {
+				scoreIndicator.missile.show(interfaceCtx,
+					menuItems.x + (shipCfg.widthPx - missileCfg.widthPx) / 2,
+					scores[i].y - shipCfg.heightPx + (shipCfg.heightPx - missileCfg.heightPx) / 2
+				);
+			}
 			ship.drawBlueprint(interfaceCtx, menuItems.x, scores[i].y - shipCfg.heightPx, scores[i].blueprint, scores[i].color);
 			font.write(interfaceCtx, [menuItems.x + shipCfg.widthPx * 2, scores[i].y], scores[i].label,
 				{size: cfg.menuItemSize, color: color});

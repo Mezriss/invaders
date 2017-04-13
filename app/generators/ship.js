@@ -74,7 +74,6 @@ export function generateBlueprint() {
 export function drawBlueprint(ctx, x, y, blueprint, color) {
 	const draw = cfg.drawStyle === confConst.beveled ? drawBeveledPixel : drawPixel;
 
-	ctx.clearRect(0, 0, cfg.widthPx, cfg.heightPx);
 	for (let i = 0; i < cfg.height; i += 1) {
 		for (let j = 0; j < cfg.width; j += 1) {
 			if (blueprint[i * cfg.width + j]) {
@@ -90,6 +89,7 @@ export function create(options = {}) {
 	ship.color = options.color || ship.color;
 	ship.blueprint = generateBlueprint();
 
+	sprite.clearRect(0, 0, cfg.widthPx, cfg.heightPx);
 	drawBlueprint(sprite, 0, 0, ship.blueprint, ship.color);
 
 	ship.sprite = cacheSprite(sprite);

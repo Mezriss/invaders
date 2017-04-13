@@ -17,8 +17,8 @@ const sprite = initCanvas(cfg.widthPaddedPx, cfg.heightPaddedPx),
 		status: null,
 		x: null,
 		y: null,
-		show: function(ctx) {
-			drawImage(ctx, this.sprites[this.armProgress].ctx, [this.x - cfg.glowLengthPx, this.y - cfg.glowLengthPx],
+		show: function(ctx, x = this.x, y = this.y) {
+			drawImage(ctx, this.sprites[this.armProgress].ctx, [x - cfg.glowLengthPx, y - cfg.glowLengthPx],
 				this.sprites[this.armProgress].coords, [cfg.widthPaddedPx, cfg.heightPaddedPx])
 		},
 		alignWithShipX() {
