@@ -43,13 +43,13 @@ export const drawingCfg = {
 };
 
 export const formationCfg = {
-	shipPadding: 4,
+	shipPadding: 9,
 	linePadding: 3
 };
 
 export const playerCfg = {
 	defaultColor: '#9305ff',
-	startingLives: 3,
+	startingLives: 1,
 	maxLives: 4,
 	get speed() { return 0.3 * coreCfg.screenWidth},
 	get minTravelDistance() { return coreCfg.screenWidth * 0.05},
@@ -99,7 +99,14 @@ export const titleScreenCfg = {
 	get cursorSpeed() { return coreCfg.screenHeight * 0.3 },
 	color: '#ffffff',
 	fadeSteps: 4,
-	transitionDuration: 3000
+	transitionDuration: 3000,
+	scoreDigits: 4
+};
+
+export const highScoresCfg = {
+	key: 'highScores',
+	amount: 5,
+	predefinedScores: [1000, 500, 250, 100, 10]
 };
 
 export const soundCfg = {

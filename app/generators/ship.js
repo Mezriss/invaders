@@ -51,34 +51,47 @@ const sprite = initCanvas(cfg.widthPx, cfg.heightPx),
 		}
 	};
 
-export function create(options = {}) {
-	const ship = Object.create(shipProto),
-		bitCount = roll(cfg.minBits, cfg.maxBits),
-		draw = cfg.drawStyle === confConst.beveled ? drawBeveledPixel : drawPixel;
+export function generateBlueprint() {
 	let shape = [];
-	
+	const bitCount = roll(cfg.minBits, cfg.maxBits),
+		blueprint = [];
+
 	for (let i = 0; i < wingLength * cfg.height; i += 1) {
 		shape.push(i < bitCount);
 	}
-	ship.color = options.color || ship.color;
+
 	shape = shuffle(shape);
-	ship.blueprint = [];
 
 	for (let i = 0; i < cfg.height; i += 1) {
 		for (let j = 0; j < wingLength; j += 1) {
-			ship.blueprint[i * cfg.width + j] = shape[i * wingLength + j];
-			ship.blueprint[i * cfg.width + cfg.width - j - 1] = shape[i * wingLength + j];
+			blueprint[i * cfg.width + j] = shape[i * wingLength + j];
+			blueprint[i * cfg.width + cfg.width - j - 1] = shape[i * wingLength + j];
 		}
 	}
 
-	sprite.clearRect(0, 0, cfg.widthPx, cfg.heightPx);
+	return blueprint;
+}
+export function drawBlueprint(ctx, x, y, blueprint, color) {
+	const draw = cfg.drawStyle === confConst.beveled ? drawBeveledPixel : drawPixel;
+
+	ctx.clearRect(0, 0, cfg.widthPx, cfg.heightPx);
 	for (let i = 0; i < cfg.height; i += 1) {
 		for (let j = 0; j < cfg.width; j += 1) {
-			if (ship.blueprint[i * cfg.width + j]) {
-				draw(sprite, j * coreCfg.pixelSize, i * coreCfg.pixelSize, ship.color);
+			if (blueprint[i * cfg.width + j]) {
+				draw(ctx, x + j * coreCfg.pixelSize, y + i * coreCfg.pixelSize, color);
 			}
 		}
 	}
+}
+
+export function create(options = {}) {
+	const ship = Object.create(shipProto);
+
+	ship.color = options.color || ship.color;
+	ship.blueprint = generateBlueprint();
+
+	drawBlueprint(sprite, 0, 0, ship.blueprint, ship.color);
+
 	ship.sprite = cacheSprite(sprite);
 
 	return ship;

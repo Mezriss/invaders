@@ -75,16 +75,15 @@ const playerProto = {
 			} else {
 				pubSub.pub(eventConst.levelEntityCreated, eventConst.effect, explosion.create(this.currentShip, missile));
 			}
-			this.currentShip = null;
-			if (this.extraShips.length) {
+			if (!this.extraShips.length) {
+				this.lastShip = this.currentShip;
+				pubSub.pub(eventConst.gameOver);
+				this.currentShip = null;
+			} else {
+				this.currentShip = null;
 				setTimeout(() => {
-					if (this.extraShips.length) {
-						this.currentShip = this.extraShips.pop();
-						pubSub.pub(eventConst.shipListUpdate, this.extraShips);
-					} else {
-						pubSub.pub(eventConst.gameOver, this);
-					}
-
+					this.currentShip = this.extraShips.pop();
+					pubSub.pub(eventConst.shipListUpdate, this.extraShips);
 				}, cfg.respawnDelay);
 				pubSub.pub(eventConst.shipListUpdate, this.extraShips);
 			}

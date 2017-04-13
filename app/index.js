@@ -2,6 +2,7 @@ import '../css/style.css';
 
 import {coreCfg as cfg, configure} from './conf'
 import {eventConst} from './const'
+import * as highScores from './highScores';
 import * as spaceGenerator from './generators/space';
 import * as player from './generators/player';
 import * as level from './generators/level';
@@ -25,9 +26,9 @@ document.addEventListener(eventConst.keyUp, event => {
 	pubSub.pub(eventConst.keyUp, event.key, event)
 });
 
-const backgroundCtx = backgroundScreen.getContext('2d');
-let space = spaceGenerator.create();
-space.show(backgroundCtx);
+highScores.init();
+
+spaceGenerator.create().show(backgroundScreen.getContext('2d'));
 
 animation.start({
 	animation: titleScreen,
@@ -37,9 +38,28 @@ animation.start({
 }).then(data => playLevels(data));
 
 function playLevels(data) {
-	data.level = level.create(data.level ? data.level.number + 1 : 1);
-	animation.start({
-		animation: gameLoop,
-		data: data
-	}).then(data => playLevels(data));
+	if (data.gameOver) {
+		const record = {
+				score: data.player.score,
+				blueprint: data.player.lastShip.blueprint,
+				color: data.player.lastShip.color
+			},
+			position = highScores.store(record);
+
+		animation.start({
+			animation: titleScreen,
+			data: {
+				player: player.create(),
+				oldPlayer: data.player,
+				position,
+				record
+			}
+		}).then(data => playLevels(data));
+	} else {
+		data.level = level.create(data.level ? data.level.number + 1 : 1);
+		animation.start({
+			animation: gameLoop,
+			data: data
+		}).then(data => playLevels(data));
+	}
 }

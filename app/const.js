@@ -16,6 +16,7 @@ export const eventConst = {
 	levelEntityDestroyed: 'levelEntityDestroyed',
 	missile: 'missiles',
 	effect: 'effects',
+	formation: 'formations',
 	enemyDestroyed: 'enemyDestroyed',
 	shipListUpdate: 'shipListUpdate',
 	scoreUpdate: 'scoreUpdate',

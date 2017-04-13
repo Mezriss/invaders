@@ -3,32 +3,33 @@
 
  */
 import {playerCfg} from '../conf';
-import * as c from '../const';
+import {keyConst, directionConst, eventConst, missileConst} from '../const';
 import {pubSub} from '../util';
 import * as infoPanel from '../interface/infoPanel';
 
 let canvas, player, level,
+	gameOver,
 	leftPressed = false, rightPressed = false;
 
 function keyDown(key) {
 	switch (key) {
-		case c.keyConst.arrowLeft:
+		case keyConst.arrowLeft:
 			if (!player.moving) {
 				player.plannedTravel = playerCfg.minTravelDistance;
 			}
 			player.moving = true;
 			leftPressed = true;
-			player.direction = c.directionConst.left;
+			player.direction = directionConst.left;
 			break;
-		case c.keyConst.arrowRight:
+		case keyConst.arrowRight:
 			if (!player.moving) {
 				player.plannedTravel = playerCfg.minTravelDistance;
 			}
 			player.moving = true;
 			rightPressed = true;
-			player.direction = c.directionConst.right;
+			player.direction = directionConst.right;
 			break;
-		case c.keyConst.space:
+		case keyConst.space:
 			player.setBarrage(true);
 			player.fire();
 			break;
@@ -37,17 +38,17 @@ function keyDown(key) {
 
 function keyUp(key) {
 	switch (key) {
-		case c.keyConst.arrowLeft:
+		case keyConst.arrowLeft:
 			leftPressed = false;
-			if (player.direction === c.directionConst.left) {
+			if (player.direction === directionConst.left) {
 				player.moving = false;
 			}
 			break;
-		case c.keyConst.arrowRight:
+		case keyConst.arrowRight:
 			rightPressed = false;
 			player.moving = leftPressed || rightPressed;
 			break;
-		case c.keyConst.space:
+		case keyConst.space:
 			player.setBarrage(false);
 			break;
 	}
@@ -63,17 +64,22 @@ function levelEntityDestroyed(type, entity) {
 
 function enemyDestroyed(enemy) {
 	player.score += enemy.scoreValue;
-	pubSub.pub(c.eventConst.scoreUpdate, player.score);
+	pubSub.pub(eventConst.scoreUpdate, player.score);
+}
+
+function onGameOver() {
+	gameOver = true;
 }
 
 export function init(data, drawCanvas) {
-	pubSub.on(c.eventConst.keyDown, keyDown);
-	pubSub.on(c.eventConst.keyUp, keyUp);
+	pubSub.on(eventConst.keyDown, keyDown);
+	pubSub.on(eventConst.keyUp, keyUp);
 
-	pubSub.on(c.eventConst.levelEntityCreated, levelEntityCreated);
-	pubSub.on(c.eventConst.levelEntityDestroyed, levelEntityDestroyed);
+	pubSub.on(eventConst.levelEntityCreated, levelEntityCreated);
+	pubSub.on(eventConst.levelEntityDestroyed, levelEntityDestroyed);
+	pubSub.on(eventConst.enemyDestroyed, enemyDestroyed);
 
-	pubSub.on(c.eventConst.enemyDestroyed, enemyDestroyed);
+	pubSub.on(eventConst.gameOver, onGameOver);
 
 	player = data.player;
 	level = data.level;
@@ -81,16 +87,18 @@ export function init(data, drawCanvas) {
 
 	canvas = drawCanvas;
 	infoPanel.init(player);
+	gameOver = false;
 }
 
 export function end() {
 	[keyDown, keyUp, levelEntityCreated, levelEntityDestroyed, enemyDestroyed].forEach(handler => pubSub.off(handler));
 	infoPanel.destroy();
+	level.missiles.forEach(missile => missile.destroy());
 }
 
 export function drawFrame(dt) {
 	//check for collisions
-	level.missiles.filter(missile => missile.status === c.missileConst.launched).forEach(missile => {
+	level.missiles.filter(missile => missile.status === missileConst.launched).forEach(missile => {
 		if (missile.launcher.player) {
 			level.formations.forEach(formation => formation.checkCollisions(missile))
 		} else {
@@ -120,6 +128,10 @@ export function drawFrame(dt) {
 	player.show(canvas);
 	level.formations.forEach(formation => formation.show(canvas));
 	level.effects.forEach(effect => effect.show(canvas));
+
+	if ((gameOver || !level.formations.length && !level.events.length) && !level.effects.length) {
+		return {player, level, gameOver};
+	}
 
 	return null;
 }

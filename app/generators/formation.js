@@ -16,6 +16,7 @@ const formationProto = {
 	advanceSpeed: 0.05,
 	evadeSpeed: 0.07,
 	advanceAmount: 0.05,
+	advanceStart: null,
 	direction: null,
 	x: null,
 	y: null,
@@ -26,20 +27,24 @@ const formationProto = {
 	show: function(ctx) {
 		drawImage(ctx, this.ctx, [this.x, this.y]);
 	},
-	behavior: function() { //this is a basic default behavior
+	behavior: function() {
+		if (this.y + this.ships[this.ships.length - 1].y + shipCfg.heightPx >= coreCfg.screenHeight) {
+			pubSub.pub(eventConst.gameOver);
+		}
+
+		//sliding movement
 		if (this.direction === directionConst.down) {
 			if (this.y - this.advanceStart >= this.advanceAmount * coreCfg.screenHeight) {
 				this.direction = this.x === 0 ? directionConst.right : directionConst.left;
 			}
-			return;
-		}
-
-		if ((this.x <= 0) || (this.x + this.ctx.canvas.width >= coreCfg.screenWidth)) {
+		} else if ((this.x <= 0) || (this.x + this.ctx.canvas.width >= coreCfg.screenWidth)) {
 			this.advanceStart = this.y;
 			this.direction = directionConst.down;
 			//prevent running offscreen on high speeds
 			this.x = this.x <= 0 ? 0 : coreCfg.screenWidth - this.ctx.canvas.width;
 		}
+
+		//basic random shooting
 		if (roll(this.ships.length) === 1) {
 			this.ships[roll(0, this.ships.length - 1)].armMissile();
 		}
@@ -90,6 +95,10 @@ const formationProto = {
 		}
 		this.ctx.clearRect(this.ships[id].x, this.ships[id].y, shipCfg.widthPx, shipCfg.heightPx);
 		this.ships.splice(id, 1);
+
+		if (!this.ships.length) {
+			pubSub.pub(eventConst.levelEntityDestroyed, eventConst.formation, this);
+		}
 	}
 };
 
