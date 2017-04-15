@@ -7,6 +7,8 @@ ship sprites, but also weapons, enemy ship formations and attack patterns.
 Players will have to learn and adapt to this in each playthrough, in
 almost a roguelike fashion
 
+[Play it here](http://invaders.catgirl.games/)
+
 ## Current state
 Game is playable, but lacks content - promised generated
 formations/patterns. Anyway, you can score points by killing same enemy
