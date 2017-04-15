@@ -8,7 +8,14 @@
     "build:watch": "webpack --env=dev --progress --profile --colors --watch",
     "build:prod": "webpack --env=prod --progress --profile --colors",
     "start": "serve",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.js": [
+      "prettier --write --single-quote --print-width 120 --use-tabs",
+      "git add"
+    ]
   },
   "repository": {
     "type": "git",
@@ -21,6 +28,8 @@
   "license": "MPL-2.0",
   "devDependencies": {
     "bdf": "^1.0.1",
+    "husky": "^0.13.3",
+    "lint-staged": "^3.4.0",
     "prettier": "^1.1.0",
     "uglify-js": "github:mishoo/UglifyJS2#harmony",
     "webpack": "^2.2.1"

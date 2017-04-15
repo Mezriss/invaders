@@ -5,7 +5,7 @@ by Space Invaders (well, obviously), Galaga and a number of other games.
 But there is a twist - everything is procedurally generated. Not only
 ship sprites, but also weapons, enemy ship formations and attack patterns.
 Players will have to learn and adapt to this in each playthrough, in
-almost a roguelike fashion
+almost a roguelike fashion.
 
 [Play it here](http://invaders.catgirl.games/)
 
