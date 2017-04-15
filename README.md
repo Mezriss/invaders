@@ -1,15 +1,24 @@
 # Invaders
-Space Invaders inspired game that procedurally generates almost all of its assets and content
+Invaders (I really need a better name) is a shoot-'em-up game inspired
+by Space Invaders (well, obviously), Galaga and a number of other games.
+
+But there is a twist - everything is procedurally generated. Not only
+ship sprites, but also weapons, enemy ship formations and attack patterns.
+Players will have to learn and adapt to this in each playthrough, in
+almost a roguelike fashion
+
+## Current state
+Game is playable, but lacks content - promised generated
+formations/patterns. Anyway, you can score points by killing same enemy
+formation over and over again.
 
 ## Roadmap
-* interface (title screen, game over screen, settings screen (?))
-* serve from github pages
-* support for mobile devices
-* performance optimization
-* polish and reimplementation of original game or something close to it
+* support mobile devices
+* add content for minimal interesting-to-play version
 * think of a better name
 * sound effects
 * content for level generator
-* optimize for N3DS browser
+* intro sequence
+* optimize for N3DS browser and maybe some other unusual platforms
 * add an ability to record gameplay as gifs/video
 * add social media buttons for easier highscore boasting

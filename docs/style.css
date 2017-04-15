@@ -1,8 +1,8 @@
-@import "~normalize.css";
-
 html, body {
 	height: 100%;
 	background: black;
+	margin: 0;
+	padding: 0;
 }
 
 .container {
@@ -21,11 +21,4 @@ canvas {
 	-moz-transform: translateZ(0); /*most probably does nothing*/
 	image-rendering: crisp-edges;
 	image-rendering: pixelated;
-}
-
-body>canvas { /* for easy debugging */
-	position: fixed;
-	top: 10px;
-	left: 10px;
-	box-shadow: 0 0 15px green;
 }

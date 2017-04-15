@@ -4,7 +4,9 @@
   "description": "An extandable Space Invaders game varian for web and mobile.",
   "main": "index.js",
   "scripts": {
-    "build": "webpack",
+    "build": "webpack --env=dev --progress --profile --colors",
+    "build:watch": "webpack --env=dev --progress --profile --colors --watch",
+    "build:prod": "webpack --env=prod --progress --profile --colors",
     "start": "serve",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -19,9 +21,6 @@
   "license": "MPL-2.0",
   "devDependencies": {
     "bdf": "^1.0.1",
-    "css-loader": "^0.26.2",
-    "extract-text-webpack-plugin": "^2.0.0",
-    "optimize-css-assets-webpack-plugin": "^1.3.0",
     "uglify-js": "github:mishoo/UglifyJS2#harmony",
     "webpack": "^2.2.1"
   },
@@ -29,6 +28,5 @@
     "serve": "^4.0.1"
   },
   "dependencies": {
-    "normalize.css": "^5.0.0"
   }
 }

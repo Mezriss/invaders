@@ -49,10 +49,10 @@ export const formationCfg = {
 
 export const playerCfg = {
 	defaultColor: '#9305ff',
-	startingLives: 1,
+	startingLives: 3,
 	maxLives: 4,
-	get speed() { return 0.3 * coreCfg.screenWidth},
-	get minTravelDistance() { return coreCfg.screenWidth * 0.05},
+	get speed() { return 0.3 * coreCfg.screenWidth },
+	get minTravelDistance() { return shipCfg.widthPx },
 	respawnDelay: 1000
 };
 export const cacheCfg = {
@@ -98,7 +98,7 @@ export const titleScreenCfg = {
 	get cursorPadding() { return coreCfg.pixelSize * 2},
 	get cursorSpeed() { return coreCfg.screenHeight * 0.3 },
 	color: '#ffffff',
-	fadeSteps: 4,
+	fadeSteps: 8,
 	transitionDuration: 3000,
 	scoreDigits: 4
 };

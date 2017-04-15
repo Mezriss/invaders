@@ -1,5 +1,3 @@
-import '../css/style.css';
-
 import {coreCfg as cfg, configure} from './conf'
 import {eventConst} from './const'
 import * as highScores from './highScores';

@@ -39,6 +39,6 @@ jspm_packages
 # Various
 .DS_Store
 .idea/
-dist/
+build/
 ideas.md
 reference/
