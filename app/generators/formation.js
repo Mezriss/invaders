@@ -6,9 +6,9 @@
 import * as ship from './ship';
 import * as missile from './missile';
 import * as explosion from './explosion';
-import {initCanvas, roll, drawImage, rectIntersect, pubSub} from '../util';
-import {coreCfg, formationCfg as cfg, shipCfg} from '../conf';
-import {formationConst, missileConst, eventConst, directionConst} from '../const';
+import { initCanvas, roll, drawImage, rectIntersect, pubSub } from '../util';
+import { coreCfg, formationCfg as cfg, shipCfg } from '../conf';
+import { formationConst, missileConst, eventConst, directionConst } from '../const';
 
 let mX, mY, i; //missile coords for collision calculations
 
@@ -37,7 +37,7 @@ const formationProto = {
 			if (this.y - this.advanceStart >= this.advanceAmount * coreCfg.screenHeight) {
 				this.direction = this.x === 0 ? directionConst.right : directionConst.left;
 			}
-		} else if ((this.x <= 0) || (this.x + this.ctx.canvas.width >= coreCfg.screenWidth)) {
+		} else if (this.x <= 0 || this.x + this.ctx.canvas.width >= coreCfg.screenWidth) {
 			this.advanceStart = this.y;
 			this.direction = directionConst.down;
 			//prevent running offscreen on high speeds
@@ -58,13 +58,17 @@ const formationProto = {
 	move: function(dt) {
 		switch (this.direction) {
 			case directionConst.left:
-				this.x -= this.evadeSpeed * coreCfg.screenWidth * dt / 1000; break;
+				this.x -= this.evadeSpeed * coreCfg.screenWidth * dt / 1000;
+				break;
 			case directionConst.right:
-				this.x += this.evadeSpeed * coreCfg.screenWidth * dt / 1000; break;
+				this.x += this.evadeSpeed * coreCfg.screenWidth * dt / 1000;
+				break;
 			case directionConst.up:
-				this.y -= this.advanceSpeed * coreCfg.screenHeight * dt / 1000; break;
+				this.y -= this.advanceSpeed * coreCfg.screenHeight * dt / 1000;
+				break;
 			case directionConst.down:
-				this.y += this.advanceSpeed * coreCfg.screenHeight * dt / 1000; break;
+				this.y += this.advanceSpeed * coreCfg.screenHeight * dt / 1000;
+				break;
 		}
 	},
 	checkCollisions: function(missile) {
@@ -75,7 +79,7 @@ const formationProto = {
 		}
 		for (i = this.ships.length - 1; i >= 0; i -= 1) {
 			if (rectIntersect(mX, mY, this.ships[i].x, this.ships[i].y)) {
-				if(this.ships[i].missile && this.ships[i].missile.status !== missileConst.launched) {
+				if (this.ships[i].missile && this.ships[i].missile.status !== missileConst.launched) {
 					pubSub.pub(eventConst.levelEntityCreated, eventConst.effect, explosion.create(this.ships[i]));
 					pubSub.pub(eventConst.levelEntityCreated, eventConst.effect, explosion.create(this.ships[i].missile));
 				} else {
@@ -101,7 +105,6 @@ const formationProto = {
 		}
 	}
 };
-
 
 export function create(options) {
 	const formation = Object.create(formationProto);

@@ -14,7 +14,7 @@ out.meta.points = font.meta.size.points;
 out.meta.properties = font.meta.properties;
 out.meta.boundingBox = font.meta.boundingBox;
 
-for (let i = 32; i <= 126; i+= 1) {
+for (let i = 32; i <= 126; i += 1) {
 	if (font.glyphs[i]) {
 		let char = font.glyphs[i].char;
 		out.glyphs[char] = {};

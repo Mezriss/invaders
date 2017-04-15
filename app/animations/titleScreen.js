@@ -1,71 +1,110 @@
-import {pubSub, hexToRgba} from  '../util';
+import { pubSub, hexToRgba } from '../util';
 import * as fontGenerator from '../generators/font';
-import {eventConst, keyConst, alignmentConst, confConst} from '../const';
-import {titleScreenCfg as cfg, coreCfg, shipCfg, soundCfg, drawingCfg, playerCfg, missileCfg, configure} from '../conf';
+import { eventConst, keyConst, alignmentConst, confConst } from '../const';
+import {
+	titleScreenCfg as cfg,
+	coreCfg,
+	shipCfg,
+	soundCfg,
+	drawingCfg,
+	playerCfg,
+	missileCfg,
+	configure
+} from '../conf';
 import str from '../str';
 import * as highScores from '../highScores';
 import * as ship from '../generators/ship';
 
-let drawCtx, player, font, color, newColor,
-	updateMenu, updateCursor,
+let drawCtx,
+	player,
+	font,
+	color,
+	newColor,
+	updateMenu,
+	updateCursor,
 	interfaceRedrawRequested,
 	currentMenu,
-	title = {}, menuItems = {}, cursor,
+	title = {},
+	menuItems = {},
+	cursor,
 	transitionElapsed,
-	scores, scoreIndicator;
+	scores,
+	scoreIndicator;
 
 const interfaceCtx = interfaceScreen.getContext('2d');
 
-const mainMenu = [{
+const mainMenu = [
+	{
 		label: str.play,
-		action: function () {
+		action: function() {
 			pubSub.off(keyDown);
 			updateMenu = fadeOutMenu;
 			updateCursor = repositionPlayer;
 		}
-	}, {
+	},
+	{
 		label: str.highScores,
-		action: function () {
+		action: function() {
 			currentMenu = highScoresMenu;
 			cursor.position = 0;
 		}
-	}, {
+	},
+	{
 		label: str.options,
-		action: function () {
+		action: function() {
 			currentMenu = settingsMenu;
 			cursor.position = 0;
 		}
-	}];
+	}
+];
 
-const settingsMenu = [{
-		get label() {return str.sound + (soundCfg.on ? str.on : str.off)},
+const settingsMenu = [
+	{
+		get label() {
+			return str.sound + (soundCfg.on ? str.on : str.off);
+		},
 		action: function() {
 			configure(confConst.sound, !soundCfg.on);
 		}
-	}, {
-		get label() {return str.showFPS + (drawingCfg.showFPS ? str.on : str.off)},
+	},
+	{
+		get label() {
+			return str.showFPS + (drawingCfg.showFPS ? str.on : str.off);
+		},
 		action: function() {
 			configure(confConst.fps, !drawingCfg.showFPS);
 		}
-	}, {
+	},
+	{
 		label: str.back,
-		get y() { return this._y + font.meta.boundingBox.height * cfg.menuItemSize * cfg.lineHeight},
-		set y(val) { this._y = val},
+		get y() {
+			return this._y + font.meta.boundingBox.height * cfg.menuItemSize * cfg.lineHeight;
+		},
+		set y(val) {
+			this._y = val;
+		},
 		action: function() {
 			currentMenu = mainMenu;
 			cursor.position = 2;
 		}
-	}];
+	}
+];
 
-const highScoresMenu = [{
+const highScoresMenu = [
+	{
 		label: str.back,
-		get y() { return this._y + font.meta.boundingBox.height * cfg.menuItemSize * cfg.lineHeight * (scores.length + 1)},
-		set y(val) { this._y = val },
-		action: function () {
+		get y() {
+			return this._y + font.meta.boundingBox.height * cfg.menuItemSize * cfg.lineHeight * (scores.length + 1);
+		},
+		set y(val) {
+			this._y = val;
+		},
+		action: function() {
 			currentMenu = mainMenu;
 			cursor.position = 1;
 		}
-	}];
+	}
+];
 
 function keyDown(key) {
 	switch (key) {
@@ -91,7 +130,9 @@ export function init(data, drawCanvas) {
 	color = hexToRgba(cfg.color, 100);
 	pubSub.on(eventConst.keyDown, keyDown);
 
-	title.y = Math.round((coreCfg.screenHeight - font.meta.boundingBox.height * (cfg.titleSize + cfg.menuItemSize * 3) * cfg.lineHeight) / 2);
+	title.y = Math.round(
+		(coreCfg.screenHeight - font.meta.boundingBox.height * (cfg.titleSize + cfg.menuItemSize * 3) * cfg.lineHeight) / 2
+	);
 
 	[mainMenu, settingsMenu, highScoresMenu].forEach(menu => {
 		menu[0].y = title.y + font.meta.boundingBox.height * cfg.titleSize * cfg.lineHeight;
@@ -110,7 +151,7 @@ export function init(data, drawCanvas) {
 		};
 		scoreIndicator.missile.armProgress = missileCfg.armSteps - 1;
 
-		if (data.position === - 1) {
+		if (data.position === -1) {
 			scores.push(data.record);
 			scoreIndicator.position = scores.length - 1;
 		}
@@ -121,8 +162,10 @@ export function init(data, drawCanvas) {
 
 	for (let i = 0; i < scores.length; i += 1) {
 		scores[i].label = '0'.repeat(Math.max(cfg.scoreDigits - scores[i].score.toString(10).length, 0)) + scores[i].score;
-		scores[i].y = title.y + font.meta.boundingBox.height * cfg.titleSize * cfg.lineHeight
-			+ (font.meta.boundingBox.height * cfg.menuItemSize * cfg.lineHeight) * i;
+		scores[i].y =
+			title.y +
+			font.meta.boundingBox.height * cfg.titleSize * cfg.lineHeight +
+			font.meta.boundingBox.height * cfg.menuItemSize * cfg.lineHeight * i;
 	}
 
 	cursor = {
@@ -130,7 +173,6 @@ export function init(data, drawCanvas) {
 		x: 0,
 		y: currentMenu[0].y - shipCfg.heightPx
 	};
-
 
 	updateMenu = drawMenu;
 	updateCursor = updateCursorPosition;
@@ -156,19 +198,31 @@ function drawMenu() {
 	menuItems.x = title.x + shipCfg.widthPx + cfg.cursorPadding;
 
 	for (let i = 0; i < currentMenu.length; i += 1) {
-		font.write(interfaceCtx, [menuItems.x, currentMenu[i].y], currentMenu[i].label, {size: cfg.menuItemSize, color: color});
+		font.write(interfaceCtx, [menuItems.x, currentMenu[i].y], currentMenu[i].label, {
+			size: cfg.menuItemSize,
+			color: color
+		});
 	}
 	if (currentMenu === highScoresMenu) {
 		for (let i = 0; i < scores.length; i += 1) {
 			if (scoreIndicator && scoreIndicator.position === i) {
-				scoreIndicator.missile.show(interfaceCtx,
+				scoreIndicator.missile.show(
+					interfaceCtx,
 					menuItems.x + (shipCfg.widthPx - missileCfg.widthPx) / 2,
 					scores[i].y - shipCfg.heightPx + (shipCfg.heightPx - missileCfg.heightPx) / 2
 				);
 			}
-			ship.drawBlueprint(interfaceCtx, menuItems.x, scores[i].y - shipCfg.heightPx, scores[i].blueprint, scores[i].color);
-			font.write(interfaceCtx, [menuItems.x + shipCfg.widthPx * 2, scores[i].y], scores[i].label,
-				{size: cfg.menuItemSize, color: color});
+			ship.drawBlueprint(
+				interfaceCtx,
+				menuItems.x,
+				scores[i].y - shipCfg.heightPx,
+				scores[i].blueprint,
+				scores[i].color
+			);
+			font.write(interfaceCtx, [menuItems.x + shipCfg.widthPx * 2, scores[i].y], scores[i].label, {
+				size: cfg.menuItemSize,
+				color: color
+			});
 		}
 	}
 
@@ -178,17 +232,18 @@ function drawMenu() {
 function updateCursorPosition(dt) {
 	if (cursor.y !== currentMenu[cursor.position].y - shipCfg.heightPx) {
 		if (cursor.y < currentMenu[cursor.position].y - shipCfg.heightPx) {
-			cursor.y = Math.min(cursor.y + cfg.cursorSpeed * dt / 1000, currentMenu[cursor.position].y - shipCfg.heightPx)
+			cursor.y = Math.min(cursor.y + cfg.cursorSpeed * dt / 1000, currentMenu[cursor.position].y - shipCfg.heightPx);
 		} else {
-			cursor.y = Math.max(cursor.y - cfg.cursorSpeed * dt / 1000, currentMenu[cursor.position].y - shipCfg.heightPx)
+			cursor.y = Math.max(cursor.y - cfg.cursorSpeed * dt / 1000, currentMenu[cursor.position].y - shipCfg.heightPx);
 		}
 	}
 }
 
 function fadeOutMenu(dt) {
 	transitionElapsed += dt;
-	newColor = hexToRgba(cfg.color,
-		(100 / cfg.fadeSteps) * (cfg.fadeSteps - Math.floor(transitionElapsed / (cfg.transitionDuration / cfg.fadeSteps)))
+	newColor = hexToRgba(
+		cfg.color,
+		100 / cfg.fadeSteps * (cfg.fadeSteps - Math.floor(transitionElapsed / (cfg.transitionDuration / cfg.fadeSteps)))
 	);
 	if (newColor !== color) {
 		color = newColor;
@@ -219,6 +274,6 @@ export function drawFrame(dt) {
 	player.show(drawCtx, cursor.x, cursor.y);
 
 	if (menuAnimationsFinished && playerAnimationsFinished) {
-		return {player};
+		return { player };
 	}
 }

@@ -7,7 +7,7 @@ export default {
 	options: 'Options',
 	back: 'Back',
 	sound: 'Sound: ',
-	showFPS:'Show FPS: ',
+	showFPS: 'Show FPS: ',
 	on: 'On',
 	off: 'Off'
 };

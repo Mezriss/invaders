@@ -1,13 +1,10 @@
-import {cacheCfg as cfg} from '../conf';
-import {initCanvas, drawImage} from '../util';
+import { cacheCfg as cfg } from '../conf';
+import { initCanvas, drawImage } from '../util';
 
-const canvases = {},
-	canvasUsage = {};
+const canvases = {}, canvasUsage = {};
 
 export function cacheSprite(ctx) {
-	const width = ctx.canvas.width,
-		height = ctx.canvas.height,
-		name = `${width}x${height}`;
+	const width = ctx.canvas.width, height = ctx.canvas.height, name = `${width}x${height}`;
 
 	if (!canvases[name] || canvasUsage[name] === cfg.itemsPerCanvas) {
 		canvases[name] = canvases[name] || [];

@@ -1,12 +1,10 @@
-import {missileCfg, shipCfg} from '../conf';
+import { missileCfg, shipCfg } from '../conf';
 
 export function rectIntersect(mX, mY, sX, sY) {
-	return !(
-		mX > sX + shipCfg.widthPx ||
+	return !(mX > sX + shipCfg.widthPx ||
 		mY > sY + shipCfg.heightPx ||
 		mX < sX - missileCfg.widthPx ||
-		mY < sY - missileCfg.heightPx
-	);
+		mY < sY - missileCfg.heightPx);
 }
 
 export function pointIntersect(mX, mY, sX, sY, player) {
@@ -14,8 +12,5 @@ export function pointIntersect(mX, mY, sX, sY, player) {
 	if (player) {
 		mY += missileCfg.heightPx;
 	}
-	return (mX - sX <= shipCfg.widthPx) &&
-		(mX >= sX) &&
-		(mY - sY <= shipCfg.heightPx) &&
-		(mY >= sY);
+	return mX - sX <= shipCfg.widthPx && mX >= sX && mY - sY <= shipCfg.heightPx && mY >= sY;
 }

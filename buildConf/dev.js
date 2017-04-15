@@ -1,4 +1,3 @@
-
 const path = require('path');
 
 module.exports = {
@@ -6,7 +5,7 @@ module.exports = {
 	entry: './index',
 	output: {
 		filename: '[name].js',
-		path: path.resolve(__dirname, '../build'),
+		path: path.resolve(__dirname, '../build')
 	},
 	devtool: 'inline-source-map'
 };

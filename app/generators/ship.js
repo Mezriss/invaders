@@ -5,9 +5,9 @@
 
  */
 
-import {shipCfg as cfg, coreCfg} from '../conf';
-import {roll, shuffle, initCanvas, drawPixel, drawBeveledPixel, drawImage, cacheSprite, pubSub} from '../util';
-import {confConst, eventConst} from '../const';
+import { shipCfg as cfg, coreCfg } from '../conf';
+import { roll, shuffle, initCanvas, drawPixel, drawBeveledPixel, drawImage, cacheSprite, pubSub } from '../util';
+import { confConst, eventConst } from '../const';
 
 const wingLength = Math.ceil(cfg.width / 2);
 
@@ -24,7 +24,7 @@ const sprite = initCanvas(cfg.widthPx, cfg.heightPx),
 		x: null,
 		y: null,
 		show: function(ctx, x = this.x, y = this.y) {
-			drawImage(ctx, this.sprite.ctx, [x, y], this.sprite.coords, [cfg.widthPx, cfg.heightPx])
+			drawImage(ctx, this.sprite.ctx, [x, y], this.sprite.coords, [cfg.widthPx, cfg.heightPx]);
 		},
 		behavior: function() {
 			//reload
@@ -46,15 +46,16 @@ const sprite = initCanvas(cfg.widthPx, cfg.heightPx),
 			}
 		},
 		getCenter() {
-			return [this.x + (this.formation ? this.formation.x : 0) + cfg.widthPx / 2,
-				this.y + (this.formation ? this.formation.y : 0) + cfg.heightPx / 2];
+			return [
+				this.x + (this.formation ? this.formation.x : 0) + cfg.widthPx / 2,
+				this.y + (this.formation ? this.formation.y : 0) + cfg.heightPx / 2
+			];
 		}
 	};
 
 export function generateBlueprint() {
 	let shape = [];
-	const bitCount = roll(cfg.minBits, cfg.maxBits),
-		blueprint = [];
+	const bitCount = roll(cfg.minBits, cfg.maxBits), blueprint = [];
 
 	for (let i = 0; i < wingLength * cfg.height; i += 1) {
 		shape.push(i < bitCount);

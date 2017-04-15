@@ -1,73 +1,77 @@
-import {fontCfg as cfg, coreCfg} from '../conf';
-import {fonts, alignmentConst} from '../const'
-import {drawImage, cacheSprite, initCanvas, drawPixel} from '../util'
+import { fontCfg as cfg, coreCfg } from '../conf';
+import { fonts, alignmentConst } from '../const';
+import { drawImage, cacheSprite, initCanvas, drawPixel } from '../util';
 
 const fontCache = [];
 
 const sprite = initCanvas(coreCfg.pixelSize, coreCfg.pixelSize),
 	fontProto = {
-	meta: null,
-	glyphs: null,
-	write: function(ctx, coords, text, options = {}) {
-		let color = options.color || cfg.defaultColor,
-			size = options.size || coreCfg.pixelSize,
-			alignment = options.alignment || cfg.alignment,
-			[x, y] = coords.map(val => Math.round(val)),
-			lineStart = x;
-
-		switch (alignment) {
-			case alignmentConst.center:
-				let lineWidth = 0;
-				for (let i = 0; i < text.length; i += 1) {
-					lineWidth += this.glyphs[text[i]].dWidth * size
-				}
-				x -= Math.floor(lineWidth / 2);
+		meta: null,
+		glyphs: null,
+		write: function(ctx, coords, text, options = {}) {
+			let color = options.color || cfg.defaultColor,
+				size = options.size || coreCfg.pixelSize,
+				alignment = options.alignment || cfg.alignment,
+				[x, y] = coords.map(val => Math.round(val)),
 				lineStart = x;
-				break;
-			case alignmentConst.right:
-				for (let i = 0; i < text.length; i += 1) {
-					x -= this.glyphs[text[i]].dWidth * size
-				}
-				lineStart = x;
-				break;
-		}
-		for (let i = 0; i < text.length; i += 1) {
-			this.writeLetter(ctx, text[i], x, y, color, size);
-			x += this.glyphs[text[i]].dWidth * size;
-		}
 
-		return {
-			lineStart,
-			lineEnd: x
-		}
-	},
-	writeLetter(ctx, letter, x, y, color, size) {
-		const style = color + '-' + size;
-		if (!this.glyphs[letter].sprites[style]) {
-			this.drawLetter(this.glyphs[letter], color, size);
-		}
-		drawImage(ctx, this.glyphs[letter].sprites[style].ctx,
-			[x + this.glyphs[letter].x * size, y - (this.glyphs[letter].y + this.glyphs[letter].height) * size],
-			this.glyphs[letter].sprites[style].coords, [this.meta.boundingBox.width * size, this.meta.boundingBox.height * size]);
-	},
-	drawLetter(glyph, color, size) {
-		if (sprite.canvas.width !== this.meta.boundingBox.width * size) {
-			sprite.canvas.width = this.meta.boundingBox.width * size;
-		}
-		if (sprite.canvas.height !== this.meta.boundingBox.height * size) {
-			sprite.canvas.height = this.meta.boundingBox.height * size;
-		}
-		sprite.clearRect(0, 0, this.meta.boundingBox.width * size, this.meta.boundingBox.height * size);
-		for (let i = 0; i < glyph.height; i += 1) {
-			for (let j = 0; j < glyph.width; j += 1) {
-				if (glyph.bitmap[i] && glyph.bitmap[i][j]) {
-					drawPixel(sprite, j * size, i * size, color, size);
+			switch (alignment) {
+				case alignmentConst.center:
+					let lineWidth = 0;
+					for (let i = 0; i < text.length; i += 1) {
+						lineWidth += this.glyphs[text[i]].dWidth * size;
+					}
+					x -= Math.floor(lineWidth / 2);
+					lineStart = x;
+					break;
+				case alignmentConst.right:
+					for (let i = 0; i < text.length; i += 1) {
+						x -= this.glyphs[text[i]].dWidth * size;
+					}
+					lineStart = x;
+					break;
+			}
+			for (let i = 0; i < text.length; i += 1) {
+				this.writeLetter(ctx, text[i], x, y, color, size);
+				x += this.glyphs[text[i]].dWidth * size;
+			}
+
+			return {
+				lineStart,
+				lineEnd: x
+			};
+		},
+		writeLetter(ctx, letter, x, y, color, size) {
+			const style = color + '-' + size;
+			if (!this.glyphs[letter].sprites[style]) {
+				this.drawLetter(this.glyphs[letter], color, size);
+			}
+			drawImage(
+				ctx,
+				this.glyphs[letter].sprites[style].ctx,
+				[x + this.glyphs[letter].x * size, y - (this.glyphs[letter].y + this.glyphs[letter].height) * size],
+				this.glyphs[letter].sprites[style].coords,
+				[this.meta.boundingBox.width * size, this.meta.boundingBox.height * size]
+			);
+		},
+		drawLetter(glyph, color, size) {
+			if (sprite.canvas.width !== this.meta.boundingBox.width * size) {
+				sprite.canvas.width = this.meta.boundingBox.width * size;
+			}
+			if (sprite.canvas.height !== this.meta.boundingBox.height * size) {
+				sprite.canvas.height = this.meta.boundingBox.height * size;
+			}
+			sprite.clearRect(0, 0, this.meta.boundingBox.width * size, this.meta.boundingBox.height * size);
+			for (let i = 0; i < glyph.height; i += 1) {
+				for (let j = 0; j < glyph.width; j += 1) {
+					if (glyph.bitmap[i] && glyph.bitmap[i][j]) {
+						drawPixel(sprite, j * size, i * size, color, size);
+					}
 				}
 			}
+			glyph.sprites[color + '-' + size] = cacheSprite(sprite);
 		}
-		glyph.sprites[color + '-' + size] = cacheSprite(sprite);
-	}
-};
+	};
 
 export function create(name) {
 	if (fontCache[name]) {
@@ -82,7 +86,7 @@ export function create(name) {
 			font.glyphs[key].sprites = {};
 			font.glyphs[key].bitmap = [];
 
-			for (let i = 0; i < font.glyphs[key].bytes.length; i+= 1) {
+			for (let i = 0; i < font.glyphs[key].bytes.length; i += 1) {
 				font.glyphs[key].bitmap[i] = [];
 				for (let bit = 0; bit < 8; bit += 1) {
 					font.glyphs[key].bitmap[i][7 - bit] = (font.glyphs[key].bytes[i] >> bit) % 2;

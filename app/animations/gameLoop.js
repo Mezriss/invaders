@@ -2,14 +2,12 @@
 	Game Loop
 
  */
-import {playerCfg} from '../conf';
-import {keyConst, directionConst, eventConst, missileConst} from '../const';
-import {pubSub} from '../util';
+import { playerCfg } from '../conf';
+import { keyConst, directionConst, eventConst, missileConst } from '../const';
+import { pubSub } from '../util';
 import * as infoPanel from '../interface/infoPanel';
 
-let canvas, player, level,
-	gameOver,
-	leftPressed = false, rightPressed = false;
+let canvas, player, level, gameOver, leftPressed = false, rightPressed = false;
 
 function keyDown(key) {
 	switch (key) {
@@ -100,7 +98,7 @@ export function drawFrame(dt) {
 	//check for collisions
 	level.missiles.filter(missile => missile.status === missileConst.launched).forEach(missile => {
 		if (missile.launcher.player) {
-			level.formations.forEach(formation => formation.checkCollisions(missile))
+			level.formations.forEach(formation => formation.checkCollisions(missile));
 		} else {
 			player.checkCollisions(missile);
 		}
@@ -129,8 +127,8 @@ export function drawFrame(dt) {
 	level.formations.forEach(formation => formation.show(canvas));
 	level.effects.forEach(effect => effect.show(canvas));
 
-	if ((gameOver || !level.formations.length && !level.events.length) && !level.effects.length) {
-		return {player, level, gameOver};
+	if ((gameOver || (!level.formations.length && !level.events.length)) && !level.effects.length) {
+		return { player, level, gameOver };
 	}
 
 	return null;

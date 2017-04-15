@@ -3,13 +3,12 @@
 
  */
 
-import {playerCfg as cfg, coreCfg, shipCfg} from '../conf'
-import {eventConst, missileConst, directionConst} from  '../const'
+import { playerCfg as cfg, coreCfg, shipCfg } from '../conf';
+import { eventConst, missileConst, directionConst } from '../const';
 import * as shipGenerator from './ship';
 import * as missileGenerator from './missile';
 import * as explosion from './explosion';
-import {rectIntersect, pubSub} from '../util';
-
+import { rectIntersect, pubSub } from '../util';
 
 const playerProto = {
 	score: 0,
@@ -19,8 +18,12 @@ const playerProto = {
 	plannedTravel: 0,
 	moving: false,
 	speed: cfg.speed,
-	get x() {return this.currentShip && this.currentShip.x},
-	get y() {return this.currentShip && this.currentShip.y},
+	get x() {
+		return this.currentShip && this.currentShip.x;
+	},
+	get y() {
+		return this.currentShip && this.currentShip.y;
+	},
 	show: function(ctx, x, y) {
 		if (this.currentShip) {
 			this.currentShip.show(ctx, x, y);
@@ -68,7 +71,7 @@ const playerProto = {
 	checkCollisions(missile) {
 		if (this.currentShip && rectIntersect(missile.x, missile.y, this.currentShip.x, this.currentShip.y)) {
 			missile.destroy();
-			if(this.currentShip.missile && this.currentShip.missile.status !== missileConst.launched) {
+			if (this.currentShip.missile && this.currentShip.missile.status !== missileConst.launched) {
 				pubSub.pub(eventConst.levelEntityCreated, eventConst.effect, explosion.create(this.currentShip));
 				pubSub.pub(eventConst.levelEntityCreated, eventConst.effect, explosion.create(this.currentShip.missile));
 				this.currentShip.missile.destroy();

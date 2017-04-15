@@ -3,11 +3,9 @@
 
  */
 
-//todo choose level traits (from a list) based on challenge rate of traits and level's "challenge budget"
-
-import {coreCfg as cfg, shipCfg, formationCfg} from '../conf';
+import { coreCfg as cfg, shipCfg, formationCfg } from '../conf';
 import * as formationGenerator from './formation';
-import {formationConst} from '../const';
+import { formationConst } from '../const';
 
 export function create(levelNumber) {
 	const level = {
@@ -18,13 +16,15 @@ export function create(levelNumber) {
 		effects: []
 	};
 
-	level.formations.push(formationGenerator.create({
-		levelNumber: levelNumber,
-		width: Math.floor(cfg.screenWidth / (shipCfg.widthPx + formationCfg.shipPaddingPx) * 0.7),
-		height: 6,
-		shipTypes: 6,
-		shipArrangement: formationConst.oneTypePerLine
-	}));
+	level.formations.push(
+		formationGenerator.create({
+			levelNumber: levelNumber,
+			width: Math.floor(cfg.screenWidth / (shipCfg.widthPx + formationCfg.shipPaddingPx) * 0.7),
+			height: 6,
+			shipTypes: 6,
+			shipArrangement: formationConst.oneTypePerLine
+		})
+	);
 
 	return level;
 }

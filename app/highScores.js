@@ -1,4 +1,4 @@
-import {highScoresCfg as cfg, shipCfg} from './conf';
+import { highScoresCfg as cfg, shipCfg } from './conf';
 import * as ship from './generators/ship';
 
 function populate() {
@@ -25,7 +25,7 @@ export function store(record) {
 	scores.sort((a, b) => b.score - a.score);
 	scores.splice(cfg.amount);
 	localStorage.setItem(cfg.key, JSON.stringify(scores));
-	return scores.indexOf(record)
+	return scores.indexOf(record);
 }
 
 export function get() {

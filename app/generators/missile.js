@@ -1,6 +1,6 @@
-import {coreCfg, missileCfg as cfg, shipCfg} from '../conf';
-import {missileConst, eventConst} from '../const';
-import {roll, initCanvas, shuffle, drawPixel, hexToRgba, drawImage, cacheSprite, pubSub} from '../util';
+import { coreCfg, missileCfg as cfg, shipCfg } from '../conf';
+import { missileConst, eventConst } from '../const';
+import { roll, initCanvas, shuffle, drawPixel, hexToRgba, drawImage, cacheSprite, pubSub } from '../util';
 
 const sprite = initCanvas(cfg.widthPaddedPx, cfg.heightPaddedPx),
 	partWidth = Math.ceil(cfg.width / 2),
@@ -18,8 +18,13 @@ const sprite = initCanvas(cfg.widthPaddedPx, cfg.heightPaddedPx),
 		x: null,
 		y: null,
 		show: function(ctx, x = this.x, y = this.y) {
-			drawImage(ctx, this.sprites[this.armProgress].ctx, [x - cfg.glowLengthPx, y - cfg.glowLengthPx],
-				this.sprites[this.armProgress].coords, [cfg.widthPaddedPx, cfg.heightPaddedPx])
+			drawImage(
+				ctx,
+				this.sprites[this.armProgress].ctx,
+				[x - cfg.glowLengthPx, y - cfg.glowLengthPx],
+				this.sprites[this.armProgress].coords,
+				[cfg.widthPaddedPx, cfg.heightPaddedPx]
+			);
 		},
 		alignWithShipX() {
 			this.x = this.launcher.x + (shipCfg.widthPx - cfg.widthPx) / 2;
@@ -40,12 +45,15 @@ const sprite = initCanvas(cfg.widthPaddedPx, cfg.heightPaddedPx),
 		},
 		launch() {
 			if (this.status === missileConst.armed) {
-				this.status = missileConst.launched
+				this.status = missileConst.launched;
 			}
 		},
 		behavior: function() {
 			if (this.status === missileConst.arming) {
-				this.armProgress = Math.min(Math.floor((Date.now() - this.armStart) / (this.armSpeed / cfg.armSteps)), cfg.armSteps - 1);
+				this.armProgress = Math.min(
+					Math.floor((Date.now() - this.armStart) / (this.armSpeed / cfg.armSteps)),
+					cfg.armSteps - 1
+				);
 				if (this.armProgress === cfg.armSteps - 1) {
 					this.status = missileConst.armed;
 					if (this.launcher.barrage) {
@@ -54,7 +62,7 @@ const sprite = initCanvas(cfg.widthPaddedPx, cfg.heightPaddedPx),
 				}
 			}
 		},
-		move: function (dt) {
+		move: function(dt) {
 			if (this.status !== missileConst.launched) {
 				this.alignWithShipY();
 			}
@@ -71,8 +79,11 @@ const sprite = initCanvas(cfg.widthPaddedPx, cfg.heightPaddedPx),
 			}
 		},
 		checkSafeDistance: function() {
-			return this.status === missileConst.launched &&
-				Math.abs(this.launcher.y + (this.launcher.formation ? this.launcher.formation.y : 0) - this.y) > cfg.heightPaddedPx;
+			return (
+				this.status === missileConst.launched &&
+				Math.abs(this.launcher.y + (this.launcher.formation ? this.launcher.formation.y : 0) - this.y) >
+					cfg.heightPaddedPx
+			);
 		},
 		destroy: function() {
 			this.status = missileConst.destroyed;
@@ -91,8 +102,7 @@ function padded2dTo1d(x, y) {
 }
 
 export function create(options = {}) {
-	const missile = Object.create(missileProto),
-		bitCount = roll(cfg.minBits, cfg.maxBits);
+	const missile = Object.create(missileProto), bitCount = roll(cfg.minBits, cfg.maxBits);
 
 	missile.color = options.color || missile.color;
 
@@ -119,8 +129,8 @@ export function create(options = {}) {
 	//let's add some glow
 	for (let i = 0; i < cfg.widthPadded * cfg.heightPadded; i += 1) {
 		if (missile.blueprint[i] === 100) {
-			for (let j = 1; j <= cfg.glowLength; j+= 1) {
-				let glow =  100 * (cfg.glow - cfg.glow * cfg.glowDegradation * (j - 1));
+			for (let j = 1; j <= cfg.glowLength; j += 1) {
+				let glow = 100 * (cfg.glow - cfg.glow * cfg.glowDegradation * (j - 1));
 				missile.blueprint[i - j] = missile.blueprint[i - j] || glow;
 				missile.blueprint[i + j] = missile.blueprint[i + j] || glow;
 				missile.blueprint[i - cfg.widthPadded * j] = missile.blueprint[i - cfg.widthPadded * j] || glow;
@@ -133,8 +143,12 @@ export function create(options = {}) {
 		sprite.clearRect(0, 0, cfg.widthPaddedPx, cfg.heightPaddedPx);
 		for (let i = 0; i < cfg.widthPadded * cfg.heightPadded; i += 1) {
 			if (missile.blueprint[i]) {
-				drawPixel(sprite, i % cfg.widthPadded * coreCfg.pixelSize, Math.floor(i / cfg.widthPadded) * coreCfg.pixelSize,
-					hexToRgba(missile.color, missile.blueprint[i] * (j + 1) / cfg.armSteps))
+				drawPixel(
+					sprite,
+					i % cfg.widthPadded * coreCfg.pixelSize,
+					Math.floor(i / cfg.widthPadded) * coreCfg.pixelSize,
+					hexToRgba(missile.color, missile.blueprint[i] * (j + 1) / cfg.armSteps)
+				);
 			}
 		}
 		missile.sprites.push(cacheSprite(sprite));

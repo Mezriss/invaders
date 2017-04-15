@@ -1,26 +1,21 @@
 /*
 	Somewhat abstract animation method
  */
-import {drawingCfg, coreCfg} from  '../conf';
-import {initCanvas, drawImage} from './drawing';
+import { drawingCfg, coreCfg } from '../conf';
+import { initCanvas, drawImage } from './drawing';
 
-
-const requestAnimationFrame = window.requestAnimationFrame ||
-		window.mozRequestAnimationFrame ||
-		window.webkitRequestAnimationFrame ||
-		window.msRequestAnimationFrame ||
-		window.oRequestAnimationFrame,
-	cancelAnimationFrame = window.cancelAnimationFrame ||
-		window.mozCancelAnimationFrame,
+const requestAnimationFrame =
+	window.requestAnimationFrame ||
+	window.mozRequestAnimationFrame ||
+	window.webkitRequestAnimationFrame ||
+	window.msRequestAnimationFrame ||
+	window.oRequestAnimationFrame,
+	cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame,
 	screenCtx = gameScreen.getContext('2d'),
 	interfaceCtx = interfaceScreen.getContext('2d'),
 	drawCanvas = initCanvas();
 
-let animation, resolveHandle,
-	responseData,
-	paused = false,
-	then, dt,
-	fpsStart, fps = 0;
+let animation, resolveHandle, responseData, paused = false, then, dt, fpsStart, fps = 0;
 
 function draw(ts) {
 	if (paused) {

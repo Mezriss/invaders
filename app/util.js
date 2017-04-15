@@ -3,12 +3,12 @@ export * from './util/color';
 export * from './util/collision';
 
 import * as animation from './util/animation';
-export {animation};
+export { animation };
 
 import * as pubSub from './util/pubSub';
-export {pubSub};
+export { pubSub };
 
-export {cacheSprite} from './util/spriteCache';
+export { cacheSprite } from './util/spriteCache';
 
 export function roll(from, to = from) {
 	from = arguments.length === 1 ? 1 : from;
@@ -18,7 +18,7 @@ export function roll(from, to = from) {
 export function rollh(n, amount) {
 	const rolls = [];
 	for (let i = 0; i < amount; i += 1) {
-		rolls.push(roll(n))
+		rolls.push(roll(n));
 	}
 	return Math.max(...rolls);
 }

@@ -1,6 +1,4 @@
-
-const path = require('path'),
-	webpack = require('webpack');
+const path = require('path'), webpack = require('webpack');
 
 console.info(path.resolve(__dirname, '../app'));
 
@@ -12,10 +10,10 @@ module.exports = {
 		path: path.resolve(__dirname, '../docs'),
 		sourceMapFilename: '[name].js.map'
 	},
-	plugins:[
+	plugins: [
 		new webpack.optimize.UglifyJsPlugin({
 			sourceMap: true
-		}),
+		})
 	],
 	module: {},
 	devtool: 'source-map'

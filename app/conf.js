@@ -1,4 +1,4 @@
-import {confConst} from './const';
+import { confConst } from './const';
 
 export const coreCfg = {
 	pixelSize: 3,
@@ -35,7 +35,8 @@ export const drawingCfg = {
 	systemInfoText: '10px sans-serif',
 	maxFPS: 60,
 	paletteSize: 100,
-	mask: [//todo generate this
+	mask: [
+		//todo generate this
 		[['#000000', 0], ['#ffffff', 25], ['#ffffff', 50]],
 		[['#000000', 25], ['#000000', 0], ['#ffffff', 25]],
 		[['#000000', 50], ['#000000', 25], ['#000000', 0]]
@@ -51,8 +52,12 @@ export const playerCfg = {
 	defaultColor: '#9305ff',
 	startingLives: 3,
 	maxLives: 4,
-	get speed() { return 0.3 * coreCfg.screenWidth },
-	get minTravelDistance() { return shipCfg.widthPx },
+	get speed() {
+		return 0.3 * coreCfg.screenWidth;
+	},
+	get minTravelDistance() {
+		return shipCfg.widthPx;
+	},
 	respawnDelay: 1000
 };
 export const cacheCfg = {
@@ -74,19 +79,23 @@ export const missileCfg = {
 export const explosionCfg = {
 	duration: 300,
 	minOpacity: 20,
-	spread: 4,
+	spread: 4
 };
 
 export const fontCfg = {
 	defaultColor: '#ffffff',
-	alignment: 'left',
+	alignment: 'left'
 };
 
 export const interfaceInfoPanelCfg = {
 	font: 'pressStart',
 	fontSize: 2,
-	get paddingX() { return Math.round(coreCfg.screenWidth * 0.02) },
-	get paddingY() { return Math.round(coreCfg.screenHeight * 0.02) },
+	get paddingX() {
+		return Math.round(coreCfg.screenWidth * 0.02);
+	},
+	get paddingY() {
+		return Math.round(coreCfg.screenHeight * 0.02);
+	},
 	scoreDigits: 4
 };
 
@@ -95,8 +104,12 @@ export const titleScreenCfg = {
 	titleSize: 3,
 	menuItemSize: 2,
 	lineHeight: 2,
-	get cursorPadding() { return coreCfg.pixelSize * 2},
-	get cursorSpeed() { return coreCfg.screenHeight * 0.3 },
+	get cursorPadding() {
+		return coreCfg.pixelSize * 2;
+	},
+	get cursorSpeed() {
+		return coreCfg.screenHeight * 0.3;
+	},
 	color: '#ffffff',
 	fadeSteps: 8,
 	transitionDuration: 3000,
@@ -129,20 +142,22 @@ function setCalculatedValues() {
 
 export function configure(key, val) {
 	switch (key) {
-		case confConst.beveled: shipCfg.drawStyle = confConst.beveled; break;
+		case confConst.beveled:
+			shipCfg.drawStyle = confConst.beveled;
+			break;
 		case 'pixelSize':
 			coreCfg.pixelSize = parseInt(val, 10);
 			setCalculatedValues();
-		break;
+			break;
 		case 'font':
 			interfaceInfoPanelCfg.font = val;
 			titleScreenCfg.font = val;
 			break;
 		case confConst.fps:
-			drawingCfg.showFPS = val || (val === undefined);
+			drawingCfg.showFPS = val || val === undefined;
 			break;
 		case confConst.sound:
-			soundCfg.on = val || (val === undefined)
+			soundCfg.on = val || val === undefined;
 	}
 }
 
