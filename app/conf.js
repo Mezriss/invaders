@@ -45,7 +45,10 @@ export const drawingCfg = {
 
 export const formationCfg = {
 	shipPadding: 9,
-	linePadding: 3
+	linePadding: 3,
+	get warpSpeed() {
+		return coreCfg.screenHeight;
+	}
 };
 
 export const playerCfg = {

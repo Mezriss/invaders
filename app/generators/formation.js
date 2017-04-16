@@ -18,6 +18,7 @@ const formationProto = {
 	advanceAmount: 0.05,
 	advanceStart: null,
 	direction: null,
+	startingPosition: null,
 	x: null,
 	y: null,
 	ctx: null,
@@ -56,19 +57,23 @@ const formationProto = {
 		}
 	},
 	move: function(dt) {
-		switch (this.direction) {
-			case directionConst.left:
-				this.x -= this.evadeSpeed * coreCfg.screenWidth * dt / 1000;
-				break;
-			case directionConst.right:
-				this.x += this.evadeSpeed * coreCfg.screenWidth * dt / 1000;
-				break;
-			case directionConst.up:
-				this.y -= this.advanceSpeed * coreCfg.screenHeight * dt / 1000;
-				break;
-			case directionConst.down:
-				this.y += this.advanceSpeed * coreCfg.screenHeight * dt / 1000;
-				break;
+		if (this.y < this.startingPosition) {
+			this.y += cfg.warpSpeed * dt / 1000;
+		} else {
+			switch (this.direction) {
+				case directionConst.left:
+					this.x -= this.evadeSpeed * coreCfg.screenWidth * dt / 1000;
+					break;
+				case directionConst.right:
+					this.x += this.evadeSpeed * coreCfg.screenWidth * dt / 1000;
+					break;
+				case directionConst.up:
+					this.y -= this.advanceSpeed * coreCfg.screenHeight * dt / 1000;
+					break;
+				case directionConst.down:
+					this.y += this.advanceSpeed * coreCfg.screenHeight * dt / 1000;
+					break;
+			}
 		}
 	},
 	checkCollisions: function(missile) {
@@ -113,7 +118,8 @@ export function create(options) {
 	formation.height = (shipCfg.heightPx + cfg.linePaddingPx) * options.height;
 	formation.ctx = initCanvas(formation.width, formation.height);
 	formation.x = (coreCfg.screenWidth - formation.width) / 2;
-	formation.y = coreCfg.screenHeight * 0.1 * options.levelNumber;
+	formation.startingPosition = coreCfg.screenHeight * 0.1 * options.levelNumber;
+	formation.y = formation.startingPosition - coreCfg.screenHeight;
 
 	formation.direction = roll(0, 1) ? directionConst.left : directionConst.right;
 
