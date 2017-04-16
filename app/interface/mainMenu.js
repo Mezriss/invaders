@@ -118,7 +118,7 @@ export function init(data) {
 	font = fontGenerator.create(cfg.font);
 	color = hexToRgba(cfg.color, 100);
 	pubSub.on(eventConst.keyDown, keyDown);
-	pubSub.on(eventConst.menuToGameTransitionFrame, fadeOutMenu);
+	pubSub.on(eventConst.animationFrame, fadeOutMenu);
 
 	title.y = Math.round(
 		(coreCfg.screenHeight - font.meta.boundingBox.height * (cfg.titleSize + cfg.menuItemSize * 3) * cfg.lineHeight) / 2

@@ -7,7 +7,7 @@ module.exports = {
 	entry: './index',
 	output: {
 		filename: '[name].js',
-		path: path.resolve(__dirname, '../docs'),
+		path: path.resolve(__dirname, '../docs/js'),
 		sourceMapFilename: '[name].js.map'
 	},
 	plugins: [

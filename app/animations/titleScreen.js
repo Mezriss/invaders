@@ -31,7 +31,7 @@ export function drawFrame(dt) {
 		return { player };
 	}
 	if (transitionSequence) {
-		pubSub.pub(eventConst.menuToGameTransitionFrame, dt);
+		pubSub.pub(eventConst.animationFrame, dt);
 	}
 
 	player.show(drawCtx, cursor.x, cursor.y);

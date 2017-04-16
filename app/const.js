@@ -23,7 +23,8 @@ export const eventConst = {
 	gameOver: 'gameOver',
 	cursorRepositioned: 'cursorRepositioned',
 	menuToGameTransition: 'menuToGameTransition',
-	menuToGameTransitionFrame: 'menuToGameTransitionFrame'
+	animationFrame: 'menuToGameTransitionFrame',
+	introOver: 'introOver'
 };
 
 export const keyConst = {

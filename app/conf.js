@@ -122,6 +122,14 @@ export const highScoresCfg = {
 	predefinedScores: [1000, 500, 250, 100, 10]
 };
 
+export const levelNumberCfg = {
+	size: 20,
+	font: 'pressStart',
+	color: '#ffffff',
+	opacity: [75, 100, 75, 50, 25, 0],
+	duration: 1000
+};
+
 export const soundCfg = {
 	on: false
 };
@@ -152,6 +160,7 @@ export function configure(key, val) {
 		case 'font':
 			interfaceInfoPanelCfg.font = val;
 			titleScreenCfg.font = val;
+			levelNumberCfg.font = val;
 			break;
 		case confConst.fps:
 			drawingCfg.showFPS = val || val === undefined;
