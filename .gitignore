@@ -42,3 +42,4 @@ jspm_packages
 build/
 ideas.md
 reference/
+*.bdf
