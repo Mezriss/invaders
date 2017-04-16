@@ -9,10 +9,10 @@
     "build:prod": "webpack --env=prod --progress --profile --colors",
     "start": "serve",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "precommit": "lint-staged"
+    "precommit": "lint-staged && npm run build:prod"
   },
   "lint-staged": {
-    "*.js": [
+    "app/**/*.js": [
       "prettier --write --single-quote --print-width 120 --use-tabs",
       "git add"
     ]

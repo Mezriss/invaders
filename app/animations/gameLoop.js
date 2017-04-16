@@ -89,7 +89,9 @@ export function init(data, drawCanvas) {
 }
 
 export function end() {
-	[keyDown, keyUp, levelEntityCreated, levelEntityDestroyed, enemyDestroyed].forEach(handler => pubSub.off(handler));
+	[keyDown, keyUp, levelEntityCreated, levelEntityDestroyed, enemyDestroyed, onGameOver].forEach(handler =>
+		pubSub.off(handler)
+	);
 	infoPanel.destroy();
 	level.missiles.forEach(missile => missile.destroy());
 }

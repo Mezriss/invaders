@@ -112,7 +112,7 @@ export const titleScreenCfg = {
 	},
 	color: '#ffffff',
 	fadeSteps: 8,
-	transitionDuration: 3000,
+	transitionDuration: 2500,
 	scoreDigits: 4
 };
 

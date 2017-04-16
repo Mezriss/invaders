@@ -20,7 +20,10 @@ export const eventConst = {
 	enemyDestroyed: 'enemyDestroyed',
 	shipListUpdate: 'shipListUpdate',
 	scoreUpdate: 'scoreUpdate',
-	gameOver: 'gameOver'
+	gameOver: 'gameOver',
+	cursorRepositioned: 'cursorRepositioned',
+	menuToGameTransition: 'menuToGameTransition',
+	menuToGameTransitionFrame: 'menuToGameTransitionFrame'
 };
 
 export const keyConst = {

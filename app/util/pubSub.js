@@ -12,10 +12,14 @@ export function on(event, handler) {
 }
 
 export function off(handler) {
+	let index;
 	for (let i in handlers) {
-		handlers[i].splice(handlers[i].findIndex(handler), 1);
-		if (!handlers[i].length) {
-			delete handlers[i];
+		index = handlers[i].indexOf(handler);
+		if (index >= 0) {
+			handlers[i].splice(index, 1);
+			if (!handlers[i].length) {
+				delete handlers[i];
+			}
 		}
 	}
 }
