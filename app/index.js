@@ -41,8 +41,8 @@ function playLevels(data) {
 	if (data.gameOver) {
 		const record = {
 			score: data.player.score,
-			blueprint: (data.player.currentShip || data.player.lastShip).blueprint,
-			color: (data.player.currentShip || data.player.lastShip).color
+			blueprint: data.player.lastShip.blueprint,
+			color: data.player.lastShip.color
 		},
 			position = highScores.store(record);
 

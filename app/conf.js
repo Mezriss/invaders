@@ -34,6 +34,7 @@ export const drawingCfg = {
 	systemInfoColor: 'lime',
 	systemInfoText: '10px sans-serif',
 	maxFPS: 60,
+	minFPS: 15,
 	paletteSize: 100,
 	mask: [
 		//todo generate this
@@ -129,8 +130,14 @@ export const levelNumberCfg = {
 	size: 20,
 	font: 'pressStart',
 	color: '#ffffff',
-	opacity: [75, 100, 75, 50, 25, 0],
-	duration: 1000
+	opacity: [75, 100, 75, 50, 25],
+	duration: 800
+};
+
+export const pauseScreenCfg = {
+	font: 'pressStart',
+	titleSize: 5,
+	subtitleSize: 2
 };
 
 export const soundCfg = {
@@ -164,6 +171,7 @@ export function configure(key, val) {
 			interfaceInfoPanelCfg.font = val;
 			titleScreenCfg.font = val;
 			levelNumberCfg.font = val;
+			pauseScreenCfg.font = val;
 			break;
 		case confConst.fps:
 			drawingCfg.showFPS = val || val === undefined;

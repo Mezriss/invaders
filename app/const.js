@@ -12,6 +12,7 @@ export const directionConst = {
 export const eventConst = {
 	keyDown: 'keydown',
 	keyUp: 'keyup',
+	visibilityChange: 'visibilitychange',
 	levelEntityCreated: 'levelEntityCreated',
 	levelEntityDestroyed: 'levelEntityDestroyed',
 	missile: 'missiles',
@@ -24,7 +25,9 @@ export const eventConst = {
 	cursorRepositioned: 'cursorRepositioned',
 	menuToGameTransition: 'menuToGameTransition',
 	animationFrame: 'menuToGameTransitionFrame',
-	introOver: 'introOver'
+	introOver: 'introOver',
+	gamePaused: 'gamePaused',
+	gameResumed: 'gameResumed'
 };
 
 export const keyConst = {
@@ -33,7 +36,8 @@ export const keyConst = {
 	arrowUp: 'ArrowUp',
 	arrowDown: 'ArrowDown',
 	enter: 'Enter',
-	space: ' '
+	space: ' ',
+	escape: 'Escape'
 };
 
 export const missileConst = {

@@ -9,5 +9,7 @@ export default {
 	sound: 'Sound: ',
 	showFPS: 'Show FPS: ',
 	on: 'On',
-	off: 'Off'
+	off: 'Off',
+	paused: 'Paused',
+	pressToContinue: 'Press [space] to continue'
 };

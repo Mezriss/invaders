@@ -8,9 +8,12 @@ import { pubSub } from '../util';
 import * as infoPanel from '../interface/infoPanel';
 import * as levelNumber from '../interface/levelNumber';
 
-let canvas, player, level, gameOver, leftPressed, rightPressed, introAnimationRunning;
+let canvas, player, level, gameOver, gamePaused, leftPressed, rightPressed, introAnimationRunning;
 
 function keyDown(key) {
+	if (gamePaused) {
+		return;
+	}
 	switch (key) {
 		case keyConst.arrowLeft:
 			if (!player.moving) {
@@ -31,6 +34,9 @@ function keyDown(key) {
 		case keyConst.space:
 			player.setBarrage(true);
 			player.fire();
+			break;
+		case keyConst.escape:
+			pubSub.pub(eventConst.gamePaused);
 			break;
 	}
 }
@@ -67,12 +73,29 @@ function enemyDestroyed(enemy) {
 }
 
 function onGameOver() {
+	if (player.currentShip && !player.lastShip) {
+		player.lastShip = player.currentShip;
+	}
 	gameOver = true;
 }
 
 function introOver() {
 	introAnimationRunning = false;
 	levelNumber.destroy();
+}
+
+function pauseGame() {
+	gamePaused = true;
+}
+
+function resumeGame() {
+	gamePaused = false;
+}
+
+function checkScreenBlur() {
+	if (document.hidden) {
+		pubSub.pub(eventConst.gamePaused);
+	}
 }
 
 export function init(data, drawCanvas) {
@@ -88,7 +111,8 @@ export function init(data, drawCanvas) {
 	pubSub.on(eventConst.enemyDestroyed, enemyDestroyed);
 
 	pubSub.on(eventConst.gameOver, onGameOver);
-
+	pubSub.on(eventConst.gamePaused, pauseGame);
+	pubSub.on(eventConst.gameResumed, resumeGame);
 	pubSub.on(eventConst.introOver, introOver);
 
 	player = data.player;
@@ -99,15 +123,26 @@ export function init(data, drawCanvas) {
 	infoPanel.init(player);
 	levelNumber.init(level.number);
 	introAnimationRunning = true;
+
+	document.addEventListener(eventConst.visibilityChange, checkScreenBlur);
 }
 
 export function end() {
-	[keyDown, keyUp, levelEntityCreated, levelEntityDestroyed, enemyDestroyed, onGameOver, introOver].forEach(handler =>
-		pubSub.off(handler)
-	);
+	[
+		keyDown,
+		keyUp,
+		levelEntityCreated,
+		levelEntityDestroyed,
+		enemyDestroyed,
+		onGameOver,
+		introOver,
+		pauseGame,
+		resumeGame
+	].forEach(handler => pubSub.off(handler));
 	infoPanel.destroy();
 	levelNumber.destroy();
 	level.missiles.forEach(missile => missile.destroy());
+	document.removeEventListener(eventConst.visibilityChange, checkScreenBlur);
 }
 
 export function drawFrame(dt) {
