@@ -52,7 +52,7 @@ const settingsMenu = [
 			return str.sound + (soundCfg.on ? str.on : str.off);
 		},
 		action: function() {
-			configure(confConst.sound, !soundCfg.on);
+			configure(confConst.sound, !soundCfg.on, true);
 		}
 	},
 	{
@@ -60,7 +60,7 @@ const settingsMenu = [
 			return str.showFPS + (drawingCfg.showFPS ? str.on : str.off);
 		},
 		action: function() {
-			configure(confConst.fps, !drawingCfg.showFPS);
+			configure(confConst.fps, !drawingCfg.showFPS, true);
 		}
 	},
 	{

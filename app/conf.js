@@ -158,7 +158,7 @@ function setCalculatedValues() {
 	formationCfg.linePaddingPx = formationCfg.linePadding * coreCfg.pixelSize;
 }
 
-export function configure(key, val) {
+export function configure(key, val, save) {
 	switch (key) {
 		case confConst.beveled:
 			shipCfg.drawStyle = confConst.beveled;
@@ -179,6 +179,14 @@ export function configure(key, val) {
 		case confConst.sound:
 			soundCfg.on = val || val === undefined;
 	}
+	if (save) {
+		const savedSettings = localStorage.getItem('settings') ? JSON.parse(localStorage.getItem('settings')) : {};
+		savedSettings[key] = val;
+		localStorage.setItem('settings', JSON.stringify(savedSettings));
+	}
 }
+
+const savedSettings = localStorage.getItem('settings') ? JSON.parse(localStorage.getItem('settings')) : {};
+Object.keys(savedSettings).forEach(key => configure(key, savedSettings[key]));
 
 setCalculatedValues();
