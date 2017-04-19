@@ -65,3 +65,7 @@ import { font as pressStart } from './fonts/press-start-2b';
 import { font as gohufont } from './fonts/gohufont-11.bdf';
 import { font as powerline } from './fonts/ter-powerline-x12b.bdf';
 export const fonts = { pressStart, c64, gohufont, powerline };
+
+import * as laser from './sounds/laser';
+
+export const soundSamples = { laser };

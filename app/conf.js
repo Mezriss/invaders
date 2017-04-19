@@ -141,7 +141,8 @@ export const pauseScreenCfg = {
 };
 
 export const soundCfg = {
-	on: false
+	on: false,
+	volume: 0.5
 };
 
 function setCalculatedValues() {

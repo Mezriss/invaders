@@ -1,6 +1,7 @@
 import { coreCfg, missileCfg as cfg, shipCfg } from '../conf';
-import { missileConst, eventConst } from '../const';
+import { missileConst, eventConst, soundSamples } from '../const';
 import { roll, initCanvas, shuffle, drawPixel, hexToRgba, drawImage, cacheSprite, pubSub } from '../util';
+import * as sound from '../sound';
 
 const sprite = initCanvas(cfg.widthPaddedPx, cfg.heightPaddedPx),
 	partWidth = Math.ceil(cfg.width / 2),
@@ -15,6 +16,7 @@ const sprite = initCanvas(cfg.widthPaddedPx, cfg.heightPaddedPx),
 		armSpeed: 1000,
 		scoreValue: 1,
 		status: null,
+		launchSound: null,
 		x: null,
 		y: null,
 		show: function(ctx, x = this.x, y = this.y) {
@@ -46,6 +48,9 @@ const sprite = initCanvas(cfg.widthPaddedPx, cfg.heightPaddedPx),
 		launch() {
 			if (this.status === missileConst.armed) {
 				this.status = missileConst.launched;
+				if (this.launchSound) {
+					sound.play(this.launchSound);
+				}
 			}
 		},
 		behavior: function() {
@@ -152,6 +157,14 @@ export function create(options = {}) {
 			}
 		}
 		missile.sprites.push(cacheSprite(sprite));
+	}
+
+	if (options.launchSound) {
+		missile.launchSound = sound.generate(options.launchSound);
+	} else {
+		const launchSound = Object.assign({}, soundSamples.laser.enemy);
+		launchSound.frequency *= 0.8 + 0.4 * Math.random();
+		missile.launchSound = sound.generate(launchSound);
 	}
 
 	return missile;

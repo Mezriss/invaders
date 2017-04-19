@@ -4,7 +4,7 @@
  */
 
 import { playerCfg as cfg, coreCfg, shipCfg } from '../conf';
-import { eventConst, missileConst, directionConst } from '../const';
+import { eventConst, missileConst, directionConst, soundSamples } from '../const';
 import * as shipGenerator from './ship';
 import * as missileGenerator from './missile';
 import * as explosion from './explosion';
@@ -110,7 +110,7 @@ export function create() {
 		ship.x = Math.floor(coreCfg.screenWidth / 2 - shipCfg.widthPx / 2);
 		ship.y = Math.floor(coreCfg.screenHeight - shipCfg.heightPx * 1.5);
 
-		ship.missileType = missileGenerator.create();
+		ship.missileType = missileGenerator.create({ launchSound: soundSamples.laser.player });
 		ship.missileType.launcher = ship;
 
 		player.extraShips.push(ship);

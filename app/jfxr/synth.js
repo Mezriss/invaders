@@ -24,5 +24,5 @@ export default function synth(sound) {
 	for (let i = 0; i < transformationList.length; i += 1) {
 		transformationList[i](sound, data);
 	}
-	return { data, sampleRate: sound.sampleRate };
+	return data;
 }
