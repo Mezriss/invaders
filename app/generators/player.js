@@ -9,90 +9,93 @@ import * as shipGenerator from './ship';
 import * as missileGenerator from './missile';
 import * as explosion from './explosion';
 import { rectIntersect, pubSub } from '../util';
+import * as sound from '../sound';
 
-const playerProto = {
-	score: 0,
-	currentShip: null,
-	extraShips: null,
-	direction: null,
-	plannedTravel: 0,
-	moving: false,
-	speed: cfg.speed,
-	get x() {
-		return this.currentShip && this.currentShip.x;
-	},
-	get y() {
-		return this.currentShip && this.currentShip.y;
-	},
-	show: function(ctx, x, y) {
-		if (this.currentShip) {
-			this.currentShip.show(ctx, x, y);
-		}
-	},
-	behavior: function() {
-		if (this.currentShip) {
-			this.currentShip.behavior();
-		}
-	},
-	move: function(dt) {
-		if (this.currentShip) {
-			if (this.moving || this.plannedTravel > 0) {
-				let travelDistance = this.speed * dt / 1000;
-				switch (this.direction) {
-					case directionConst.left:
-						this.currentShip.x -= travelDistance;
-						break;
-					case directionConst.right:
-						this.currentShip.x += travelDistance;
-						break;
-				}
-				if (this.currentShip.x < 0) {
-					this.currentShip.x = 0;
-				}
-				if (this.currentShip.x > coreCfg.screenWidth - shipCfg.widthPx) {
-					this.currentShip.x = coreCfg.screenWidth - shipCfg.widthPx;
-				}
-				this.plannedTravel -= travelDistance;
-			} else {
-				this.currentShip.x = Math.round(this.currentShip.x);
+const explosionSound = sound.generate(soundSamples.explosion.player),
+	playerProto = {
+		score: 0,
+		currentShip: null,
+		extraShips: null,
+		direction: null,
+		plannedTravel: 0,
+		moving: false,
+		speed: cfg.speed,
+		get x() {
+			return this.currentShip && this.currentShip.x;
+		},
+		get y() {
+			return this.currentShip && this.currentShip.y;
+		},
+		show: function(ctx, x, y) {
+			if (this.currentShip) {
+				this.currentShip.show(ctx, x, y);
 			}
-		}
-	},
-	fire() {
-		if (this.currentShip) {
-			this.currentShip.fire();
-		}
-	},
-	setBarrage(val) {
-		if (this.currentShip) {
-			this.currentShip.barrage = val;
-		}
-	},
-	checkCollisions(missile) {
-		if (this.currentShip && rectIntersect(missile.x, missile.y, this.currentShip.x, this.currentShip.y)) {
-			missile.destroy();
-			if (this.currentShip.missile && this.currentShip.missile.status !== missileConst.launched) {
-				pubSub.pub(eventConst.levelEntityCreated, eventConst.effect, explosion.create(this.currentShip));
-				pubSub.pub(eventConst.levelEntityCreated, eventConst.effect, explosion.create(this.currentShip.missile));
-				this.currentShip.missile.destroy();
-			} else {
-				pubSub.pub(eventConst.levelEntityCreated, eventConst.effect, explosion.create(this.currentShip, missile));
+		},
+		behavior: function() {
+			if (this.currentShip) {
+				this.currentShip.behavior();
 			}
-			if (!this.extraShips.length) {
-				this.lastShip = this.currentShip;
-				pubSub.pub(eventConst.gameOver);
-				this.currentShip = null;
-			} else {
-				this.currentShip = null;
-				setTimeout(() => {
-					this.currentShip = this.extraShips.pop();
+		},
+		move: function(dt) {
+			if (this.currentShip) {
+				if (this.moving || this.plannedTravel > 0) {
+					let travelDistance = this.speed * dt / 1000;
+					switch (this.direction) {
+						case directionConst.left:
+							this.currentShip.x -= travelDistance;
+							break;
+						case directionConst.right:
+							this.currentShip.x += travelDistance;
+							break;
+					}
+					if (this.currentShip.x < 0) {
+						this.currentShip.x = 0;
+					}
+					if (this.currentShip.x > coreCfg.screenWidth - shipCfg.widthPx) {
+						this.currentShip.x = coreCfg.screenWidth - shipCfg.widthPx;
+					}
+					this.plannedTravel -= travelDistance;
+				} else {
+					this.currentShip.x = Math.round(this.currentShip.x);
+				}
+			}
+		},
+		fire() {
+			if (this.currentShip) {
+				this.currentShip.fire();
+			}
+		},
+		setBarrage(val) {
+			if (this.currentShip) {
+				this.currentShip.barrage = val;
+			}
+		},
+		checkCollisions(missile) {
+			if (this.currentShip && rectIntersect(missile.x, missile.y, this.currentShip.x, this.currentShip.y)) {
+				missile.destroy();
+				sound.play(explosionSound);
+				if (this.currentShip.missile && this.currentShip.missile.status !== missileConst.launched) {
+					pubSub.pub(eventConst.levelEntityCreated, eventConst.effect, explosion.create(this.currentShip));
+					pubSub.pub(eventConst.levelEntityCreated, eventConst.effect, explosion.create(this.currentShip.missile));
+					this.currentShip.missile.destroy();
+				} else {
+					pubSub.pub(eventConst.levelEntityCreated, eventConst.effect, explosion.create(this.currentShip, missile));
+				}
+				if (!this.extraShips.length) {
+					this.lastShip = this.currentShip;
+					pubSub.pub(eventConst.gameOver);
+					this.currentShip = null;
+				} else {
+					this.currentShip = null;
+					setTimeout(() => {
+						this.currentShip = this.extraShips.pop();
+						pubSub.pub(eventConst.shipListUpdate, this.extraShips);
+					}, cfg.respawnDelay);
 					pubSub.pub(eventConst.shipListUpdate, this.extraShips);
-				}, cfg.respawnDelay);
-				pubSub.pub(eventConst.shipListUpdate, this.extraShips);
+				}
 			}
 		}
-	}
-};
+	};
 
 const playerShipCfg = {
 	color: cfg.defaultColor

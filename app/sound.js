@@ -18,7 +18,7 @@ export function generate(sound) {
 }
 
 export function play(bufferId) {
-	if (!cfg.on || !bufferId || !buffers[bufferId]) {
+	if (!cfg.on) {
 		return;
 	}
 	if (!buffers[bufferId].buffer) {

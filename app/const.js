@@ -67,5 +67,6 @@ import { font as powerline } from './fonts/ter-powerline-x12b.bdf';
 export const fonts = { pressStart, c64, gohufont, powerline };
 
 import * as laser from './sounds/laser';
+import * as explosion from './sounds/explosion';
 
-export const soundSamples = { laser };
+export const soundSamples = { laser, explosion };
