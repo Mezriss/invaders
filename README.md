@@ -18,7 +18,6 @@ formation over and over again.
 * support mobile devices
 * add content for minimal interesting-to-play version
 * think of a better name
-* sound effects
 * content for level generator
 * intro sequence
 * optimize for N3DS browser and maybe some other unusual platforms
