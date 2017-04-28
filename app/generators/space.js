@@ -74,7 +74,7 @@ export function create() {
 		const star = {
 			x: roll(cfg.maxBeamLength, coreCfg.screenWidth / pixelSize - cfg.maxBeamLength * 2 - 1),
 			y: roll(cfg.maxBeamLength, coreCfg.screenHeight / pixelSize - cfg.maxBeamLength * 2 - 1),
-			intensity: roll(cfg.maxIntensity),
+			intensity: roll(cfg.maxIntensity * 100) / 100,
 			hue: cfg.hue[roll(0, cfg.hue.length - 1)]
 		};
 		space.stars.push(star);

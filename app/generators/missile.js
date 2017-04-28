@@ -125,18 +125,18 @@ export function create(options = {}) {
 	for (let i = 0; i < partHeight; i += 1) {
 		for (let j = 0; j < partWidth; j += 1) {
 			if (shape[i * partWidth + j]) {
-				missile.blueprint[padded2dTo1d(j, i)] = 100;
-				missile.blueprint[padded2dTo1d(cfg.width - 1 - j, i)] = 100;
-				missile.blueprint[padded2dTo1d(j, cfg.height - 1 - i)] = 100;
-				missile.blueprint[padded2dTo1d(cfg.width - 1 - j, cfg.height - 1 - i)] = 100;
+				missile.blueprint[padded2dTo1d(j, i)] = 1;
+				missile.blueprint[padded2dTo1d(cfg.width - 1 - j, i)] = 1;
+				missile.blueprint[padded2dTo1d(j, cfg.height - 1 - i)] = 1;
+				missile.blueprint[padded2dTo1d(cfg.width - 1 - j, cfg.height - 1 - i)] = 1;
 			}
 		}
 	}
 	//let's add some glow
 	for (let i = 0; i < cfg.widthPadded * cfg.heightPadded; i += 1) {
-		if (missile.blueprint[i] === 100) {
+		if (missile.blueprint[i] === 1) {
 			for (let j = 1; j <= cfg.glowLength; j += 1) {
-				let glow = 100 * (cfg.glow - cfg.glow * cfg.glowDegradation * (j - 1));
+				let glow = cfg.glow - cfg.glow * cfg.glowDegradation * (j - 1);
 				missile.blueprint[i - j] = missile.blueprint[i - j] || glow;
 				missile.blueprint[i + j] = missile.blueprint[i + j] || glow;
 				missile.blueprint[i - cfg.widthPadded * j] = missile.blueprint[i - cfg.widthPadded * j] || glow;

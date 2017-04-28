@@ -10,11 +10,11 @@ export const spaceCfg = {
 	pixelSize: 2,
 	background: 0x000011,
 	maxStars: 80,
-	maxIntensity: 80,
+	maxIntensity: 0.8,
 	hue: [0x9bb0ff, 0xaabfff, 0xcad7ff, 0xf8f7ff, 0xfef4ea], //0xFED2A3, 0xFFCC70  //leaving only colder colors
-	beamFadeRate: 15,
+	beamFadeRate: 0.15,
 	minBeamIntensity: 0.1,
-	initialBeamIntensity: 0.60,
+	initialBeamIntensity: 0.6,
 	maxBeamLength: 5
 };
 
@@ -130,7 +130,7 @@ export const levelNumberCfg = {
 	size: 20,
 	font: 'pressStart',
 	color: 0xffffff,
-	opacity: [75, 100, 75, 50, 25],
+	opacity: [0.75, 1, 0.75, 0.5, 0.25],
 	duration: 800
 };
 

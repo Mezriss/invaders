@@ -116,7 +116,7 @@ function keyDown(key) {
 
 export function init(data) {
 	font = fontGenerator.create(cfg.font);
-	color = hexToRgba(cfg.color, 100);
+	color = hexToRgba(cfg.color, 1);
 	pubSub.on(eventConst.keyDown, keyDown);
 	pubSub.on(eventConst.animationFrame, fadeOutMenu);
 
@@ -217,7 +217,7 @@ function fadeOutMenu(dt) {
 	transitionElapsed += dt;
 	newColor = hexToRgba(
 		cfg.color,
-		100 / cfg.fadeSteps * (cfg.fadeSteps - Math.floor(transitionElapsed / (cfg.transitionDuration / cfg.fadeSteps)))
+		1 / cfg.fadeSteps * (cfg.fadeSteps - Math.floor(transitionElapsed / (cfg.transitionDuration / cfg.fadeSteps)))
 	);
 	if (newColor !== color) {
 		color = newColor;
