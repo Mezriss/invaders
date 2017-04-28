@@ -1,6 +1,7 @@
 import { fontCfg as cfg, coreCfg } from '../conf';
-import { fonts, alignmentConst } from '../const';
+import { alignmentConst } from '../const';
 import { drawImage, cacheSprite, initCanvas, drawPixel } from '../util';
+import fonts from '../fonts';
 
 const fontCache = [];
 
@@ -8,7 +9,7 @@ const sprite = initCanvas(coreCfg.pixelSize, coreCfg.pixelSize),
 	fontProto = {
 		meta: null,
 		glyphs: null,
-		write: function(ctx, coords, text, options = {}) {
+		write(ctx, coords, text, options = {}) {
 			let color = options.color || cfg.defaultColor,
 				size = options.size || coreCfg.pixelSize,
 				alignment = options.alignment || cfg.alignment,

@@ -23,14 +23,14 @@ const interfaceCtx = interfaceScreen.getContext('2d');
 const mainMenu = [
 	{
 		label: str.play,
-		action: function() {
+		action() {
 			pubSub.off(keyDown);
 			pubSub.pub(eventConst.menuToGameTransition);
 		}
 	},
 	{
 		label: str.highScores,
-		action: function() {
+		action() {
 			currentMenu = highScoresMenu;
 			selectedMenuItem = 0;
 			pubSub.pub(eventConst.cursorRepositioned, currentMenu[selectedMenuItem].y);
@@ -38,7 +38,7 @@ const mainMenu = [
 	},
 	{
 		label: str.options,
-		action: function() {
+		action() {
 			currentMenu = settingsMenu;
 			selectedMenuItem = 0;
 			pubSub.pub(eventConst.cursorRepositioned, currentMenu[selectedMenuItem].y);
@@ -51,7 +51,7 @@ const settingsMenu = [
 		get label() {
 			return str.sound + (soundCfg.on ? str.on : str.off);
 		},
-		action: function() {
+		action() {
 			configure(confConst.sound, !soundCfg.on, true);
 		}
 	},
@@ -59,7 +59,7 @@ const settingsMenu = [
 		get label() {
 			return str.showFPS + (drawingCfg.showFPS ? str.on : str.off);
 		},
-		action: function() {
+		action() {
 			configure(confConst.fps, !drawingCfg.showFPS, true);
 		}
 	},
@@ -71,7 +71,7 @@ const settingsMenu = [
 		set y(val) {
 			this._y = val;
 		},
-		action: function() {
+		action() {
 			currentMenu = mainMenu;
 			selectedMenuItem = 2;
 			pubSub.pub(eventConst.cursorRepositioned, currentMenu[selectedMenuItem].y);
@@ -88,7 +88,7 @@ const highScoresMenu = [
 		set y(val) {
 			this._y = val;
 		},
-		action: function() {
+		action() {
 			currentMenu = mainMenu;
 			selectedMenuItem = 1;
 			pubSub.pub(eventConst.cursorRepositioned, currentMenu[selectedMenuItem].y);

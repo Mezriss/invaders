@@ -8,8 +8,9 @@ import * as missile from './missile';
 import * as explosion from './explosion';
 import { initCanvas, roll, drawImage, rectIntersect, pubSub } from '../util';
 import { coreCfg, formationCfg as cfg, shipCfg } from '../conf';
-import { formationConst, missileConst, eventConst, directionConst, soundSamples } from '../const';
+import { formationConst, missileConst, eventConst, directionConst } from '../const';
 import * as sound from '../sound';
+import soundSamples from '../samples';
 
 let mX, mY, i; //missile coords for collision calculations
 
@@ -27,10 +28,10 @@ const explosionSound = sound.generate(soundSamples.explosion.enemy),
 		ships: null,
 		width: null,
 		height: null,
-		show: function(ctx) {
+		show(ctx) {
 			drawImage(ctx, this.ctx, [this.x, this.y]);
 		},
-		behavior: function() {
+		behavior() {
 			if (this.y + this.ships[this.ships.length - 1].y + shipCfg.heightPx >= coreCfg.screenHeight) {
 				pubSub.pub(eventConst.gameOver);
 			}
@@ -58,7 +59,7 @@ const explosionSound = sound.generate(soundSamples.explosion.enemy),
 				}
 			}
 		},
-		move: function(dt) {
+		move(dt) {
 			if (this.y < this.startingPosition) {
 				this.y += cfg.warpSpeed * dt / 1000;
 			} else {
@@ -78,7 +79,7 @@ const explosionSound = sound.generate(soundSamples.explosion.enemy),
 				}
 			}
 		},
-		checkCollisions: function(missile) {
+		checkCollisions(missile) {
 			mX = missile.x - this.x;
 			mY = missile.y - this.y;
 			if (mX < 0 || mY < 0 || mX > this.width || mY > this.height) {
@@ -98,7 +99,7 @@ const explosionSound = sound.generate(soundSamples.explosion.enemy),
 				}
 			}
 		},
-		destroyShip: function(id) {
+		destroyShip(id) {
 			pubSub.pub(eventConst.enemyDestroyed, this.ships[i]);
 			sound.play(explosionSound);
 			if (this.ships[i].missile && this.ships[i].missile.status !== missileConst.launched) {

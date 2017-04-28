@@ -6,7 +6,7 @@
   "scripts": {
     "build": "webpack --env=dev --progress --profile --colors",
     "build:watch": "webpack --env=dev --progress --profile --colors --watch",
-    "build:prod": "webpack --env=prod --progress --profile --colors",
+    "build:prod": "webpack --env=prod --progress --profile --colors --optimize-minimize",
     "start": "serve",
     "test": "echo \"Error: no test specified\" && exit 1",
     "precommit": "lint-staged && npm run build:prod && git add docs/js/*"

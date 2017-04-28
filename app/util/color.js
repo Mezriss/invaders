@@ -1,3 +1,3 @@
 export function hexToRgba(hex, alpha) {
-	return `rgba(${parseInt(hex.substr(1, 2), 16)}, ${parseInt(hex.substr(3, 2), 16)}, ${parseInt(hex.substr(5, 2), 16)}, ${alpha / 100})`;
+	return `rgba(${Math.floor(hex / 0x10000).toString()}, ${Math.floor(hex % 0x10000 / 0x100).toString()}, ${(hex % 0x100).toString()}, ${alpha / 100})`;
 }

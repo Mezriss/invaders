@@ -1,7 +1,8 @@
 import { coreCfg, missileCfg as cfg, shipCfg } from '../conf';
-import { missileConst, eventConst, soundSamples } from '../const';
+import { missileConst, eventConst } from '../const';
 import { roll, initCanvas, shuffle, drawPixel, hexToRgba, drawImage, cacheSprite, pubSub } from '../util';
 import * as sound from '../sound';
+import soundSamples from '../samples';
 
 const sprite = initCanvas(cfg.widthPaddedPx, cfg.heightPaddedPx),
 	partWidth = Math.ceil(cfg.width / 2),
@@ -19,7 +20,7 @@ const sprite = initCanvas(cfg.widthPaddedPx, cfg.heightPaddedPx),
 		launchSound: null,
 		x: null,
 		y: null,
-		show: function(ctx, x = this.x, y = this.y) {
+		show(ctx, x = this.x, y = this.y) {
 			drawImage(
 				ctx,
 				this.sprites[this.armProgress].ctx,
@@ -39,7 +40,7 @@ const sprite = initCanvas(cfg.widthPaddedPx, cfg.heightPaddedPx),
 				this.y = this.launcher.formation.y + this.launcher.y - (shipCfg.heightPx - cfg.heightPx) / 2;
 			}
 		},
-		arm: function() {
+		arm() {
 			this.alignWithShipX();
 			this.alignWithShipY();
 			this.armStart = Date.now();
@@ -53,7 +54,7 @@ const sprite = initCanvas(cfg.widthPaddedPx, cfg.heightPaddedPx),
 				}
 			}
 		},
-		behavior: function() {
+		behavior() {
 			if (this.status === missileConst.arming) {
 				this.armProgress = Math.min(
 					Math.floor((Date.now() - this.armStart) / (this.armSpeed / cfg.armSteps)),
@@ -67,7 +68,7 @@ const sprite = initCanvas(cfg.widthPaddedPx, cfg.heightPaddedPx),
 				}
 			}
 		},
-		move: function(dt) {
+		move(dt) {
 			if (this.status !== missileConst.launched) {
 				this.alignWithShipY();
 			}
@@ -83,21 +84,21 @@ const sprite = initCanvas(cfg.widthPaddedPx, cfg.heightPaddedPx),
 				this.destroy();
 			}
 		},
-		checkSafeDistance: function() {
+		checkSafeDistance() {
 			return (
 				this.status === missileConst.launched &&
 				Math.abs(this.launcher.y + (this.launcher.formation ? this.launcher.formation.y : 0) - this.y) >
 					cfg.heightPaddedPx
 			);
 		},
-		destroy: function() {
+		destroy() {
 			this.status = missileConst.destroyed;
 			pubSub.pub(eventConst.levelEntityDestroyed, eventConst.missile, this);
 			if (this.launcher.missile === this) {
 				this.launcher.missile = null;
 			}
 		},
-		getCenter: function() {
+		getCenter() {
 			return [this.x + cfg.widthPx / 2, this.y + cfg.heightPx / 2];
 		}
 	};

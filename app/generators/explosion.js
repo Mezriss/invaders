@@ -10,7 +10,7 @@ const explosionProto = {
 	spread: 1,
 	x: null,
 	y: null,
-	move: function(dt) {
+	move(dt) {
 		this.elapsedTime += dt;
 		this.spread = 1 + (cfg.spread - 1) * this.elapsedTime / cfg.duration;
 		this.alpha = 100 - (100 - cfg.minOpacity) * this.elapsedTime / cfg.duration;
@@ -18,7 +18,7 @@ const explosionProto = {
 			pubSub.pub(eventConst.levelEntityDestroyed, eventConst.effect, this);
 		}
 	},
-	show: function(ctx) {
+	show(ctx) {
 		this.particles.forEach(particle => {
 			(shipCfg.drawStyle === confConst.beveled ? drawBeveledPixel : drawPixel)(
 				ctx,

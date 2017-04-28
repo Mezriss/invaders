@@ -9,7 +9,7 @@ export function initCanvas(width = cfg.screenWidth, height = cfg.screenHeight) {
 }
 
 export function drawPixel(ctx, x, y, color, pixelSize = cfg.pixelSize) {
-	ctx.fillStyle = color;
+	ctx.fillStyle = typeof color === 'number' ? '#' + color.toString(16) : color;
 	ctx.fillRect(x, y, pixelSize, pixelSize);
 }
 
@@ -39,6 +39,7 @@ drawingCfg.mask.forEach((line, j) =>
 );
 
 export function drawBeveledPixel(ctx, x, y, color) {
+	color = typeof color === 'number' ? color.toString(16) : color;
 	if (!paletteIndex[color]) {
 		paletteLength += 1;
 		paletteIndex[color] = paletteLength;

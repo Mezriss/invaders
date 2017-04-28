@@ -10,7 +10,7 @@ import { roll, initCanvas, drawPixel, hexToRgba, rollh, drawImage } from '../uti
 
 const spaceProto = {
 	ctx: initCanvas(),
-	draw: function() {
+	draw() {
 		const pixelSize = cfg.pixelSize || coreCfg.pixelSize;
 
 		this.ctx.fillStyle = cfg.background;
@@ -56,7 +56,7 @@ const spaceProto = {
 			}
 		});
 	},
-	show: function(ctx) {
+	show(ctx) {
 		drawImage(ctx, this.ctx, [0, 0]);
 	}
 };

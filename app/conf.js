@@ -8,10 +8,10 @@ export const coreCfg = {
 
 export const spaceCfg = {
 	pixelSize: 2,
-	background: '#000011',
+	background: 0x000011,
 	maxStars: 80,
 	maxIntensity: 80,
-	hue: ['#9BB0FF', '#AABFFF', '#CAD7FF', '#F8F7FF', '#FEF4EA'], //'#FED2A3', '#FFCC70'  //leaving only colder colors
+	hue: [0x9bb0ff, 0xaabfff, 0xcad7ff, 0xf8f7ff, 0xfef4ea], //0xFED2A3, 0xFFCC70  //leaving only colder colors
 	beamFadeRate: 15,
 	minBeamIntensity: 0.1,
 	initialBeamIntensity: 0.60,
@@ -23,7 +23,7 @@ export const shipCfg = {
 	height: 5,
 	minBits: 7,
 	maxBits: 15,
-	defaultColor: '#FFC905',
+	defaultColor: 0xffc905,
 	drawStyle: confConst.regular
 };
 
@@ -38,9 +38,9 @@ export const drawingCfg = {
 	paletteSize: 100,
 	mask: [
 		//todo generate this
-		[['#000000', 0], ['#ffffff', 25], ['#ffffff', 50]],
-		[['#000000', 25], ['#000000', 0], ['#ffffff', 25]],
-		[['#000000', 50], ['#000000', 25], ['#000000', 0]]
+		[[0x000000, 0], [0xffffff, 25], [0xffffff, 50]],
+		[[0x000000, 25], [0x000000, 0], [0xffffff, 25]],
+		[[0x000000, 50], [0x000000, 25], [0x000000, 0]]
 	]
 };
 
@@ -53,7 +53,7 @@ export const formationCfg = {
 };
 
 export const playerCfg = {
-	defaultColor: '#9305ff',
+	defaultColor: 0x9305ff,
 	startingLives: 3,
 	maxLives: 4,
 	get speed() {
@@ -69,7 +69,7 @@ export const cacheCfg = {
 };
 
 export const missileCfg = {
-	defaultColor: '#ffffff',
+	defaultColor: 0xffffff,
 	glow: 0.2,
 	glowDegradation: 0,
 	width: 3,
@@ -87,7 +87,7 @@ export const explosionCfg = {
 };
 
 export const fontCfg = {
-	defaultColor: '#ffffff',
+	defaultColor: 0xffffff,
 	alignment: 'left'
 };
 
@@ -114,7 +114,7 @@ export const titleScreenCfg = {
 	get cursorSpeed() {
 		return coreCfg.screenHeight * 0.3;
 	},
-	color: '#ffffff',
+	color: 0xffffff,
 	fadeSteps: 8,
 	transitionDuration: 2500,
 	scoreDigits: 4
@@ -129,7 +129,7 @@ export const highScoresCfg = {
 export const levelNumberCfg = {
 	size: 20,
 	font: 'pressStart',
-	color: '#ffffff',
+	color: 0xffffff,
 	opacity: [75, 100, 75, 50, 25],
 	duration: 800
 };

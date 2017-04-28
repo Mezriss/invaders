@@ -23,16 +23,16 @@ const sprite = initCanvas(cfg.widthPx, cfg.heightPx),
 		scoreValue: 1,
 		x: null,
 		y: null,
-		show: function(ctx, x = this.x, y = this.y) {
+		show(ctx, x = this.x, y = this.y) {
 			drawImage(ctx, this.sprite.ctx, [x, y], this.sprite.coords, [cfg.widthPx, cfg.heightPx]);
 		},
-		behavior: function() {
+		behavior() {
 			//reload
 			if (this.player && this.missileType && (!this.missile || this.missile.checkSafeDistance())) {
 				this.armMissile();
 			}
 		},
-		armMissile: function() {
+		armMissile() {
 			if (!this.missile || this.missile.checkSafeDistance()) {
 				this.missile = Object.create(this.missileType);
 				this.missile.launcher = this;
@@ -40,7 +40,7 @@ const sprite = initCanvas(cfg.widthPx, cfg.heightPx),
 				pubSub.pub(eventConst.levelEntityCreated, eventConst.missile, this.missile);
 			}
 		},
-		fire: function() {
+		fire() {
 			if (this.missile) {
 				this.missile.launch();
 			}

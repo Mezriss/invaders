@@ -4,12 +4,13 @@
  */
 
 import { playerCfg as cfg, coreCfg, shipCfg } from '../conf';
-import { eventConst, missileConst, directionConst, soundSamples } from '../const';
+import { eventConst, missileConst, directionConst } from '../const';
 import * as shipGenerator from './ship';
 import * as missileGenerator from './missile';
 import * as explosion from './explosion';
 import { rectIntersect, pubSub } from '../util';
 import * as sound from '../sound';
+import soundSamples from '../samples';
 
 const explosionSound = sound.generate(soundSamples.explosion.player),
 	playerProto = {
@@ -26,17 +27,17 @@ const explosionSound = sound.generate(soundSamples.explosion.player),
 		get y() {
 			return this.currentShip && this.currentShip.y;
 		},
-		show: function(ctx, x, y) {
+		show(ctx, x, y) {
 			if (this.currentShip) {
 				this.currentShip.show(ctx, x, y);
 			}
 		},
-		behavior: function() {
+		behavior() {
 			if (this.currentShip) {
 				this.currentShip.behavior();
 			}
 		},
-		move: function(dt) {
+		move(dt) {
 			if (this.currentShip) {
 				if (this.moving || this.plannedTravel > 0) {
 					let travelDistance = this.speed * dt / 1000;
