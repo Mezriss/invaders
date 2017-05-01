@@ -1,21 +1,31 @@
-import { coreCfg as cfg, configure } from './conf';
-import { eventConst } from './const';
+import { coreCfg as cfg, mobileCfg, configure } from './conf';
+import { eventConst, confConst } from './const';
 import * as highScores from './highScores';
 import * as spaceGenerator from './generators/space';
 import * as player from './generators/player';
 import * as level from './generators/level';
 import * as gameLoop from './animations/gameLoop';
 import * as titleScreen from './animations/titleScreen';
-import { pubSub, animation } from './util';
+import { pubSub, animation, touch } from './util';
 
 window.location.search.substr(1).split(/[,;&]/).forEach(keyValue => configure(...keyValue.split('=')));
 
-[gameScreen, interfaceScreen, backgroundScreen].forEach(canvas => {
+if (mobileCfg.enabled) {
+	configure(confConst.screenWidth, Math.min(window.innerWidth, window.innerHeight));
+	configure(confConst.screenHeight, Math.max(window.innerWidth, window.innerHeight) - mobileCfg.controlPanelHeightPx);
+	document.body.className = 'mobile';
+	touch.init(interfaceScreen);
+}
+
+[interfaceScreen, backgroundScreen].forEach(canvas => {
 	canvas.width = cfg.screenWidth;
-	canvas.height = cfg.screenHeight;
+	canvas.height = cfg.fullScreenHeight;
 });
+gameScreen.width = cfg.screenWidth;
+gameScreen.height = cfg.screenHeight;
+
 main.style.width = cfg.screenWidth + 'px';
-main.style.height = cfg.screenHeight + 'px';
+main.style.height = cfg.fullScreenHeight + 'px';
 
 document.addEventListener(eventConst.keyDown, event => {
 	pubSub.pub(eventConst.keyDown, event.key, event);

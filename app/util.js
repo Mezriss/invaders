@@ -8,6 +8,9 @@ export { animation };
 import * as pubSub from './util/pubSub';
 export { pubSub };
 
+import * as touch from './util/touch';
+export { touch };
+
 export { cacheSprite } from './util/spriteCache';
 
 export function roll(from, to = from) {

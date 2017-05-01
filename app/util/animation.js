@@ -17,8 +17,9 @@ const requestAnimationFrame =
 	window.oRequestAnimationFrame,
 	cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame,
 	screenCtx = gameScreen.getContext('2d'),
-	interfaceCtx = interfaceScreen.getContext('2d'),
-	drawCanvas = initCanvas();
+	interfaceCtx = interfaceScreen.getContext('2d');
+
+let drawCanvas;
 
 let animation, resolveHandle, responseData, then, paused, dt, fpsStart, fps = 0;
 
@@ -63,6 +64,7 @@ function draw(ts) {
 }
 
 export function start(config) {
+	drawCanvas = drawCanvas || initCanvas();
 	animation = config.animation;
 	animation.init(config.data, drawCanvas);
 

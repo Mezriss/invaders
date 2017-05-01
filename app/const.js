@@ -12,6 +12,10 @@ export const directionConst = {
 export const eventConst = {
 	keyDown: 'keydown',
 	keyUp: 'keyup',
+	touchStart: 'touchstart',
+	touchEnd: 'touchend',
+	touchCancel: 'touchcancel',
+	touchMove: 'touchmove',
 	visibilityChange: 'visibilitychange',
 	levelEntityCreated: 'levelEntityCreated',
 	levelEntityDestroyed: 'levelEntityDestroyed',
@@ -51,8 +55,16 @@ export const confConst = {
 	regular: 'regular',
 	beveled: 'beveled',
 	sound: 'sound',
-	fps: 'fps'
+	fps: 'fps',
+	screenWidth: 'screenWidth',
+	screenHeight: 'screenHeight',
+	controls: 'controls',
+	buttons: 'buttons',
+	drag: 'drag',
+	accelerometer: 'accelerometer',
+	controlsOptions: []
 };
+confConst.controlsOptions.push(confConst.buttons, confConst.drag, confConst.accelerometer);
 
 export const alignmentConst = {
 	left: 'left',

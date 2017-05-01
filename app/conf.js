@@ -3,7 +3,10 @@ import { confConst } from './const';
 export const coreCfg = {
 	pixelSize: 3,
 	screenWidth: 480,
-	screenHeight: 600
+	screenHeight: 600,
+	get fullScreenHeight() {
+		return this.screenHeight + (mobileCfg.enabled ? mobileCfg.controlPanelHeightPx : 0);
+	}
 };
 
 export const spaceCfg = {
@@ -98,7 +101,7 @@ export const interfaceInfoPanelCfg = {
 		return Math.round(coreCfg.screenWidth * 0.02);
 	},
 	get paddingY() {
-		return Math.round(coreCfg.screenHeight * 0.02);
+		return Math.round(coreCfg.fullScreenHeight * 0.02);
 	},
 	scoreDigits: 4
 };
@@ -112,7 +115,7 @@ export const titleScreenCfg = {
 		return coreCfg.pixelSize * 2;
 	},
 	get cursorSpeed() {
-		return coreCfg.screenHeight * 0.3;
+		return coreCfg.fullScreenHeight * 0.3;
 	},
 	color: 0xffffff,
 	fadeSteps: 8,
@@ -141,8 +144,14 @@ export const pauseScreenCfg = {
 };
 
 export const soundCfg = {
-	on: false,
+	on: true,
 	volume: 0.5
+};
+
+export const mobileCfg = {
+	enabled: !!('ontouchstart' in window || (window.DocumentTouch && document instanceof DocumentTouch)),
+	controlPanelHeight: 11,
+	controls: confConst.buttons
 };
 
 function setCalculatedValues() {
@@ -157,6 +166,7 @@ function setCalculatedValues() {
 	missileCfg.heightPaddedPx = missileCfg.heightPx + missileCfg.glowLengthPx * 2;
 	formationCfg.shipPaddingPx = formationCfg.shipPadding * coreCfg.pixelSize;
 	formationCfg.linePaddingPx = formationCfg.linePadding * coreCfg.pixelSize;
+	mobileCfg.controlPanelHeightPx = mobileCfg.controlPanelHeight * coreCfg.pixelSize;
 }
 
 export function configure(key, val, save) {
@@ -174,8 +184,23 @@ export function configure(key, val, save) {
 			levelNumberCfg.font = val;
 			pauseScreenCfg.font = val;
 			break;
+		case confConst.screenWidth:
+			coreCfg.screenWidth = val;
+			break;
+		case confConst.screenHeight:
+			coreCfg.screenHeight = val;
+			break;
+		case 'mobile':
+			mobileCfg.enabled = true;
+			break;
+		case 'desktop':
+			mobileCfg.enabled = false;
+			break;
 		case confConst.fps:
 			drawingCfg.showFPS = val || val === undefined;
+			break;
+		case confConst.controls:
+			mobileCfg.controls = val;
 			break;
 		case confConst.sound:
 			soundCfg.on = val || val === undefined;

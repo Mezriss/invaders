@@ -11,5 +11,9 @@ export default {
 	on: 'On',
 	off: 'Off',
 	paused: 'Paused',
-	pressToContinue: 'Press [space] to continue'
+	pressToContinue: 'Press [space] to continue',
+	controls: 'Controls: ',
+	buttons: 'buttons',
+	drag: 'drag',
+	accelerometer: 'accelerometer'
 };

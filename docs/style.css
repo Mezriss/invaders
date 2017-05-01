@@ -5,6 +5,10 @@ html, body {
 	padding: 0;
 }
 
+.mobile {
+	overflow: hidden;
+}
+
 .container {
 	height: 100%;
 	display: flex;

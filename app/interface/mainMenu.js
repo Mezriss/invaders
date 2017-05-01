@@ -1,9 +1,18 @@
-import { pubSub, hexToRgba } from '../util';
+import { pubSub, touch, hexToRgba } from '../util';
 import * as fontGenerator from '../generators/font';
 import * as ship from '../generators/ship';
 import { eventConst, keyConst, alignmentConst, confConst } from '../const';
 import { default as str } from '../str';
-import { titleScreenCfg as cfg, coreCfg, shipCfg, soundCfg, drawingCfg, missileCfg, configure } from '../conf';
+import {
+	titleScreenCfg as cfg,
+	coreCfg,
+	shipCfg,
+	soundCfg,
+	drawingCfg,
+	missileCfg,
+	mobileCfg,
+	configure
+} from '../conf';
 
 import * as highScores from '../highScores';
 
@@ -31,6 +40,8 @@ const mainMenu = [
 	{
 		label: str.highScores,
 		action() {
+			unsubscribeMenuFromTouchEvents(mainMenu);
+			subscribeMenuToTouchEvents(highScoresMenu);
 			currentMenu = highScoresMenu;
 			selectedMenuItem = 0;
 			pubSub.pub(eventConst.cursorRepositioned, currentMenu[selectedMenuItem].y);
@@ -39,6 +50,8 @@ const mainMenu = [
 	{
 		label: str.options,
 		action() {
+			unsubscribeMenuFromTouchEvents(mainMenu);
+			subscribeMenuToTouchEvents(settingsMenu);
 			currentMenu = settingsMenu;
 			selectedMenuItem = 0;
 			pubSub.pub(eventConst.cursorRepositioned, currentMenu[selectedMenuItem].y);
@@ -72,12 +85,26 @@ const settingsMenu = [
 			this._y = val;
 		},
 		action() {
+			unsubscribeMenuFromTouchEvents(settingsMenu);
+			subscribeMenuToTouchEvents(mainMenu);
 			currentMenu = mainMenu;
 			selectedMenuItem = 2;
 			pubSub.pub(eventConst.cursorRepositioned, currentMenu[selectedMenuItem].y);
 		}
 	}
 ];
+
+if (mobileCfg.enabled) {
+	settingsMenu.splice(-1, 0, {
+		get label() {
+			return str.controls + str[mobileCfg.controls];
+		},
+		action() {
+			const chosen = (confConst.controlsOptions.indexOf(mobileCfg.controls) + 1) % confConst.controlsOptions.length;
+			configure(confConst.controls, confConst.controlsOptions[chosen], true);
+		}
+	});
+}
 
 const highScoresMenu = [
 	{
@@ -89,12 +116,42 @@ const highScoresMenu = [
 			this._y = val;
 		},
 		action() {
+			unsubscribeMenuFromTouchEvents(highScoresMenu);
+			subscribeMenuToTouchEvents(mainMenu);
 			currentMenu = mainMenu;
 			selectedMenuItem = 1;
 			pubSub.pub(eventConst.cursorRepositioned, currentMenu[selectedMenuItem].y);
 		}
 	}
 ];
+
+function subscribeMenuToTouchEvents(menu) {
+	menu.forEach((el, i) => {
+		el.touchAction =
+			el.touchAction ||
+			function() {
+				selectedMenuItem = i;
+				el.action();
+				pubSub.pub(eventConst.cursorRepositioned, currentMenu[selectedMenuItem].y);
+				drawMenu();
+			};
+
+		touch.on(
+			eventConst.touchStart,
+			{
+				x: 0,
+				y: el.y - font.meta.boundingBox.height * cfg.menuItemSize * cfg.lineHeight,
+				w: coreCfg.screenWidth,
+				h: font.meta.boundingBox.height * cfg.menuItemSize * cfg.lineHeight
+			},
+			el.touchAction
+		);
+	});
+}
+
+function unsubscribeMenuFromTouchEvents(menu) {
+	menu.forEach(el => touch.off(eventConst.touchStart, el.touchAction));
+}
 
 function keyDown(key) {
 	switch (key) {
@@ -121,7 +178,9 @@ export function init(data) {
 	pubSub.on(eventConst.animationFrame, fadeOutMenu);
 
 	title.y = Math.round(
-		(coreCfg.screenHeight - font.meta.boundingBox.height * (cfg.titleSize + cfg.menuItemSize * 3) * cfg.lineHeight) / 2
+		(coreCfg.fullScreenHeight -
+			font.meta.boundingBox.height * (cfg.titleSize + cfg.menuItemSize * 3) * cfg.lineHeight) /
+			2
 	);
 
 	[mainMenu, settingsMenu, highScoresMenu].forEach(menu => {
@@ -160,6 +219,11 @@ export function init(data) {
 
 	transitionElapsed = 0;
 	selectedMenuItem = 0;
+
+	if (mobileCfg.enabled) {
+		subscribeMenuToTouchEvents(currentMenu);
+	}
+
 	return {
 		x: drawMenu(),
 		y: currentMenu[selectedMenuItem].y
@@ -169,11 +233,12 @@ export function init(data) {
 export function destroy() {
 	pubSub.off(keyDown);
 	pubSub.off(fadeOutMenu);
-	interfaceCtx.clearRect(0, 0, coreCfg.screenWidth, coreCfg.screenHeight);
+	unsubscribeMenuFromTouchEvents(currentMenu);
+	interfaceCtx.clearRect(0, 0, coreCfg.screenWidth, coreCfg.fullScreenHeight);
 }
 
 function drawMenu() {
-	interfaceCtx.clearRect(0, 0, coreCfg.screenWidth, coreCfg.screenHeight);
+	interfaceCtx.clearRect(0, 0, coreCfg.screenWidth, coreCfg.fullScreenHeight);
 	title.x = font.write(interfaceCtx, [coreCfg.screenWidth / 2, title.y], str.title, {
 		alignment: alignmentConst.center,
 		size: cfg.titleSize,

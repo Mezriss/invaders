@@ -31,7 +31,7 @@ function update(dt) {
 			clear();
 			font.write(
 				interfaceCtx,
-				[coreCfg.screenWidth / 2, (coreCfg.screenHeight + font.meta.points * cfg.size) / 2],
+				[coreCfg.screenWidth / 2, (coreCfg.fullScreenHeight + font.meta.points * cfg.size) / 2],
 				`${level}`,
 				{ alignment: alignmentConst.center, size: cfg.size, color }
 			);
@@ -44,7 +44,7 @@ function update(dt) {
 function clear() {
 	interfaceCtx.clearRect(
 		0,
-		(coreCfg.screenHeight - font.meta.points * cfg.size) / 2,
+		(coreCfg.fullScreenHeight - font.meta.points * cfg.size) / 2,
 		coreCfg.screenWidth,
 		font.meta.points * cfg.size
 	);

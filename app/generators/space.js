@@ -9,7 +9,7 @@ import { coreCfg, spaceCfg as cfg } from '../conf';
 import { roll, initCanvas, drawPixel, hexToRgba, rollh, drawImage } from '../util';
 
 const spaceProto = {
-	ctx: initCanvas(),
+	ctx: null,
 	draw() {
 		const pixelSize = cfg.pixelSize || coreCfg.pixelSize;
 
@@ -63,6 +63,7 @@ const spaceProto = {
 
 export function create() {
 	const pixelSize = cfg.pixelSize || coreCfg.pixelSize, space = Object.create(spaceProto);
+	space.ctx = initCanvas();
 
 	space.ctx.canvas.width = coreCfg.screenWidth;
 	space.ctx.canvas.height = coreCfg.screenHeight;
