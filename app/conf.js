@@ -158,7 +158,9 @@ export const mobileCfg = {
 	controls: confConst.buttons,
 	buttonColor: 0xffffff,
 	buttonWidth: 16,
-	buttonHeight: 9
+	buttonHeight: 9,
+	gyroSafeZone: 3,
+	gyroMessageBottomMargin: 5
 };
 
 function setCalculatedValues() {

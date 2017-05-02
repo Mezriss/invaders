@@ -152,6 +152,11 @@ function touchDragEnd() {
 	player.setBarrage(false);
 }
 
+function onGyroData(angle) {
+	player.moving = Math.abs(angle) > mobileCfg.gyroSafeZone;
+	player.direction = angle < 0 ? directionConst.left : directionConst.right;
+}
+
 export function init(data, drawCanvas) {
 	leftPressed = false;
 	rightPressed = false;
@@ -186,6 +191,8 @@ export function init(data, drawCanvas) {
 
 		pubSub.on(eventConst.touchDragMove, touchDragMove);
 		pubSub.on(eventConst.touchDragEnd, touchDragEnd);
+
+		pubSub.on(eventConst.gyroData, onGyroData);
 	}
 	introAnimationRunning = true;
 
@@ -214,7 +221,8 @@ export function end() {
 			touchLeft,
 			touchRight,
 			touchDragMove,
-			touchDragEnd
+			touchDragEnd,
+			onGyroData
 		].forEach(handler => pubSub.off(handler));
 	}
 	levelNumber.destroy();

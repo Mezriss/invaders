@@ -17,6 +17,8 @@ export const eventConst = {
 	touchCancel: 'touchcancel',
 	touchMove: 'touchmove',
 	visibilityChange: 'visibilitychange',
+	deviceOrientation: 'deviceorientation',
+
 	levelEntityCreated: 'levelEntityCreated',
 	levelEntityDestroyed: 'levelEntityDestroyed',
 	missile: 'missiles',
@@ -38,7 +40,8 @@ export const eventConst = {
 	touchLeft: 'touchLeftStart',
 	touchRight: 'touchRightStart',
 	touchDragMove: 'touchDragMove',
-	touchDragEnd: 'touchDragEnd'
+	touchDragEnd: 'touchDragEnd',
+	gyroData: 'gyroData'
 };
 
 export const keyConst = {
@@ -68,10 +71,10 @@ export const confConst = {
 	controls: 'controls',
 	buttons: 'buttons',
 	drag: 'drag',
-	accelerometer: 'accelerometer',
+	gyro: 'gyro',
 	controlsOptions: []
 };
-confConst.controlsOptions.push(confConst.buttons, confConst.drag, confConst.accelerometer);
+confConst.controlsOptions.push(confConst.buttons, confConst.drag, confConst.gyro);
 
 export const alignmentConst = {
 	left: 'left',

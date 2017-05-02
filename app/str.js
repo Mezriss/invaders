@@ -15,6 +15,7 @@ export default {
 	controls: 'Controls: ',
 	buttons: 'buttons',
 	drag: 'drag',
-	accelerometer: 'accelerometer',
-	dragToMove: 'Drag to move'
+	gyro: 'gyro',
+	dragToMove: 'Drag to move',
+	tiltToMove: 'Tilt screen to move'
 };

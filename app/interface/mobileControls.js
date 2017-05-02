@@ -6,7 +6,7 @@ import str from '../str';
 
 const sprites = {}, interfaceCtx = interfaceScreen.getContext('2d');
 
-let buttonHandlers, dragHandlers, accelerometerHandlers, noticeClearTimeout;
+let buttonHandlers, dragHandlers, gyroHandlers, noticeClearTimeout;
 
 function initButtons() {
 	sprites.buttonLeft = sprites.buttonLeft || drawSprite(graphics.buttonLeft, cfg.buttonColor);
@@ -149,9 +149,65 @@ function initDrag() {
 	};
 }
 
-function initAccelerometer() {
-	console.info('Not implemented yet');
-	accelerometerHandlers = accelerometerHandlers || {};
+function deviceOrientationHandler(event) {
+	pubSub.pub(eventConst.gyroData, event.gamma);
+}
+
+function initGyro() {
+	const font = fontGenerator.create(cfg.controlPanelFont);
+	font.write(
+		interfaceCtx,
+		[coreCfg.screenWidth / 2, coreCfg.fullScreenHeight - cfg.gyroMessageBottomMargin],
+		str.tiltToMove,
+		{
+			alignment: alignmentConst.center,
+			size: cfg.controlPanelFontSize
+		}
+	);
+	setTimeout(
+		() =>
+			interfaceCtx.clearRect(
+				0,
+				coreCfg.fullScreenHeight -
+					font.meta.boundingBox.height * cfg.controlPanelFontSize -
+					cfg.gyroMessageBottomMargin,
+				coreCfg.screenWidth,
+				font.meta.boundingBox.height * cfg.controlPanelFontSize
+			),
+		cfg.noticeClearTimeout
+	);
+
+	gyroHandlers = gyroHandlers || {
+		shoot: {
+			zone: { x: 0, y: 0, w: coreCfg.screenWidth, h: coreCfg.fullScreenHeight },
+			events: [
+				{
+					name: eventConst.touchStart,
+					action() {
+						pubSub.pub(eventConst.touchShootStart);
+					}
+				},
+				{
+					name: eventConst.touchEnd,
+					action() {
+						pubSub.pub(eventConst.touchShootEnd);
+					}
+				}
+			]
+		}
+	};
+	window.addEventListener(eventConst.deviceOrientation, deviceOrientationHandler);
+	sprites.buttonShoot = sprites.buttonShoot || drawSprite(graphics.buttonShoot, cfg.buttonColor);
+	drawImage(
+		interfaceCtx,
+		sprites.buttonShoot.ctx,
+		[
+			Math.floor((coreCfg.screenWidth - cfg.buttonWidthPx) / 2),
+			coreCfg.screenHeight + Math.floor((cfg.controlPanelHeightPx - cfg.buttonHeightPx) / 2)
+		],
+		sprites.buttonShoot.coords,
+		[cfg.buttonWidthPx, cfg.buttonHeightPx]
+	);
 }
 
 export function init() {
@@ -165,9 +221,9 @@ export function init() {
 			initDrag();
 			handlers = dragHandlers;
 			break;
-		case confConst.accelerometer:
-			initAccelerometer();
-			handlers = accelerometerHandlers;
+		case confConst.gyro:
+			initGyro();
+			handlers = gyroHandlers;
 	}
 	Object.keys(handlers).forEach(handler =>
 		handlers[handler].events.forEach(event => touch.on(event.name, handlers[handler].zone, event.action))
@@ -185,8 +241,9 @@ export function destroy() {
 		case confConst.drag:
 			handlers = dragHandlers;
 			break;
-		case confConst.accelerometer:
-			handlers = accelerometerHandlers;
+		case confConst.gyro:
+			handlers = gyroHandlers;
+			window.removeEventListener(eventConst.deviceOrientation, deviceOrientationHandler);
 			break;
 	}
 	Object.keys(handlers).forEach(handler =>
