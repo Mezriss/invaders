@@ -12,6 +12,7 @@ export default {
 	off: 'Off',
 	paused: 'Paused',
 	pressToContinue: 'Press [space] to continue',
+	tapToContinue: 'Tap to continue',
 	controls: 'Controls: ',
 	buttons: 'buttons',
 	drag: 'drag',

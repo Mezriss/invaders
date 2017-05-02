@@ -1,4 +1,4 @@
-import { pauseScreenCfg as cfg, coreCfg } from '../conf';
+import { pauseScreenCfg as cfg, coreCfg, mobileCfg } from '../conf';
 import { alignmentConst } from '../const';
 import * as fontGenerator from '../generators/font';
 import str from '../str';
@@ -23,7 +23,7 @@ export function show() {
 	font.write(
 		interfaceCtx,
 		[coreCfg.screenWidth / 2, (coreCfg.fullScreenHeight + font.meta.points * (cfg.titleSize * 2)) / 2],
-		str.pressToContinue,
+		mobileCfg.enabled ? str.tapToContinue : str.pressToContinue,
 		{
 			size: cfg.subtitleSize,
 			alignment: alignmentConst.center

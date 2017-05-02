@@ -1,11 +1,12 @@
 /*
 	Somewhat abstract animation method
  */
-import { drawingCfg, coreCfg } from '../conf';
+import { drawingCfg, coreCfg, mobileCfg } from '../conf';
 import { initCanvas, drawImage } from './drawing';
 import * as pubSub from './pubSub';
 import { eventConst, keyConst } from '../const';
 import * as pauseScreen from '../interface/pauseScreen';
+import { touch } from '../util';
 
 pauseScreen.init();
 
@@ -84,16 +85,23 @@ export function pause() {
 		then = null;
 		pauseScreen.show();
 		pubSub.on(eventConst.keyDown, resume);
+		if (mobileCfg.enabled) {
+			touch.on(eventConst.touchStart, { x: 0, y: 0, w: drawCanvas.canvas.width, h: drawCanvas.canvas.height }, resume);
+		}
 	}
 }
 
 export function resume(key) {
-	if (key === keyConst.space || !key) {
+	//key is array when game is resumed by touch
+	if (key === keyConst.space || !key || Array.isArray(key)) {
 		paused = false;
 		pauseScreen.hide();
 		pubSub.pub(eventConst.gameResumed);
 		requestAnimationFrame(draw);
 		pubSub.off(resume);
+		if (mobileCfg.enabled) {
+			touch.off(eventConst.touchStart, resume);
+		}
 	}
 }
 
