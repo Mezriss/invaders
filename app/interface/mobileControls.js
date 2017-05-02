@@ -109,7 +109,7 @@ function initDrag() {
 		[
 			coreCfg.screenWidth / 2,
 			coreCfg.screenHeight +
-				Math.floor((cfg.controlPanelHeightPx - font.meta.boundingBox.height * cfg.controlPanelFontSize) / 2)
+				Math.floor((cfg.controlPanelHeightPx - font.meta.properties.fontAscent * cfg.controlPanelFontSize) / 2)
 		],
 		str.dragToMove,
 		{
@@ -169,10 +169,10 @@ function initGyro() {
 			interfaceCtx.clearRect(
 				0,
 				coreCfg.fullScreenHeight -
-					font.meta.boundingBox.height * cfg.controlPanelFontSize -
+					font.meta.properties.fontAscent * cfg.controlPanelFontSize -
 					cfg.gyroMessageBottomMargin,
 				coreCfg.screenWidth,
-				font.meta.boundingBox.height * cfg.controlPanelFontSize
+				font.meta.properties.fontAscent * cfg.controlPanelFontSize
 			),
 		cfg.noticeClearTimeout
 	);

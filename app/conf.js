@@ -41,9 +41,9 @@ export const drawingCfg = {
 	paletteSize: 100,
 	mask: [
 		//todo generate this
-		[[0x000000, 0], [0xffffff, 25], [0xffffff, 50]],
-		[[0x000000, 25], [0x000000, 0], [0xffffff, 25]],
-		[[0x000000, 50], [0x000000, 25], [0x000000, 0]]
+		[[0x000000, 0], [0xffffff, 15], [0xffffff, 25]],
+		[[0x000000, 15], [0x000000, 0], [0xffffff, 15]],
+		[[0x000000, 25], [0x000000, 15], [0x000000, 0]]
 	]
 };
 
@@ -96,7 +96,7 @@ export const fontCfg = {
 };
 
 export const interfaceInfoPanelCfg = {
-	font: 'pressStart',
+	font: 'powerline',
 	fontSize: 2,
 	get paddingX() {
 		return Math.round(coreCfg.screenWidth * 0.02);
@@ -108,10 +108,10 @@ export const interfaceInfoPanelCfg = {
 };
 
 export const titleScreenCfg = {
-	font: 'pressStart',
+	font: 'powerline',
 	titleSize: 3,
 	menuItemSize: 2,
-	lineHeight: 2,
+	lineHeight: 1.7,
 	get cursorPadding() {
 		return coreCfg.pixelSize * 2;
 	},
@@ -132,14 +132,14 @@ export const highScoresCfg = {
 
 export const levelNumberCfg = {
 	size: 20,
-	font: 'pressStart',
+	font: 'powerline',
 	color: 0xffffff,
 	opacity: [0.75, 1, 0.75, 0.5, 0.25],
 	duration: 800
 };
 
 export const pauseScreenCfg = {
-	font: 'pressStart',
+	font: 'powerline',
 	titleSize: 5,
 	subtitleSize: 2
 };
@@ -152,7 +152,7 @@ export const soundCfg = {
 export const mobileCfg = {
 	enabled: !!('ontouchstart' in window || (window.DocumentTouch && document instanceof DocumentTouch)),
 	controlPanelHeight: 30,
-	controlPanelFont: 'pressStart',
+	controlPanelFont: 'powerline',
 	controlPanelFontSize: 1,
 	noticeClearTimeout: 3000,
 	controls: confConst.buttons,
@@ -194,6 +194,7 @@ export function configure(key, val, save) {
 			titleScreenCfg.font = val;
 			levelNumberCfg.font = val;
 			pauseScreenCfg.font = val;
+			mobileCfg.controlPanelFont = val;
 			break;
 		case confConst.screenWidth:
 			coreCfg.screenWidth = val;

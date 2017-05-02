@@ -79,7 +79,7 @@ const settingsMenu = [
 	{
 		label: str.back,
 		get y() {
-			return this._y + font.meta.boundingBox.height * cfg.menuItemSize * cfg.lineHeight;
+			return this._y + font.meta.properties.fontAscent * cfg.menuItemSize * cfg.lineHeight;
 		},
 		set y(val) {
 			this._y = val;
@@ -110,7 +110,7 @@ const highScoresMenu = [
 	{
 		label: str.back,
 		get y() {
-			return this._y + font.meta.boundingBox.height * cfg.menuItemSize * cfg.lineHeight * (scores.length + 1);
+			return this._y + font.meta.properties.fontAscent * cfg.menuItemSize * cfg.lineHeight * (scores.length + 1);
 		},
 		set y(val) {
 			this._y = val;
@@ -140,9 +140,9 @@ function subscribeMenuToTouchEvents(menu) {
 			eventConst.touchStart,
 			{
 				x: 0,
-				y: el.y - font.meta.boundingBox.height * cfg.menuItemSize * cfg.lineHeight,
+				y: el.y - font.meta.properties.fontAscent * cfg.menuItemSize * cfg.lineHeight,
 				w: coreCfg.screenWidth,
-				h: font.meta.boundingBox.height * cfg.menuItemSize * cfg.lineHeight
+				h: font.meta.properties.fontAscent * cfg.menuItemSize * cfg.lineHeight
 			},
 			el.touchAction
 		);
@@ -179,14 +179,14 @@ export function init(data) {
 
 	title.y = Math.round(
 		(coreCfg.fullScreenHeight -
-			font.meta.boundingBox.height * (cfg.titleSize + cfg.menuItemSize * 3) * cfg.lineHeight) /
+			font.meta.properties.fontAscent * (cfg.titleSize + cfg.menuItemSize * 3) * cfg.lineHeight) /
 			2
 	);
 
 	[mainMenu, settingsMenu, highScoresMenu].forEach(menu => {
-		menu[0].y = title.y + font.meta.boundingBox.height * cfg.titleSize * cfg.lineHeight;
+		menu[0].y = title.y + font.meta.properties.fontAscent * cfg.titleSize * cfg.lineHeight;
 		for (let i = 1; i < menu.length; i += 1) {
-			menu[i].y = menu[i - 1].y + font.meta.boundingBox.height * cfg.menuItemSize * cfg.lineHeight;
+			menu[i].y = menu[i - 1].y + font.meta.properties.fontAscent * cfg.menuItemSize * cfg.lineHeight;
 		}
 	});
 
@@ -213,8 +213,8 @@ export function init(data) {
 		scores[i].label = '0'.repeat(Math.max(cfg.scoreDigits - scores[i].score.toString(10).length, 0)) + scores[i].score;
 		scores[i].y =
 			title.y +
-			font.meta.boundingBox.height * cfg.titleSize * cfg.lineHeight +
-			font.meta.boundingBox.height * cfg.menuItemSize * cfg.lineHeight * i;
+			font.meta.properties.fontAscent * cfg.titleSize * cfg.lineHeight +
+			font.meta.properties.fontAscent * cfg.menuItemSize * cfg.lineHeight * i;
 	}
 
 	transitionElapsed = 0;

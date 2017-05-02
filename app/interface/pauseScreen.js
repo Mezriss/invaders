@@ -13,7 +13,7 @@ export function init() {
 export function show() {
 	font.write(
 		interfaceCtx,
-		[coreCfg.screenWidth / 2, (coreCfg.fullScreenHeight + font.meta.points * cfg.titleSize) / 2],
+		[coreCfg.screenWidth / 2, (coreCfg.screenHeight + font.meta.points * cfg.titleSize) / 2],
 		str.paused,
 		{
 			size: cfg.titleSize,
@@ -22,7 +22,7 @@ export function show() {
 	);
 	font.write(
 		interfaceCtx,
-		[coreCfg.screenWidth / 2, (coreCfg.fullScreenHeight + font.meta.points * (cfg.titleSize * 2)) / 2],
+		[coreCfg.screenWidth / 2, (coreCfg.screenHeight + font.meta.points * (cfg.titleSize * 2)) / 2],
 		mobileCfg.enabled ? str.tapToContinue : str.pressToContinue,
 		{
 			size: cfg.subtitleSize,

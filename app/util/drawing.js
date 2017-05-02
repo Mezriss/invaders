@@ -55,7 +55,7 @@ drawingCfg.mask.forEach((line, j) =>
 );
 
 export function drawBeveledPixel(ctx, x, y, color) {
-	color = typeof color === 'number' ? color.toString(16) : color;
+	color = typeof color === 'number' ? '#' + color.toString(16) : color;
 	if (!paletteIndex[color]) {
 		paletteLength += 1;
 		paletteIndex[color] = paletteLength;

@@ -16,7 +16,7 @@ function updateScore(score) {
 		scorePositionX,
 		cfg.paddingY,
 		score.length * font.meta.boundingBox.width * cfg.fontSize,
-		(font.meta.boundingBox.height + Math.abs(font.meta.boundingBox.y)) * cfg.fontSize
+		(font.meta.properties.fontAscent + Math.abs(font.meta.boundingBox.y)) * cfg.fontSize
 	);
 	font.write(interfaceCtx, [scorePositionX, textPositionY], score, { size: cfg.fontSize });
 }
@@ -40,7 +40,7 @@ function updateShips(ships) {
 
 export function init(data) {
 	font = fontGenerator.create(cfg.font);
-	textPositionY = cfg.paddingY + (font.meta.boundingBox.height + font.meta.boundingBox.y) * cfg.fontSize;
+	textPositionY = cfg.paddingY + (font.meta.properties.fontAscent + font.meta.boundingBox.y) * cfg.fontSize;
 	scorePositionX = font.write(interfaceCtx, [cfg.paddingX, textPositionY], str.score, { size: cfg.fontSize }).lineEnd;
 	updateScore(data.score);
 
