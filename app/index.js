@@ -13,7 +13,6 @@ window.location.search.substr(1).split(/[,;&]/).forEach(keyValue => configure(..
 if (mobileCfg.enabled) {
 	configure(confConst.screenWidth, Math.min(window.innerWidth, window.innerHeight));
 	configure(confConst.screenHeight, Math.max(window.innerWidth, window.innerHeight) - mobileCfg.controlPanelHeightPx);
-	document.body.className = 'mobile';
 	touch.init(interfaceScreen);
 }
 
