@@ -108,6 +108,9 @@ function padded2dTo1d(x, y) {
 }
 
 export function create(options = {}) {
+	sprite.canvas.width = cfg.widthPaddedPx;
+	sprite.canvas.height = cfg.heightPaddedPx;
+
 	const missile = Object.create(missileProto), bitCount = roll(cfg.minBits, cfg.maxBits);
 
 	missile.color = options.color || missile.color;

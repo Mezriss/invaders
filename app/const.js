@@ -36,7 +36,9 @@ export const eventConst = {
 	touchShootEnd: 'touchShootEnd',
 	touchMoveEnd: 'touchMoveEnd',
 	touchLeft: 'touchLeftStart',
-	touchRight: 'touchRightStart'
+	touchRight: 'touchRightStart',
+	touchDragMove: 'touchDragMove',
+	touchDragEnd: 'touchDragEnd'
 };
 
 export const keyConst = {

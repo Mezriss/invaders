@@ -2,7 +2,7 @@
 	Game Loop
 
  */
-import { playerCfg, mobileCfg } from '../conf';
+import { playerCfg, shipCfg, mobileCfg } from '../conf';
 import { keyConst, directionConst, eventConst, missileConst } from '../const';
 import { pubSub } from '../util';
 import * as infoPanel from '../interface/infoPanel';
@@ -132,6 +132,26 @@ function touchRight() {
 	player.direction = directionConst.right;
 }
 
+function touchDragMove(coords) {
+	player.setBarrage(true);
+	player.fire();
+	if (coords[0] < player.x) {
+		player.direction = directionConst.left;
+		player.moveTarget = coords[0];
+		player.moving = true;
+	}
+	if (coords[0] > player.x + shipCfg.widthPx) {
+		player.direction = directionConst.right;
+		player.moveTarget = coords[0];
+		player.moving = true;
+	}
+}
+
+function touchDragEnd() {
+	player.moving = false;
+	player.setBarrage(false);
+}
+
 export function init(data, drawCanvas) {
 	leftPressed = false;
 	rightPressed = false;
@@ -163,6 +183,9 @@ export function init(data, drawCanvas) {
 		pubSub.on(eventConst.touchMoveEnd, touchMoveEnd);
 		pubSub.on(eventConst.touchLeft, touchLeft);
 		pubSub.on(eventConst.touchRight, touchRight);
+
+		pubSub.on(eventConst.touchDragMove, touchDragMove);
+		pubSub.on(eventConst.touchDragEnd, touchDragEnd);
 	}
 	introAnimationRunning = true;
 
@@ -184,7 +207,15 @@ export function end() {
 	infoPanel.destroy();
 	if (mobileCfg.enabled) {
 		mobileControls.destroy();
-		[touchShootStart, touchShootEnd, touchMoveEnd, touchLeft, touchRight].forEach(handler => pubSub.off(handler));
+		[
+			touchShootStart,
+			touchShootEnd,
+			touchMoveEnd,
+			touchLeft,
+			touchRight,
+			touchDragMove,
+			touchDragEnd
+		].forEach(handler => pubSub.off(handler));
 	}
 	levelNumber.destroy();
 	level.missiles.forEach(missile => missile.destroy());

@@ -152,6 +152,9 @@ export const soundCfg = {
 export const mobileCfg = {
 	enabled: !!('ontouchstart' in window || (window.DocumentTouch && document instanceof DocumentTouch)),
 	controlPanelHeight: 30,
+	controlPanelFont: 'pressStart',
+	controlPanelFontSize: 1,
+	noticeClearTimeout: 3000,
 	controls: confConst.buttons,
 	buttonColor: 0xffffff,
 	buttonWidth: 16,

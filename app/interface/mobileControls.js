@@ -1,38 +1,40 @@
-import { coreCfg, mobileCfg } from '../conf';
-import { confConst, eventConst, graphics } from '../const';
+import { coreCfg, mobileCfg as cfg } from '../conf';
+import { confConst, eventConst, graphics, alignmentConst } from '../const';
 import { drawSprite, drawImage, touch, pubSub } from '../util';
+import * as fontGenerator from '../generators/font';
+import str from '../str';
 
 const sprites = {}, interfaceCtx = interfaceScreen.getContext('2d');
 
-let buttonHandlers, dragHandlers, accelerometerHandlers;
+let buttonHandlers, dragHandlers, accelerometerHandlers, noticeClearTimeout;
 
 function initButtons() {
-	sprites.buttonLeft = sprites.buttonLeft || drawSprite(graphics.buttonLeft, mobileCfg.buttonColor);
-	sprites.buttonRight = sprites.buttonRight || drawSprite(graphics.buttonRight, mobileCfg.buttonColor);
-	sprites.buttonShoot = sprites.buttonShoot || drawSprite(graphics.buttonShoot, mobileCfg.buttonColor);
+	sprites.buttonLeft = sprites.buttonLeft || drawSprite(graphics.buttonLeft, cfg.buttonColor);
+	sprites.buttonRight = sprites.buttonRight || drawSprite(graphics.buttonRight, cfg.buttonColor);
+	sprites.buttonShoot = sprites.buttonShoot || drawSprite(graphics.buttonShoot, cfg.buttonColor);
 
-	let buttonY = coreCfg.screenHeight + Math.floor((mobileCfg.controlPanelHeightPx - mobileCfg.buttonHeightPx) / 2);
+	let buttonY = coreCfg.screenHeight + Math.floor((cfg.controlPanelHeightPx - cfg.buttonHeightPx) / 2);
 
 	drawImage(
 		interfaceCtx,
 		sprites.buttonLeft.ctx,
-		[Math.floor(coreCfg.screenWidth / 4 * 0.5 - mobileCfg.buttonWidthPx / 2), buttonY],
+		[Math.floor(coreCfg.screenWidth / 4 * 0.5 - cfg.buttonWidthPx / 2), buttonY],
 		sprites.buttonLeft.coords,
-		[mobileCfg.buttonWidthPx, mobileCfg.buttonHeightPx]
+		[cfg.buttonWidthPx, cfg.buttonHeightPx]
 	);
 	drawImage(
 		interfaceCtx,
 		sprites.buttonRight.ctx,
-		[Math.floor(coreCfg.screenWidth / 4 * 1.5 - mobileCfg.buttonWidthPx / 2), buttonY],
+		[Math.floor(coreCfg.screenWidth / 4 * 1.5 - cfg.buttonWidthPx / 2), buttonY],
 		sprites.buttonRight.coords,
-		[mobileCfg.buttonWidthPx, mobileCfg.buttonHeightPx]
+		[cfg.buttonWidthPx, cfg.buttonHeightPx]
 	);
 	drawImage(
 		interfaceCtx,
 		sprites.buttonShoot.ctx,
-		[Math.floor(coreCfg.screenWidth / 4 * 3 - mobileCfg.buttonWidthPx / 2), buttonY],
+		[Math.floor(coreCfg.screenWidth / 4 * 3 - cfg.buttonWidthPx / 2), buttonY],
 		sprites.buttonShoot.coords,
-		[mobileCfg.buttonWidthPx, mobileCfg.buttonHeightPx]
+		[cfg.buttonWidthPx, cfg.buttonHeightPx]
 	);
 	buttonHandlers = buttonHandlers || {
 		left: {
@@ -98,15 +100,53 @@ function initButtons() {
 			]
 		}
 	};
-
-	Object.keys(buttonHandlers).forEach(handler =>
-		buttonHandlers[handler].events.forEach(event => touch.on(event.name, buttonHandlers[handler].zone, event.action))
-	);
 }
 
 function initDrag() {
-	console.info('Not implemented yet');
-	dragHandlers = dragHandlers || {};
+	const font = fontGenerator.create(cfg.controlPanelFont);
+	font.write(
+		interfaceCtx,
+		[
+			coreCfg.screenWidth / 2,
+			coreCfg.screenHeight +
+				Math.floor((cfg.controlPanelHeightPx - font.meta.boundingBox.height * cfg.controlPanelFontSize) / 2)
+		],
+		str.dragToMove,
+		{
+			alignment: alignmentConst.center,
+			size: cfg.controlPanelFontSize
+		}
+	);
+	setTimeout(
+		() => interfaceCtx.clearRect(0, coreCfg.screenHeight, coreCfg.screenWidth, cfg.controlPanelHeightPx),
+		cfg.noticeClearTimeout
+	);
+
+	dragHandlers = dragHandlers || {
+		dragZone: {
+			zone: { x: 0, y: 0, w: coreCfg.screenWidth, h: coreCfg.fullScreenHeight },
+			events: [
+				{
+					name: eventConst.touchStart,
+					action(coords) {
+						pubSub.pub(eventConst.touchDragMove, coords);
+					}
+				},
+				{
+					name: eventConst.touchMove,
+					action(coords) {
+						pubSub.pub(eventConst.touchDragMove, coords);
+					}
+				},
+				{
+					name: eventConst.touchEnd,
+					action() {
+						pubSub.pub(eventConst.touchDragEnd);
+					}
+				}
+			]
+		}
+	};
 }
 
 function initAccelerometer() {
@@ -115,27 +155,41 @@ function initAccelerometer() {
 }
 
 export function init() {
-	switch (mobileCfg.controls) {
+	let handlers;
+	switch (cfg.controls) {
 		case confConst.buttons:
 			initButtons();
+			handlers = buttonHandlers;
 			break;
 		case confConst.drag:
 			initDrag();
+			handlers = dragHandlers;
 			break;
 		case confConst.accelerometer:
 			initAccelerometer();
+			handlers = accelerometerHandlers;
 	}
+	Object.keys(handlers).forEach(handler =>
+		handlers[handler].events.forEach(event => touch.on(event.name, handlers[handler].zone, event.action))
+	);
 }
 
 export function destroy() {
-	interfaceCtx.clearRect(0, coreCfg.screenHeight, coreCfg.screenWidth, mobileCfg.controlPanelHeightPx);
+	clearTimeout(noticeClearTimeout);
+	interfaceCtx.clearRect(0, coreCfg.screenHeight, coreCfg.screenWidth, cfg.controlPanelHeightPx);
 	let handlers;
-	switch (mobileCfg.controls) {
+	switch (cfg.controls) {
 		case confConst.buttons:
 			handlers = buttonHandlers;
 			break;
+		case confConst.drag:
+			handlers = dragHandlers;
+			break;
+		case confConst.accelerometer:
+			handlers = accelerometerHandlers;
+			break;
 	}
-	Object.keys(buttonHandlers).forEach(handler =>
-		buttonHandlers[handler].events.forEach(event => touch.off(event.name, event.action))
+	Object.keys(handlers).forEach(handler =>
+		handlers[handler].events.forEach(event => touch.off(event.name, event.action))
 	);
 }

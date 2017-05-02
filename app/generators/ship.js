@@ -90,6 +90,8 @@ export function create(options = {}) {
 	ship.color = options.color || ship.color;
 	ship.blueprint = generateBlueprint();
 
+	sprite.canvas.width = cfg.widthPx;
+	sprite.canvas.height = cfg.heightPx;
 	sprite.clearRect(0, 0, cfg.widthPx, cfg.heightPx);
 	drawBlueprint(sprite, 0, 0, ship.blueprint, ship.color);
 

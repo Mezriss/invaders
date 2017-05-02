@@ -15,5 +15,6 @@ export default {
 	controls: 'Controls: ',
 	buttons: 'buttons',
 	drag: 'drag',
-	accelerometer: 'accelerometer'
+	accelerometer: 'accelerometer',
+	dragToMove: 'Drag to move'
 };

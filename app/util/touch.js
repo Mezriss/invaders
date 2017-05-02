@@ -15,7 +15,7 @@ function checkTouchStart(event) {
 		if (event.touches.length) {
 			Array.prototype.forEach.call(
 				event.touches,
-				touch => checkCollision(touch.pageX, touch.pageY, el.zone) && el.handler()
+				touch => checkCollision(touch.pageX, touch.pageY, el.zone) && el.handler([touch.pageX, touch.pageY])
 			);
 		}
 	});
@@ -38,7 +38,7 @@ function checkTouchMove(event) {
 		if (event.touches.length) {
 			Array.prototype.forEach.call(
 				event.touches,
-				touch => checkCollision(touch.pageX, touch.pageY, el.zone) && el.handler()
+				touch => checkCollision(touch.pageX, touch.pageY, el.zone) && el.handler([touch.pageX, touch.pageY])
 			);
 		}
 	});

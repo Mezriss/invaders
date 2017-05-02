@@ -20,6 +20,7 @@ const explosionSound = sound.generate(soundSamples.explosion.player),
 		direction: null,
 		plannedTravel: 0,
 		moving: false,
+		moveTarget: null,
 		speed: cfg.speed,
 		get x() {
 			return this.currentShip && this.currentShip.x;
@@ -39,6 +40,12 @@ const explosionSound = sound.generate(soundSamples.explosion.player),
 		},
 		move(dt) {
 			if (this.currentShip) {
+				if (this.moveTarget !== null) {
+					if (this.moveTarget > this.x && this.moveTarget < this.x + shipCfg.widthPx) {
+						this.moveTarget = null;
+						this.moving = false;
+					}
+				}
 				if (this.moving || this.plannedTravel > 0) {
 					let travelDistance = this.speed * dt / 1000;
 					switch (this.direction) {
