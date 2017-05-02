@@ -2,10 +2,11 @@
 	Game Loop
 
  */
-import { playerCfg } from '../conf';
+import { playerCfg, mobileCfg } from '../conf';
 import { keyConst, directionConst, eventConst, missileConst } from '../const';
 import { pubSub } from '../util';
 import * as infoPanel from '../interface/infoPanel';
+import * as mobileControls from '../interface/mobileControls';
 import * as levelNumber from '../interface/levelNumber';
 
 let canvas, player, level, gameOver, gamePaused, leftPressed, rightPressed, introAnimationRunning;
@@ -18,16 +19,16 @@ function keyDown(key) {
 		case keyConst.arrowLeft:
 			if (!player.moving) {
 				player.plannedTravel = playerCfg.minTravelDistance;
+				player.moving = true;
 			}
-			player.moving = true;
 			leftPressed = true;
 			player.direction = directionConst.left;
 			break;
 		case keyConst.arrowRight:
 			if (!player.moving) {
 				player.plannedTravel = playerCfg.minTravelDistance;
+				player.moving = true;
 			}
-			player.moving = true;
 			rightPressed = true;
 			player.direction = directionConst.right;
 			break;
@@ -45,12 +46,16 @@ function keyUp(key) {
 	switch (key) {
 		case keyConst.arrowLeft:
 			leftPressed = false;
-			if (player.direction === directionConst.left) {
-				player.moving = false;
+			if (rightPressed) {
+				player.direction = directionConst.right;
 			}
+			player.moving = leftPressed || rightPressed;
 			break;
 		case keyConst.arrowRight:
 			rightPressed = false;
+			if (leftPressed) {
+				player.direction = directionConst.left;
+			}
 			player.moving = leftPressed || rightPressed;
 			break;
 		case keyConst.space:
@@ -98,6 +103,35 @@ function checkScreenBlur() {
 	}
 }
 
+function touchShootStart() {
+	player.setBarrage(true);
+	player.fire();
+}
+
+function touchShootEnd() {
+	player.setBarrage(false);
+}
+
+function touchMoveEnd() {
+	player.moving = false;
+}
+
+function touchLeft() {
+	if (!player.moving) {
+		player.plannedTravel = playerCfg.minTravelDistance;
+		player.moving = true;
+	}
+	player.direction = directionConst.left;
+}
+
+function touchRight() {
+	if (!player.moving) {
+		player.plannedTravel = playerCfg.minTravelDistance;
+		player.moving = true;
+	}
+	player.direction = directionConst.right;
+}
+
 export function init(data, drawCanvas) {
 	leftPressed = false;
 	rightPressed = false;
@@ -122,6 +156,14 @@ export function init(data, drawCanvas) {
 	canvas = drawCanvas;
 	infoPanel.init(player);
 	levelNumber.init(level.number);
+	if (mobileCfg.enabled) {
+		mobileControls.init();
+		pubSub.on(eventConst.touchShootStart, touchShootStart);
+		pubSub.on(eventConst.touchShootEnd, touchShootEnd);
+		pubSub.on(eventConst.touchMoveEnd, touchMoveEnd);
+		pubSub.on(eventConst.touchLeft, touchLeft);
+		pubSub.on(eventConst.touchRight, touchRight);
+	}
 	introAnimationRunning = true;
 
 	document.addEventListener(eventConst.visibilityChange, checkScreenBlur);
@@ -140,6 +182,10 @@ export function end() {
 		resumeGame
 	].forEach(handler => pubSub.off(handler));
 	infoPanel.destroy();
+	if (mobileCfg.enabled) {
+		mobileControls.destroy();
+		[touchShootStart, touchShootEnd, touchMoveEnd, touchLeft, touchRight].forEach(handler => pubSub.off(handler));
+	}
 	levelNumber.destroy();
 	level.missiles.forEach(missile => missile.destroy());
 	document.removeEventListener(eventConst.visibilityChange, checkScreenBlur);

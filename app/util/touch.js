@@ -12,27 +12,34 @@ function checkCollision(x, y, zone) {
 
 function checkTouchStart(event) {
 	handlers[eventConst.touchStart].forEach(el => {
-		if (event.touches.length && checkCollision(event.touches[0].pageX, event.touches[0].pageY, el.zone)) {
-			el.handler();
+		if (event.touches.length) {
+			Array.prototype.forEach.call(
+				event.touches,
+				touch => checkCollision(touch.pageX, touch.pageY, el.zone) && el.handler()
+			);
 		}
 	});
 }
 
 function checkTouchEnd(event) {
 	handlers[eventConst.touchEnd].forEach(el => {
-		if (
-			event.changedTouches.length &&
-			checkCollision(event.changedTouches[0].pageX, event.changedTouches[0].pageY, el.zone)
-		) {
-			el.handler();
+		if (event.changedTouches.length) {
+			Array.prototype.forEach.call(
+				event.changedTouches,
+				touch => checkCollision(touch.pageX, touch.pageY, el.zone) && el.handler()
+			);
 		}
 	});
 }
 
 function checkTouchMove(event) {
+	event.preventDefault();
 	handlers[eventConst.touchMove].forEach(el => {
-		if (event.touches.length && checkCollision(event.touches[0].pageX, event.touches[0].pageY, el.zone)) {
-			el.handler();
+		if (event.touches.length) {
+			Array.prototype.forEach.call(
+				event.touches,
+				touch => checkCollision(touch.pageX, touch.pageY, el.zone) && el.handler()
+			);
 		}
 	});
 }

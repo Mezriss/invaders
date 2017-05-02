@@ -36,12 +36,12 @@ function draw(ts) {
 	dt = Math.min(dt, 1000 / drawingCfg.minFPS);
 	dt = Math.max(dt, 1000 / drawingCfg.maxFPS);
 
-	drawCanvas.clearRect(0, 0, coreCfg.screenWidth, coreCfg.screenHeight);
+	drawCanvas.clearRect(0, 0, coreCfg.screenWidth, coreCfg.fullScreenHeight);
 
 	//draw next frame
 	responseData = animation.drawFrame(Math.max(dt), 1000 / drawingCfg.minFPS);
 
-	screenCtx.clearRect(0, 0, coreCfg.screenWidth, coreCfg.screenHeight);
+	screenCtx.clearRect(0, 0, coreCfg.screenWidth, coreCfg.fullScreenHeight);
 	drawImage(screenCtx, drawCanvas, [0, 0]);
 
 	if (drawingCfg.showFPS) {

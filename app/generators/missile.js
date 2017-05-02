@@ -80,7 +80,7 @@ const sprite = initCanvas(cfg.widthPaddedPx, cfg.heightPaddedPx),
 				this.y += this.speed * coreCfg.screenHeight * dt / 1000 * (this.launcher.player ? -1 : 1);
 			}
 			//cleanup offscreen missiles
-			if (this.y < -cfg.heightPaddedPx || this.y > coreCfg.screenHeight) {
+			if (this.y < -cfg.heightPaddedPx || this.y > coreCfg.fullScreenHeight) {
 				this.destroy();
 			}
 		},

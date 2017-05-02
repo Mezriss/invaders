@@ -14,7 +14,7 @@ const spaceProto = {
 		const pixelSize = cfg.pixelSize || coreCfg.pixelSize;
 
 		this.ctx.fillStyle = cfg.background;
-		this.ctx.fillRect(0, 0, coreCfg.screenWidth, coreCfg.screenHeight);
+		this.ctx.fillRect(0, 0, coreCfg.screenWidth, coreCfg.fullScreenHeight);
 
 		this.stars.forEach(star => {
 			drawPixel(this.ctx, star.x * pixelSize, star.y * pixelSize, hexToRgba(star.hue, star.intensity), pixelSize);
@@ -66,7 +66,7 @@ export function create() {
 	space.ctx = initCanvas();
 
 	space.ctx.canvas.width = coreCfg.screenWidth;
-	space.ctx.canvas.height = coreCfg.screenHeight;
+	space.ctx.canvas.height = coreCfg.fullScreenHeight;
 	space.stars = [];
 
 	const starCount = rollh(cfg.maxStars, 2);
@@ -74,7 +74,7 @@ export function create() {
 	for (let i = 0; i < starCount; i += 1) {
 		const star = {
 			x: roll(cfg.maxBeamLength, coreCfg.screenWidth / pixelSize - cfg.maxBeamLength * 2 - 1),
-			y: roll(cfg.maxBeamLength, coreCfg.screenHeight / pixelSize - cfg.maxBeamLength * 2 - 1),
+			y: roll(cfg.maxBeamLength, coreCfg.fullScreenHeight / pixelSize - cfg.maxBeamLength * 2 - 1),
 			intensity: roll(cfg.maxIntensity * 100) / 100,
 			hue: cfg.hue[roll(0, cfg.hue.length - 1)]
 		};

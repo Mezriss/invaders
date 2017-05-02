@@ -1,7 +1,8 @@
 import { coreCfg as cfg, drawingCfg } from '../conf';
 import { hexToRgba } from './color';
+import { cacheSprite } from './spriteCache';
 
-export function initCanvas(width = cfg.screenWidth, height = cfg.screenHeight) {
+export function initCanvas(width = cfg.screenWidth, height = cfg.fullScreenHeight) {
 	const canvas = document.createElement('canvas');
 	canvas.width = width;
 	canvas.height = height;
@@ -25,6 +26,21 @@ export function drawImage(ctx, source, coords, sourceCoords, dimensions) {
 	} else {
 		ctx.drawImage(source.canvas, ...coords);
 	}
+}
+
+const spriteCanvas = initCanvas(1, 1);
+export function drawSprite(data, color, width = 16) {
+	spriteCanvas.canvas.width = width * cfg.pixelSize;
+	spriteCanvas.canvas.height = data.length * cfg.pixelSize;
+
+	for (let i = 0; i < data.length; i += 1) {
+		for (let bit = 0; bit < width; bit += 1) {
+			if ((data[i] >> bit) % 2) {
+				drawPixel(spriteCanvas, (width - 1 - bit) * cfg.pixelSize, i * cfg.pixelSize, color);
+			}
+		}
+	}
+	return cacheSprite(spriteCanvas);
 }
 
 //drawingCfg pixels with a mask over them; for shitty "3d" pixel effect

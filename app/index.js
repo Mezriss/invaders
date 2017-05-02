@@ -17,12 +17,10 @@ if (mobileCfg.enabled) {
 	touch.init(interfaceScreen);
 }
 
-[interfaceScreen, backgroundScreen].forEach(canvas => {
+[interfaceScreen, backgroundScreen, gameScreen].forEach(canvas => {
 	canvas.width = cfg.screenWidth;
 	canvas.height = cfg.fullScreenHeight;
 });
-gameScreen.width = cfg.screenWidth;
-gameScreen.height = cfg.screenHeight;
 
 main.style.width = cfg.screenWidth + 'px';
 main.style.height = cfg.fullScreenHeight + 'px';

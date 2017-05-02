@@ -8,15 +8,21 @@ export function cacheSprite(ctx) {
 
 	if (!canvases[name] || canvasUsage[name] === cfg.itemsPerCanvas) {
 		canvases[name] = canvases[name] || [];
-		canvases[name].push(initCanvas(width * cfg.itemsPerCanvas, height));
+		canvases[name].push(initCanvas((width + cfg.itemPadding) * cfg.itemsPerCanvas, height));
 		canvasUsage[name] = 0;
 	}
 
-	drawImage(canvases[name][canvases[name].length - 1], ctx, [canvasUsage[name] * width, 0], [0, 0], [width, height]);
+	drawImage(
+		canvases[name][canvases[name].length - 1],
+		ctx,
+		[canvasUsage[name] * (width + cfg.itemPadding), 0],
+		[0, 0],
+		[width, height]
+	);
 	canvasUsage[name] += 1;
 
 	return {
 		ctx: canvases[name][canvases[name].length - 1],
-		coords: [(canvasUsage[name] - 1) * width, 0]
+		coords: [(canvasUsage[name] - 1) * (width + cfg.itemPadding), 0]
 	};
 }

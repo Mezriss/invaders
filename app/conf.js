@@ -68,7 +68,8 @@ export const playerCfg = {
 	respawnDelay: 1000
 };
 export const cacheCfg = {
-	itemsPerCanvas: 10
+	itemsPerCanvas: 10,
+	itemPadding: 5
 };
 
 export const missileCfg = {
@@ -150,8 +151,11 @@ export const soundCfg = {
 
 export const mobileCfg = {
 	enabled: !!('ontouchstart' in window || (window.DocumentTouch && document instanceof DocumentTouch)),
-	controlPanelHeight: 11,
-	controls: confConst.buttons
+	controlPanelHeight: 30,
+	controls: confConst.buttons,
+	buttonColor: 0xffffff,
+	buttonWidth: 16,
+	buttonHeight: 9
 };
 
 function setCalculatedValues() {
@@ -167,6 +171,8 @@ function setCalculatedValues() {
 	formationCfg.shipPaddingPx = formationCfg.shipPadding * coreCfg.pixelSize;
 	formationCfg.linePaddingPx = formationCfg.linePadding * coreCfg.pixelSize;
 	mobileCfg.controlPanelHeightPx = mobileCfg.controlPanelHeight * coreCfg.pixelSize;
+	mobileCfg.buttonWidthPx = mobileCfg.buttonWidth * coreCfg.pixelSize;
+	mobileCfg.buttonHeightPx = mobileCfg.buttonHeight * coreCfg.pixelSize;
 }
 
 export function configure(key, val, save) {

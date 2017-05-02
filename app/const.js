@@ -31,7 +31,12 @@ export const eventConst = {
 	animationFrame: 'menuToGameTransitionFrame',
 	introOver: 'introOver',
 	gamePaused: 'gamePaused',
-	gameResumed: 'gameResumed'
+	gameResumed: 'gameResumed',
+	touchShootStart: 'touchShootStart',
+	touchShootEnd: 'touchShootEnd',
+	touchMoveEnd: 'touchMoveEnd',
+	touchLeft: 'touchLeftStart',
+	touchRight: 'touchRightStart'
 };
 
 export const keyConst = {
@@ -70,4 +75,10 @@ export const alignmentConst = {
 	left: 'left',
 	right: 'right',
 	center: 'center'
+};
+
+export const graphics = {
+	buttonLeft: [0x7ffe, 0xff3f, 0xfe3f, 0xfc3f, 0xf83f, 0xfc3f, 0xfe3f, 0xff3f, 0x7ffe],
+	buttonRight: [0x7ffe, 0xfcff, 0xfc7f, 0xfc3f, 0xfc1f, 0xfc3f, 0xfc7f, 0xfcff, 0x7ffe],
+	buttonShoot: [0x7ffe, 0xffff, 0xf99f, 0xfc3f, 0xfe7f, 0xfc3f, 0xf99f, 0xffff, 0x7ffe]
 };
