@@ -5,7 +5,7 @@ import { pubSub, hexToRgba } from '../util';
 
 let font, level, color, opacity, timer;
 
-const interfaceCtx = interfaceScreen.getContext('2d');
+const interfaceCtx = document.getElementById('interfaceScreen').getContext('2d');
 
 export function init(n) {
 	font = fontGenerator.create(cfg.font);
@@ -46,6 +46,6 @@ function clear() {
 		0,
 		(coreCfg.fullScreenHeight - font.meta.points * cfg.size) / 2,
 		coreCfg.screenWidth,
-		font.meta.points * cfg.size
+		font.meta.points * cfg.size + 5 //quickfix for an artifact with clearing this on iphone; should revisit later
 	);
 }

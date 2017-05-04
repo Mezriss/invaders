@@ -2,6 +2,15 @@ import { coreCfg as cfg, drawingCfg } from '../conf';
 import { hexToRgba } from './color';
 import { cacheSprite } from './spriteCache';
 
+export function n2color(color) {
+	if (typeof color === 'string') {
+		return color;
+	}
+	color = color.toString(16);
+	color = '0'.repeat(6 - color.length) + color;
+	return '#' + color;
+}
+
 export function initCanvas(width = cfg.screenWidth, height = cfg.fullScreenHeight) {
 	const canvas = document.createElement('canvas');
 	canvas.width = width;
@@ -10,7 +19,7 @@ export function initCanvas(width = cfg.screenWidth, height = cfg.fullScreenHeigh
 }
 
 export function drawPixel(ctx, x, y, color, pixelSize = cfg.pixelSize) {
-	ctx.fillStyle = typeof color === 'number' ? '#' + color.toString(16) : color;
+	ctx.fillStyle = n2color(color);
 	ctx.fillRect(x, y, pixelSize, pixelSize);
 }
 
@@ -29,7 +38,7 @@ export function drawImage(ctx, source, coords, sourceCoords, dimensions) {
 }
 
 const spriteCanvas = initCanvas(1, 1);
-export function drawSprite(data, color, width = 16) {
+export function drawBitmap(data, color, width = 16) {
 	spriteCanvas.canvas.width = width * cfg.pixelSize;
 	spriteCanvas.canvas.height = data.length * cfg.pixelSize;
 

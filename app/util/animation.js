@@ -1,14 +1,10 @@
 /*
 	Somewhat abstract animation method
  */
-import { drawingCfg, coreCfg, mobileCfg } from '../conf';
+import { drawingCfg, coreCfg } from '../conf';
 import { initCanvas, drawImage } from './drawing';
 import * as pubSub from './pubSub';
-import { eventConst, keyConst } from '../const';
-import * as pauseScreen from '../interface/pauseScreen';
-import { touch } from '../util';
-
-pauseScreen.init();
+import { eventConst } from '../const';
 
 const requestAnimationFrame =
 	window.requestAnimationFrame ||
@@ -17,8 +13,8 @@ const requestAnimationFrame =
 	window.msRequestAnimationFrame ||
 	window.oRequestAnimationFrame,
 	cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame,
-	screenCtx = gameScreen.getContext('2d'),
-	interfaceCtx = interfaceScreen.getContext('2d');
+	screenCtx = document.getElementById('gameScreen').getContext('2d'),
+	interfaceCtx = document.getElementById('interfaceScreen').getContext('2d');
 
 let drawCanvas;
 
@@ -72,6 +68,7 @@ export function start(config) {
 	fpsStart = Date.now();
 	requestAnimationFrame(draw);
 	pubSub.on(eventConst.gamePaused, pause);
+	pubSub.on(eventConst.gameResumed, resume);
 
 	return new Promise(resolve => {
 		resolveHandle = result => resolve(result);
@@ -83,26 +80,12 @@ export function pause() {
 		paused = true;
 		cancelAnimationFrame(draw);
 		then = null;
-		pauseScreen.show();
-		pubSub.on(eventConst.keyDown, resume);
-		if (mobileCfg.enabled) {
-			touch.on(eventConst.touchStart, { x: 0, y: 0, w: drawCanvas.canvas.width, h: drawCanvas.canvas.height }, resume);
-		}
 	}
 }
 
 export function resume(key) {
-	//key is array when game is resumed by touch
-	if (key === keyConst.space || !key || Array.isArray(key)) {
-		paused = false;
-		pauseScreen.hide();
-		pubSub.pub(eventConst.gameResumed);
-		requestAnimationFrame(draw);
-		pubSub.off(resume);
-		if (mobileCfg.enabled) {
-			touch.off(eventConst.touchStart, resume);
-		}
-	}
+	paused = false;
+	requestAnimationFrame(draw);
 }
 
 export function stop() {

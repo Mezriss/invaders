@@ -7,6 +7,14 @@ ship sprites, but also weapons, enemy ship formations and attack patterns.
 Players will have to learn and adapt to this in each playthrough, in
 almost a roguelike fashion.
 
+This game is developed with two self imposed limitations:
+* there should be no external dependencies (otherwise it would have made
+much more sense to use something like pixi.js), everything should be
+written from scratch, adapted or generated if at all feasible
+* final package should be small, no more than 64kb minified (at this
+moment I'm already over this limit, but I'll keep 100kb in mind as
+absolute maximum)
+
 [Play it here](http://invaders.catgirl.games/)
 
 ## Current state
@@ -15,11 +23,13 @@ formations/patterns. Anyway, you can score points by killing same enemy
 formation over and over again.
 
 ## Roadmap
-* support mobile devices
-* add content for minimal interesting-to-play version
-* think of a better name
+* up next: generator for AI behavior
+* content for minimal interesting-to-play version
+* better name
+* destructible obstacles as another element on the field
+* ship capturing
 * content for level generator
 * intro sequence
-* optimize for N3DS browser and maybe some other unusual platforms
-* add an ability to record gameplay as gifs/video
-* add social media buttons for easier highscore boasting
+* an ability to record gameplay as gifs/video
+* social media buttons for easier highscore boasting
+* dev docs for easier contribution

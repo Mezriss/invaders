@@ -3,7 +3,7 @@ import { alignmentConst } from '../const';
 import * as fontGenerator from '../generators/font';
 import str from '../str';
 
-const interfaceCtx = interfaceScreen.getContext('2d');
+const interfaceCtx = document.getElementById('interfaceScreen').getContext('2d');
 
 let font;
 
@@ -34,7 +34,7 @@ export function show() {
 export function hide() {
 	interfaceCtx.clearRect(
 		0,
-		(coreCfg.fullScreenHeight - font.meta.points * cfg.titleSize) / 2,
+		(coreCfg.screenHeight - font.meta.points * cfg.titleSize) / 2,
 		coreCfg.screenWidth,
 		font.meta.points * cfg.titleSize * 3
 	);

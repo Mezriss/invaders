@@ -27,7 +27,7 @@ let font,
 	scores,
 	scoreIndicator;
 
-const interfaceCtx = interfaceScreen.getContext('2d');
+const interfaceCtx = document.getElementById('interfaceScreen').getContext('2d');
 
 const mainMenu = [
 	{

@@ -2,21 +2,22 @@
 	Game Loop
 
  */
-import { playerCfg, shipCfg, mobileCfg } from '../conf';
+import { coreCfg, playerCfg, shipCfg, mobileCfg } from '../conf';
 import { keyConst, directionConst, eventConst, missileConst } from '../const';
-import { pubSub } from '../util';
+import { pubSub, touch } from '../util';
 import * as infoPanel from '../interface/infoPanel';
 import * as mobileControls from '../interface/mobileControls';
 import * as levelNumber from '../interface/levelNumber';
+import * as pauseScreen from '../interface/pauseScreen';
 
 let canvas, player, level, gameOver, gamePaused, leftPressed, rightPressed, introAnimationRunning;
 
 function keyDown(key) {
-	if (gamePaused) {
-		return;
-	}
 	switch (key) {
 		case keyConst.arrowLeft:
+			if (gamePaused) {
+				return;
+			}
 			if (!player.moving) {
 				player.plannedTravel = playerCfg.minTravelDistance;
 				player.moving = true;
@@ -25,6 +26,9 @@ function keyDown(key) {
 			player.direction = directionConst.left;
 			break;
 		case keyConst.arrowRight:
+			if (gamePaused) {
+				return;
+			}
 			if (!player.moving) {
 				player.plannedTravel = playerCfg.minTravelDistance;
 				player.moving = true;
@@ -33,11 +37,15 @@ function keyDown(key) {
 			player.direction = directionConst.right;
 			break;
 		case keyConst.space:
-			player.setBarrage(true);
-			player.fire();
+			if (gamePaused) {
+				resumeGame();
+			} else {
+				player.setBarrage(true);
+				player.fire();
+			}
 			break;
 		case keyConst.escape:
-			pubSub.pub(eventConst.gamePaused);
+			pauseGame();
 			break;
 	}
 }
@@ -91,15 +99,25 @@ function introOver() {
 
 function pauseGame() {
 	gamePaused = true;
+	pubSub.pub(eventConst.gamePaused);
+	pauseScreen.show();
+	if (mobileCfg.enabled) {
+		touch.on(eventConst.touchStart, { x: 0, y: 0, w: coreCfg.screenWidth, h: coreCfg.fullScreenHeight }, resumeGame);
+	}
 }
 
 function resumeGame() {
 	gamePaused = false;
+	pubSub.pub(eventConst.gameResumed);
+	pauseScreen.hide();
+	if (mobileCfg.enabled) {
+		touch.off(eventConst.touchStart, resumeGame);
+	}
 }
 
 function checkScreenBlur() {
 	if (document.hidden) {
-		pubSub.pub(eventConst.gamePaused);
+		pauseGame();
 	}
 }
 
@@ -170,8 +188,6 @@ export function init(data, drawCanvas) {
 	pubSub.on(eventConst.enemyDestroyed, enemyDestroyed);
 
 	pubSub.on(eventConst.gameOver, onGameOver);
-	pubSub.on(eventConst.gamePaused, pauseGame);
-	pubSub.on(eventConst.gameResumed, resumeGame);
 	pubSub.on(eventConst.introOver, introOver);
 
 	player = data.player;
@@ -181,6 +197,8 @@ export function init(data, drawCanvas) {
 	canvas = drawCanvas;
 	infoPanel.init(player);
 	levelNumber.init(level.number);
+	pauseScreen.init();
+
 	if (mobileCfg.enabled) {
 		mobileControls.init();
 		pubSub.on(eventConst.touchShootStart, touchShootStart);
@@ -200,17 +218,9 @@ export function init(data, drawCanvas) {
 }
 
 export function end() {
-	[
-		keyDown,
-		keyUp,
-		levelEntityCreated,
-		levelEntityDestroyed,
-		enemyDestroyed,
-		onGameOver,
-		introOver,
-		pauseGame,
-		resumeGame
-	].forEach(handler => pubSub.off(handler));
+	[keyDown, keyUp, levelEntityCreated, levelEntityDestroyed, enemyDestroyed, onGameOver, introOver].forEach(handler =>
+		pubSub.off(handler)
+	);
 	infoPanel.destroy();
 	if (mobileCfg.enabled) {
 		mobileControls.destroy();

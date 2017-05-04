@@ -1,0 +1,9 @@
+{
+	"name": "Catgirl Invaders",
+	"short_name": "Catgirl Invaders",
+	"start_url": ".",
+	"display": "fullscreen",
+	"orientation": "portrait",
+	"background_color": "#000011",
+	"description": "Space shoot-'em-up game where almost everything is procedurally generated"
+}

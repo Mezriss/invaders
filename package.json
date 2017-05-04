@@ -1,12 +1,12 @@
 {
   "name": "invaders",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "An extandable Space Invaders game varian for web and mobile.",
   "main": "index.js",
   "scripts": {
     "build": "webpack --env=dev --progress --profile --colors",
     "build:watch": "webpack --env=dev --progress --profile --colors --watch",
-    "build:prod": "webpack --env=prod --progress --profile --colors --optimize-minimize",
+    "build:prod": "webpack --env=prod --progress --profile --colors -p",
     "start": "serve",
     "test": "echo \"Error: no test specified\" && exit 1",
     "precommit": "lint-staged && npm run build:prod && git add docs/js/*"

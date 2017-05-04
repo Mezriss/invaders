@@ -6,14 +6,14 @@
  */
 
 import { coreCfg, spaceCfg as cfg } from '../conf';
-import { roll, initCanvas, drawPixel, hexToRgba, rollh, drawImage } from '../util';
+import { roll, initCanvas, drawPixel, hexToRgba, rollh, drawImage, n2color } from '../util';
 
 const spaceProto = {
 	ctx: null,
 	draw() {
 		const pixelSize = cfg.pixelSize || coreCfg.pixelSize;
 
-		this.ctx.fillStyle = cfg.background;
+		this.ctx.fillStyle = n2color(cfg.background);
 		this.ctx.fillRect(0, 0, coreCfg.screenWidth, coreCfg.fullScreenHeight);
 
 		this.stars.forEach(star => {

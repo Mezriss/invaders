@@ -72,13 +72,13 @@ export function generateBlueprint() {
 
 	return blueprint;
 }
-export function drawBlueprint(ctx, x, y, blueprint, color) {
+export function drawBlueprint(ctx, x, y, blueprint, color, pixelSize = coreCfg.pixelSize) {
 	const draw = cfg.drawStyle === confConst.beveled ? drawBeveledPixel : drawPixel;
 
 	for (let i = 0; i < cfg.height; i += 1) {
 		for (let j = 0; j < cfg.width; j += 1) {
 			if (blueprint[i * cfg.width + j]) {
-				draw(ctx, x + j * coreCfg.pixelSize, y + i * coreCfg.pixelSize, color);
+				draw(ctx, x + j * pixelSize, y + i * pixelSize, color);
 			}
 		}
 	}
@@ -93,7 +93,7 @@ export function create(options = {}) {
 	sprite.canvas.width = cfg.widthPx;
 	sprite.canvas.height = cfg.heightPx;
 	sprite.clearRect(0, 0, cfg.widthPx, cfg.heightPx);
-	drawBlueprint(sprite, 0, 0, ship.blueprint, ship.color);
+	drawBlueprint(sprite, 0, 0, ship.blueprint, ship.color, options.pixelSize);
 
 	ship.sprite = cacheSprite(sprite);
 

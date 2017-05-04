@@ -6,7 +6,7 @@ import str from '../str';
 
 let font, scorePositionX, textPositionY, shipListPositionX;
 
-const interfaceCtx = interfaceScreen.getContext('2d');
+const interfaceCtx = document.getElementById('interfaceScreen').getContext('2d');
 
 function updateScore(score) {
 	score = score.toString();

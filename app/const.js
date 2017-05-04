@@ -45,13 +45,13 @@ export const eventConst = {
 };
 
 export const keyConst = {
-	arrowLeft: 'ArrowLeft',
-	arrowRight: 'ArrowRight',
-	arrowUp: 'ArrowUp',
-	arrowDown: 'ArrowDown',
-	enter: 'Enter',
-	space: ' ',
-	escape: 'Escape'
+	arrowLeft: 37,
+	arrowRight: 39,
+	arrowUp: 38,
+	arrowDown: 40,
+	enter: 13,
+	space: 32,
+	escape: 27
 };
 
 export const missileConst = {

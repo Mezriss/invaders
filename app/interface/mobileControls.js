@@ -1,17 +1,17 @@
 import { coreCfg, mobileCfg as cfg } from '../conf';
 import { confConst, eventConst, graphics, alignmentConst } from '../const';
-import { drawSprite, drawImage, touch, pubSub } from '../util';
+import { drawBitmap, drawImage, touch, pubSub } from '../util';
 import * as fontGenerator from '../generators/font';
 import str from '../str';
 
-const sprites = {}, interfaceCtx = interfaceScreen.getContext('2d');
+const sprites = {}, interfaceCtx = document.getElementById('interfaceScreen').getContext('2d');
 
 let buttonHandlers, dragHandlers, gyroHandlers, noticeClearTimeout;
 
 function initButtons() {
-	sprites.buttonLeft = sprites.buttonLeft || drawSprite(graphics.buttonLeft, cfg.buttonColor);
-	sprites.buttonRight = sprites.buttonRight || drawSprite(graphics.buttonRight, cfg.buttonColor);
-	sprites.buttonShoot = sprites.buttonShoot || drawSprite(graphics.buttonShoot, cfg.buttonColor);
+	sprites.buttonLeft = sprites.buttonLeft || drawBitmap(graphics.buttonLeft, cfg.buttonColor);
+	sprites.buttonRight = sprites.buttonRight || drawBitmap(graphics.buttonRight, cfg.buttonColor);
+	sprites.buttonShoot = sprites.buttonShoot || drawBitmap(graphics.buttonShoot, cfg.buttonColor);
 
 	let buttonY = coreCfg.screenHeight + Math.floor((cfg.controlPanelHeightPx - cfg.buttonHeightPx) / 2);
 
@@ -197,7 +197,7 @@ function initGyro() {
 		}
 	};
 	window.addEventListener(eventConst.deviceOrientation, deviceOrientationHandler);
-	sprites.buttonShoot = sprites.buttonShoot || drawSprite(graphics.buttonShoot, cfg.buttonColor);
+	sprites.buttonShoot = sprites.buttonShoot || drawBitmap(graphics.buttonShoot, cfg.buttonColor);
 	drawImage(
 		interfaceCtx,
 		sprites.buttonShoot.ctx,
