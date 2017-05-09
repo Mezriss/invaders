@@ -24,7 +24,7 @@ const sprite = initCanvas(cfg.widthPx, cfg.heightPx),
 		x: null,
 		y: null,
 		show(ctx, x = this.x, y = this.y) {
-			drawImage(ctx, this.sprite.ctx, [x, y], this.sprite.coords, [cfg.widthPx, cfg.heightPx]);
+			drawImage(ctx, this.sprite.ctx, [x, y], this.sprite.coords, [this.sprite.widthPx, this.sprite.heightPx]);
 		},
 		behavior() {
 			//reload
@@ -78,21 +78,22 @@ export function drawBlueprint(ctx, x, y, blueprint, color, pixelSize = coreCfg.p
 	for (let i = 0; i < cfg.height; i += 1) {
 		for (let j = 0; j < cfg.width; j += 1) {
 			if (blueprint[i * cfg.width + j]) {
-				draw(ctx, x + j * pixelSize, y + i * pixelSize, color);
+				draw(ctx, x + j * pixelSize, y + i * pixelSize, color, pixelSize);
 			}
 		}
 	}
 }
 
 export function create(options = {}) {
-	const ship = Object.create(shipProto);
-
+	const ship = Object.create(shipProto),
+		widthPx = cfg.width * (options.pixelSize || coreCfg.pixelSize),
+		heightPx = cfg.height * (options.pixelSize || coreCfg.pixelSize);
 	ship.color = options.color || ship.color;
-	ship.blueprint = generateBlueprint();
+	ship.blueprint = options.blueprint || generateBlueprint();
 
-	sprite.canvas.width = cfg.widthPx;
-	sprite.canvas.height = cfg.heightPx;
-	sprite.clearRect(0, 0, cfg.widthPx, cfg.heightPx);
+	sprite.canvas.width = widthPx;
+	sprite.canvas.height = heightPx;
+	sprite.clearRect(0, 0, widthPx, heightPx);
 	drawBlueprint(sprite, 0, 0, ship.blueprint, ship.color, options.pixelSize);
 
 	ship.sprite = cacheSprite(sprite);

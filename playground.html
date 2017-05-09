@@ -8,11 +8,32 @@
 	<link rel="manifest" href="docs/manifest.json">
 	<link id="favicon" rel="icon">
 	<title>Invaders</title>
+	<style>
+		.container {
+			align-items: flex-start;
+		}
+		canvas {
+			position:  relative;
+			border: 1px solid lime;
+		}
+		.controls {
+			text-align: center;
+			padding: 10px;
+		}
+		#shipNumber {
+			width: 20px;
+		}
+	</style>
 </head>
 <body>
 <div class="container">
 	<div id="main">
 		<canvas id="playground"></canvas>
+		<div class="controls">
+			<input id="shipNumber" value="">
+			<button id="generate">Generate</button>
+		</div>
+		<div id="icons"></div>
 	</div>
 </div>
 <script src="build/playground.js"></script>

@@ -2,7 +2,7 @@ import { coreCfg as cfg, drawingCfg } from '../conf';
 import { hexToRgba } from './color';
 import { cacheSprite } from './spriteCache';
 
-export function n2color(color) {
+export function n2c(color) {
 	if (typeof color === 'string') {
 		return color;
 	}
@@ -19,7 +19,7 @@ export function initCanvas(width = cfg.screenWidth, height = cfg.fullScreenHeigh
 }
 
 export function drawPixel(ctx, x, y, color, pixelSize = cfg.pixelSize) {
-	ctx.fillStyle = n2color(color);
+	ctx.fillStyle = n2c(color);
 	ctx.fillRect(x, y, pixelSize, pixelSize);
 }
 

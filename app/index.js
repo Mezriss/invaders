@@ -7,7 +7,7 @@ import * as level from './generators/level';
 import * as ship from './generators/ship';
 import * as gameLoop from './animations/gameLoop';
 import * as titleScreen from './animations/titleScreen';
-import { pubSub, touch, n2color, initCanvas } from './util';
+import { pubSub, touch, n2c, initCanvas } from './util';
 import * as animation from './util/animation';
 
 window.location.search.substr(1).split(/[,;&]/).forEach(keyValue => configure(...keyValue.split('=')));
@@ -19,7 +19,7 @@ if (mobileCfg.enabled) {
 }
 
 const icon = initCanvas(32, 32);
-icon.fillStyle = n2color(spaceCfg.background);
+icon.fillStyle = n2c(spaceCfg.background);
 icon.fillRect(0, 0, 31, 31);
 ship.create({ pixelSize: 3 }).show(icon, 5, 8);
 document.getElementById('favicon').href = icon.canvas.toDataURL();

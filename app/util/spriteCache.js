@@ -23,6 +23,8 @@ export function cacheSprite(ctx) {
 
 	return {
 		ctx: canvases[name][canvases[name].length - 1],
-		coords: [(canvasUsage[name] - 1) * (width + cfg.itemPadding), 0]
+		coords: [(canvasUsage[name] - 1) * (width + cfg.itemPadding), 0],
+		widthPx: width,
+		heightPx: height
 	};
 }
