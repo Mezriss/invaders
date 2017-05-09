@@ -50,7 +50,7 @@ function drawIcon(size, pixelSize) {
 }
 
 function generate() {
-	[192, 512, 57, 60, 72, 76, 114, 120, 144, 152, 180, 16, 32, 150].forEach(size =>
+	[192, 512, 57, 60, 72, 76, 114, 120, 144, 152, 167, 180, 16, 32, 150].forEach(size =>
 		drawIcon(size, Math.floor(size * 0.8 / shipCfg.width))
 	);
 	drawIcon(16, 2);

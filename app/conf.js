@@ -4,6 +4,7 @@ export const coreCfg = {
 	pixelSize: 3,
 	screenWidth: 480,
 	screenHeight: 600,
+	homescreen: false,
 	get fullScreenHeight() {
 		return this.screenHeight + (mobileCfg.enabled ? mobileCfg.controlPanelHeightPx : 0);
 	}
@@ -216,6 +217,10 @@ export function configure(key, val, save) {
 			break;
 		case confConst.sound:
 			soundCfg.on = val || val === undefined;
+			break;
+		case 'homescreen':
+			coreCfg.homescreen = true;
+			break;
 	}
 	if (save) {
 		const savedSettings = localStorage.getItem('settings') ? JSON.parse(localStorage.getItem('settings')) : {};

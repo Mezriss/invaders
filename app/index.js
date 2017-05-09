@@ -1,5 +1,5 @@
 import { coreCfg as cfg, mobileCfg, spaceCfg, configure } from './conf';
-import { eventConst, confConst } from './const';
+import { eventConst, confConst, version } from './const';
 import * as highScores from './highScores';
 import * as spaceGenerator from './generators/space';
 import * as player from './generators/player';
@@ -83,3 +83,5 @@ function playLevels(data) {
 			.then(data => playLevels(data));
 	}
 }
+
+console.log('V' + version);

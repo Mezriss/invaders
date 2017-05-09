@@ -1,3 +1,5 @@
+export const version = '0.2.2.10';
+
 export const formationConst = {
 	oneTypePerLine: 'one-type-per-line'
 };
