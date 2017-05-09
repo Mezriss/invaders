@@ -42,8 +42,8 @@ function draw(ts) {
 	drawImage(screenCtx, drawCanvas, [0, 0]);
 
 	if (drawingCfg.showFPS) {
-		if (Date.now() - fpsStart >= 1000) {
-			fpsStart = Date.now();
+		if (performance.now() - fpsStart >= 1000) {
+			fpsStart = performance.now();
 			interfaceCtx.clearRect(0, 0, 20, 12);
 			interfaceCtx.fillStyle = drawingCfg.systemInfoColor;
 			interfaceCtx.font = drawingCfg.systemInfoText;
@@ -65,7 +65,7 @@ export function start(config) {
 	animation = config.animation;
 	animation.init(config.data, drawCanvas);
 
-	fpsStart = Date.now();
+	fpsStart = performance.now();
 	requestAnimationFrame(draw);
 	pubSub.on(eventConst.gamePaused, pause);
 	pubSub.on(eventConst.gameResumed, resume);

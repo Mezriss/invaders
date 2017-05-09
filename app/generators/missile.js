@@ -43,7 +43,7 @@ const sprite = initCanvas(cfg.widthPaddedPx, cfg.heightPaddedPx),
 		arm() {
 			this.alignWithShipX();
 			this.alignWithShipY();
-			this.armStart = Date.now();
+			this.armStart = performance.now();
 			this.status = missileConst.arming;
 		},
 		launch() {
@@ -57,7 +57,7 @@ const sprite = initCanvas(cfg.widthPaddedPx, cfg.heightPaddedPx),
 		behavior() {
 			if (this.status === missileConst.arming) {
 				this.armProgress = Math.min(
-					Math.floor((Date.now() - this.armStart) / (this.armSpeed / cfg.armSteps)),
+					Math.floor((performance.now() - this.armStart) / (this.armSpeed / cfg.armSteps)),
 					cfg.armSteps - 1
 				);
 				if (this.armProgress === cfg.armSteps - 1) {

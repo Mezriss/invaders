@@ -15,7 +15,7 @@ written from scratch, adapted or generated if at all feasible
 moment I'm already over this limit, but I'll keep 100kb in mind as
 absolute maximum)
 
-[Play it here](http://invaders.catgirl.games/)
+[Play it here](https://mezriss.github.io/invaders/)
 
 ## Current state
 Game is playable, but lacks content - promised generated

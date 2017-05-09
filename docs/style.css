@@ -1,8 +1,11 @@
 html, body {
 	height: 100%;
-	background: black;
+	background: #000011;
+	color: #ffc905;
+	font-family: sans-serif;
 	margin: 0;
 	padding: 0;
+
 }
 
 .container {
@@ -14,6 +17,12 @@ html, body {
 
 #main {
 	box-shadow: 0 0 15px purple;
+}
+
+.no-js-notice {
+	display: block;
+	padding: 10px;
+	text-align: center;
 }
 
 canvas {
