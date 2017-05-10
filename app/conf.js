@@ -5,6 +5,8 @@ export const coreCfg = {
 	screenWidth: 480,
 	screenHeight: 600,
 	homescreen: false,
+	speed: 1,
+	maxSpeed: 5,
 	get fullScreenHeight() {
 		return this.screenHeight + (mobileCfg.enabled ? mobileCfg.controlPanelHeightPx : 0);
 	}
@@ -61,7 +63,7 @@ export const playerCfg = {
 	startingLives: 3,
 	maxLives: 4,
 	get speed() {
-		return 0.3 * coreCfg.screenWidth;
+		return 0.3 * coreCfg.screenWidth * coreCfg.speed;
 	},
 	get minTravelDistance() {
 		return shipCfg.widthPx;
@@ -221,6 +223,8 @@ export function configure(key, val, save) {
 		case 'homescreen':
 			coreCfg.homescreen = true;
 			break;
+		case confConst.speed:
+			coreCfg.speed = parseInt(val, 10);
 	}
 	if (save) {
 		const savedSettings = localStorage.getItem('settings') ? JSON.parse(localStorage.getItem('settings')) : {};

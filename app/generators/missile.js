@@ -8,14 +8,18 @@ const sprite = initCanvas(cfg.widthPaddedPx, cfg.heightPaddedPx),
 	partWidth = Math.ceil(cfg.width / 2),
 	partHeight = Math.ceil(cfg.height / 2),
 	missileProto = {
-		speed: 0.2,
+		get speed() {
+			return 0.2 * coreCfg.screenHeight * coreCfg.speed;
+		},
 		color: cfg.defaultColor,
 		launcher: null,
 		sprites: null,
 		armStart: null,
 		armProgress: 0,
-		armSpeed: 1000,
-		scoreValue: 1,
+		get armSpeed() {
+			return 1000 / coreCfg.speed;
+		},
+		scoreValue: null,
 		status: null,
 		launchSound: null,
 		x: null,
@@ -77,7 +81,7 @@ const sprite = initCanvas(cfg.widthPaddedPx, cfg.heightPaddedPx),
 				this.alignWithShipX();
 			}
 			if (this.status === missileConst.launched) {
-				this.y += this.speed * coreCfg.screenHeight * dt / 1000 * (this.launcher.player ? -1 : 1);
+				this.y += this.speed * dt / 1000 * (this.launcher.player ? -1 : 1);
 			}
 			//cleanup offscreen missiles
 			if (this.y < -cfg.heightPaddedPx || this.y > coreCfg.fullScreenHeight) {
@@ -114,6 +118,7 @@ export function create(options = {}) {
 	const missile = Object.create(missileProto), bitCount = roll(cfg.minBits, cfg.maxBits);
 
 	missile.color = options.color || missile.color;
+	missile.scoreValue = coreCfg.speed;
 
 	let shape = [];
 

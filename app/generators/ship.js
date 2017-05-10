@@ -20,7 +20,7 @@ const sprite = initCanvas(cfg.widthPx, cfg.heightPx),
 		missile: null,
 		formation: null,
 		sprite: null,
-		scoreValue: 1,
+		scoreValue: null,
 		x: null,
 		y: null,
 		show(ctx, x = this.x, y = this.y) {
@@ -90,6 +90,7 @@ export function create(options = {}) {
 		heightPx = cfg.height * (options.pixelSize || coreCfg.pixelSize);
 	ship.color = options.color || ship.color;
 	ship.blueprint = options.blueprint || generateBlueprint();
+	ship.scoreValue = coreCfg.speed;
 
 	sprite.canvas.width = widthPx;
 	sprite.canvas.height = heightPx;

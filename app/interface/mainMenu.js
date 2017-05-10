@@ -77,6 +77,14 @@ const settingsMenu = [
 		}
 	},
 	{
+		get label() {
+			return str.speed + coreCfg.speed;
+		},
+		action() {
+			configure(confConst.speed, coreCfg.speed === coreCfg.maxSpeed ? 1 : coreCfg.speed + 1, true);
+		}
+	},
+	{
 		label: str.back,
 		get y() {
 			return this._y + font.meta.properties.fontAscent * cfg.menuItemSize * cfg.lineHeight;

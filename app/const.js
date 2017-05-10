@@ -1,4 +1,4 @@
-export const version = '0.2.2.10';
+export const version = '0.2.3';
 
 export const formationConst = {
 	oneTypePerLine: 'one-type-per-line'
@@ -74,7 +74,8 @@ export const confConst = {
 	buttons: 'buttons',
 	drag: 'drag',
 	gyro: 'gyro',
-	controlsOptions: []
+	controlsOptions: [],
+	speed: 'speed'
 };
 confConst.controlsOptions.push(confConst.buttons, confConst.drag, confConst.gyro);
 

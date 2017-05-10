@@ -16,8 +16,12 @@ let mX, mY, i; //missile coords for collision calculations
 
 const explosionSound = sound.generate(soundSamples.explosion.enemy),
 	formationProto = {
-		advanceSpeed: 0.05,
-		evadeSpeed: 0.07,
+		get advanceSpeed() {
+			return 0.05 * coreCfg.screenHeight * coreCfg.speed;
+		},
+		get evadeSpeed() {
+			return 0.07 * coreCfg.screenWidth * coreCfg.speed;
+		},
 		advanceAmount: 0.05,
 		advanceStart: null,
 		direction: null,
@@ -65,16 +69,16 @@ const explosionSound = sound.generate(soundSamples.explosion.enemy),
 			} else {
 				switch (this.direction) {
 					case directionConst.left:
-						this.x -= this.evadeSpeed * coreCfg.screenWidth * dt / 1000;
+						this.x -= this.evadeSpeed * dt / 1000;
 						break;
 					case directionConst.right:
-						this.x += this.evadeSpeed * coreCfg.screenWidth * dt / 1000;
+						this.x += this.evadeSpeed * dt / 1000;
 						break;
 					case directionConst.up:
-						this.y -= this.advanceSpeed * coreCfg.screenHeight * dt / 1000;
+						this.y -= this.advanceSpeed * dt / 1000;
 						break;
 					case directionConst.down:
-						this.y += this.advanceSpeed * coreCfg.screenHeight * dt / 1000;
+						this.y += this.advanceSpeed * dt / 1000;
 						break;
 				}
 			}
