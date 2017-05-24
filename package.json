@@ -1,6 +1,6 @@
 {
   "name": "invaders",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "An extandable Space Invaders game varian for web and mobile.",
   "main": "index.js",
   "scripts": {

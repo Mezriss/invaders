@@ -19,5 +19,6 @@ export default {
 	gyro: 'gyro',
 	dragToMove: 'Drag to move',
 	tiltToMove: 'Tilt screen to move',
-	speed: 'Speed: '
+	speed: 'Speed: ',
+	source: 'Source'
 };

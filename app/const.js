@@ -1,8 +1,10 @@
-export const version = '0.2.3';
+export const version = '0.2.4';
 
 export const formationConst = {
 	oneTypePerLine: 'one-type-per-line'
 };
+
+export const repoURL = 'https://github.com/mezriss/invaders';
 
 export const directionConst = {
 	left: 'left',

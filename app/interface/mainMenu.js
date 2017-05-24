@@ -1,7 +1,7 @@
 import { pubSub, touch, hexToRgba } from '../util';
 import * as fontGenerator from '../generators/font';
 import * as ship from '../generators/ship';
-import { eventConst, keyConst, alignmentConst, confConst } from '../const';
+import { eventConst, keyConst, alignmentConst, confConst, repoURL } from '../const';
 import { default as str } from '../str';
 import {
 	titleScreenCfg as cfg,
@@ -55,6 +55,12 @@ const mainMenu = [
 			currentMenu = settingsMenu;
 			selectedMenuItem = 0;
 			pubSub.pub(eventConst.cursorRepositioned, currentMenu[selectedMenuItem].y);
+		}
+	},
+	{
+		label: str.source,
+		action() {
+			window.open(repoURL, 'Mezriss/invaders');
 		}
 	}
 ];
